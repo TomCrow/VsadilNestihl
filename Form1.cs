@@ -24,6 +24,33 @@ namespace VsadilNestihl
             InitializeComponent();
         }
 
+        private void PictureBoxPlayerOnPaint(object sender, PaintEventArgs e)
+        {
+            if (!(sender is PictureBox pictureBox))
+                return;
+
+            Graphics g = e.Graphics;
+
+            if (pictureBox.Parent != null)
+            {
+                var index = pictureBox.Parent.Controls.GetChildIndex(pictureBox);
+                for (var i = pictureBox.Parent.Controls.Count - 1; i > index; i--)
+                {
+                    var c = pictureBox.Parent.Controls[i];
+                    if (c.Bounds.IntersectsWith(Bounds) && c.Visible)
+                    {
+                        using (var bmp = new Bitmap(c.Width, c.Height, g))
+                        {
+                            c.DrawToBitmap(bmp, c.ClientRectangle);
+                            g.TranslateTransform(c.Left - Left, c.Top - Top);
+                            g.DrawImageUnscaled(bmp, Point.Empty);
+                            g.TranslateTransform(Left - c.Left, Top - c.Top);
+                        }
+                    }
+                }
+            }
+        }
+
         public void SetGameManager(GameManager gameManager)
         {
             _gameManager = gameManager;
@@ -108,7 +135,7 @@ namespace VsadilNestihl
                 case ConcretePlace.Clinic1: return panel4;
                 case ConcretePlace.Trainer1: return panel5;
                 case ConcretePlace.LadyAnne: return panel6;
-                case ConcretePlace.Chandom1: return panel7;
+                case ConcretePlace.Chance1: return panel7;
                 case ConcretePlace.Pasek: return panel8;
                 case ConcretePlace.Koran: return panel9;
                 case ConcretePlace.Distanc: return panel10;
@@ -162,24 +189,36 @@ namespace VsadilNestihl
         public void PlayerRolledDice(Player player, int rolledCount)
         {
         }
-
-        public void PlayerRolledThisTurn(Player player)
-        {
-        }
-
-        public void PlayerSetPlace(Player player, IPlace place)
-        {
-            GameUpdated();
-        }
-
-        public void PlayerSetPosition(Player player, IPosition position)
-        {
-            GameUpdated();
-        }
-
+        
         public void NextRound(Player currentPlayer)
         {
             GameUpdated();
+        }
+
+        public void GameStarted(List<Player> players)
+        {
+        }
+
+        public void PlayerRolledThisTurn(Player player, bool rolledThisTurn)
+        {
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+        }
+
+        public void PlayerSetPlacePosition(Player player, IPlace place, IPosition position)
+        {
+        }
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                var cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;    // Turn on WS_EX_COMPOSITED
+                return cp;
+            }
         }
     }
 }

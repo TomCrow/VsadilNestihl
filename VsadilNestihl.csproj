@@ -67,6 +67,11 @@
     <Compile Include="Game\GameSettings.cs" />
     <Compile Include="Game\Board\IPlace.cs" />
     <Compile Include="Game\IGameUpdater.cs" />
+    <Compile Include="Game\Lobby\JoiningPlayer.cs" />
+    <Compile Include="Game\Lobby\LobbyPlayer.cs" />
+    <Compile Include="Game\Lobby\PlayerHandler.cs" />
+    <Compile Include="Game\Lobby\NetworkLobby.cs" />
+    <Compile Include="Game\Lobby\PlayerPosition.cs" />
     <Compile Include="Game\LocalGameUpdater.cs" />
     <Compile Include="Game\Player\IPlayerController.cs" />
     <Compile Include="Game\Player\IPlayerData.cs" />
@@ -74,6 +79,41 @@
     <Compile Include="Game\Player\LocalPlayerController.cs" />
     <Compile Include="Game\GameState.cs" />
     <Compile Include="Game\Player\PlayerData.cs" />
+    <Compile Include="GUI\GameCanvas\Helpers\CommonDrawables.cs" />
+    <Compile Include="GUI\GameCanvas\Drawable.cs" />
+    <Compile Include="GUI\GameCanvas\Drawables\BoardPositionDrawable.cs" />
+    <Compile Include="GUI\GameCanvas\Drawables\DiceDrawable.cs" />
+    <Compile Include="GUI\GameCanvas\GameCanvasControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\GameCanvas\GameCanvasControl.Designer.cs">
+      <DependentUpon>GameCanvasControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\GameCanvas\Helpers\PlacesPositions.cs" />
+    <Compile Include="GUI\Extensions\InvokingExtensions.cs" />
+    <Compile Include="GUI\GameCanvas\IDrawable.cs" />
+    <Compile Include="GUI\GameCanvas\Drawables\PlayerDrawable.cs" />
+    <Compile Include="GUI\GameWindow\FormGameWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\GameWindow\FormGameWindow.Designer.cs">
+      <DependentUpon>FormGameWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\GameWindow\GameWindowGui.cs" />
+    <Compile Include="GUI\GameWindow\IGameWindowView.cs" />
+    <Compile Include="GUI\NetworkLobby\FormNetworkLobby.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\NetworkLobby\FormNetworkLobby.Designer.cs">
+      <DependentUpon>FormNetworkLobby.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Menu\Helpers\JoiningPlayerDelegates.cs" />
+    <Compile Include="GUI\NetworkLobby\LobbyPlayer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\NetworkLobby\LobbyPlayer.Designer.cs">
+      <DependentUpon>LobbyPlayer.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Menu\FormMenu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,11 +121,22 @@
       <DependentUpon>FormMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Menu\IMenuView.cs" />
-    <Compile Include="GUI\Menu\Menu.cs" />
+    <Compile Include="GUI\Menu\MenuGui.cs" />
+    <Compile Include="GUI\NetworkLobby\NetworkLobbyGui.cs" />
+    <Compile Include="GUI\NetworkLobby\INetworkLobbyView.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\GameWindow\FormGameWindow.resx">
+      <DependentUpon>FormGameWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\NetworkLobby\FormNetworkLobby.resx">
+      <DependentUpon>FormNetworkLobby.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\NetworkLobby\LobbyPlayer.resx">
+      <DependentUpon>LobbyPlayer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Menu\FormMenu.resx">
       <DependentUpon>FormMenu.cs</DependentUpon>
@@ -98,6 +149,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -112,6 +164,35 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\VsadilNestihlNetworking\VsadilNestihlNetworking.csproj">
+      <Project>{94244e33-9d02-484d-83a2-52980d6d40e2}</Project>
+      <Name>VsadilNestihlNetworking</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menu_background.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menu_background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GUI\NetworkLobby\Helpers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\board.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\player.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dice_mouse.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dice_pressed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dice_still.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -8,10 +8,13 @@ namespace VsadilNestihl.GUI.Menu
 {
     public interface IMenuView
     {
-        Menu GetMenu();
+        MenuGui GetMenuGui();
         string GetPlayerName();
         int GetHostPort();
         string GetJoinIp();
         int GetJoinPort();
+        void ShowNameRequired();
+        void ShowException(Exception exception);
+        void SetLoading(bool loading);
     }
 }

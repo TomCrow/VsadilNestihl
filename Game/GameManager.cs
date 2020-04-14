@@ -9,6 +9,8 @@ namespace VsadilNestihl.Game
 {
     public class GameManager
     {
+        private readonly List<Lobby.LobbyPlayer> _lobbyPlayers;
+
         public Board.IBoard Board { get; private set; }
         public GameSettings GameSettings { get; private set; }
         public IGameUpdater GameUpdater { get; private set; }
@@ -18,12 +20,13 @@ namespace VsadilNestihl.Game
 
         public IDice DefaultDice { get; set; } = new Dice();
 
-        public GameManager(Board.IBoard board, GameSettings gameSettings, IGameUpdater gameUpdater, List<Player.Player> players)
+        public GameManager(Board.IBoard board, GameSettings gameSettings, IGameUpdater gameUpdater, List<Lobby.LobbyPlayer> lobbyPlayers)
         {
+            _lobbyPlayers = lobbyPlayers;
+
             Board = board;
             GameSettings = gameSettings;
             GameUpdater = gameUpdater;
-            Players = players;
             GameState = GameState.Lobby;
         }
 
@@ -32,23 +35,24 @@ namespace VsadilNestihl.Game
             if (GameState != GameState.Lobby)
                 throw new InvalidActionException("Game is already started.");
 
-            if (Players.Count < 2)
+            // All playing players (not spectators)
+            var actualLobbyPlayers = _lobbyPlayers.Where(x => x.PlayerPosition != Lobby.PlayerPosition.Spectator).ToList();
+
+            if (actualLobbyPlayers.Count < 2)
                 throw new InvalidActionException("More players are needed.");
 
             var startPlace = Board.GetStartPlace();
-            var startPosition = Board.GetStartPosition();
 
-            // Set start money to all players and set position to start
-            var nextPlayerId = 1;
-            foreach (var player in Players)
+            // Create all players
+            Players = new List<Player.Player>();
+            foreach (var lobbyPlayer in actualLobbyPlayers)
             {
-                player.SetGameManager(this, nextPlayerId);
-                nextPlayerId++;
-
-                player.Dice = DefaultDice;
-                player.SetMoney(GameSettings.StartMoney);
-                player.SetPlace(startPlace);
-                player.SetPosition(startPosition);
+                var player = new Player.Player(lobbyPlayer, 
+                                               DefaultDice, 
+                                               GameSettings.StartMoney,
+                                               startPlace);
+                player.SetGameManager(this);
+                Players.Add(player);
             }
 
             GameState = GameState.ChosingStartingPlayer;
@@ -73,8 +77,7 @@ namespace VsadilNestihl.Game
                 place = Board.GetNextPlace(place);
 
             player.SetRolledThisTurn(true);
-            player.SetPlace(place);
-            player.SetPosition(place.GetPosition());
+            player.SetPlacePosition(place, place.GetDefaultPosition());
         }
 
         public void PlayerEndTurn(Player.Player player)

@@ -8,14 +8,14 @@ using VsadilNestihl.Game.Player;
 
 namespace VsadilNestihl.Game
 {
-    public class LocalGameUpdater : IGameUpdater
+    public abstract class LocalGameUpdater : IGameUpdater
     {
-        public Dictionary<int, IPlayerData> Players { get; private set; } = new Dictionary<int, IPlayerData>();
-        public Dictionary<int, IPlayerController> PlayerControllers { get; private set; } = new Dictionary<int, IPlayerController>();
-        public int CurrentPlayerId { get; private set; }
-        public bool CurrentPlayerRolledThisTurn { get; private set; }
+        protected Dictionary<int, IPlayerData> Players { get; private set; } = new Dictionary<int, IPlayerData>();
+        protected Dictionary<int, IPlayerController> PlayerControllers { get; private set; } = new Dictionary<int, IPlayerController>();
+        protected int CurrentPlayerId { get; private set; }
+        protected bool CurrentPlayerRolledThisTurn { get; private set; }
 
-        public void GameStarted(List<Player.Player> players)
+        public virtual void GameStarted(List<Player.Player> players)
         {
             foreach (var player in players)
             {
@@ -27,33 +27,29 @@ namespace VsadilNestihl.Game
             }
         }
 
-        public void PlayerSetMoney(Player.Player player, int money)
+        public virtual void PlayerSetMoney(Player.Player player, int money)
         {
             Players[player.PlayerId].Money = money;
         }
 
-        public void PlayerRolledDice(Player.Player player, int rolledCount)
+        public virtual void PlayerRolledDice(Player.Player player, int rolledCount)
         {
             // TODO:
         }
 
-        public void PlayerRolledThisTurn(Player.Player player, bool rolledThisTurn)
+        public virtual void PlayerRolledThisTurn(Player.Player player, bool rolledThisTurn)
         {
             if (player.PlayerId == CurrentPlayerId)
                 CurrentPlayerRolledThisTurn = rolledThisTurn;
         }
 
-        public void PlayerSetPlace(Player.Player player, IPlace place)
+        public void PlayerSetPlacePosition(Player.Player player, IPlace place, IPosition position)
         {
             Players[player.PlayerId].Place = place;
-        }
-
-        public void PlayerSetPosition(Player.Player player, IPosition position)
-        {
             Players[player.PlayerId].Position = position;
         }
 
-        public void NextRound(Player.Player currentPlayer)
+        public virtual void NextRound(Player.Player currentPlayer)
         {
             CurrentPlayerId = currentPlayer.PlayerId;
         }

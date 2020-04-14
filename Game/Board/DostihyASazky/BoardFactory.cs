@@ -18,7 +18,7 @@ namespace VsadilNestihl.Game.Board.DostihyASazky
             places.AddLast(new Place(ConcretePlace.Clinic1, "Klinika"));
             places.AddLast(new Place(ConcretePlace.Trainer1, "1. Trenér"));
             places.AddLast(new Place(ConcretePlace.LadyAnne, "LAdy Anne"));
-            places.AddLast(new Place(ConcretePlace.Chandom1, "Náhoda"));
+            places.AddLast(new Place(ConcretePlace.Chance1, "Náhoda"));
             places.AddLast(new Place(ConcretePlace.Pasek, "Pasek"));
             places.AddLast(new Place(ConcretePlace.Koran, "Koran"));
             places.AddLast(new Place(ConcretePlace.Distanc, "Distanc"));

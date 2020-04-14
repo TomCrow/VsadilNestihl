@@ -23,16 +23,19 @@ namespace VsadilNestihl.Game.Player
 
         public Dices.IDice Dice { get; set; } = new Dices.Dice();
 
-        public Player(string name, Color color)
+        public Player(Lobby.LobbyPlayer lobbyPlayer, Dices.IDice dice, int startingMoney, IPlace startingPlace)
         {
-            Name = name;
-            Color = color;
+            PlayerId = lobbyPlayer.PlayerId;
+            Name = lobbyPlayer.PlayerName;
+            Color = lobbyPlayer.Color;
+            Dice = dice;
+            _money = startingMoney;
+            Place = startingPlace;
+            Position = startingPlace.GetDefaultPosition();
         }
 
-        public void SetGameManager(GameManager gameManager, int playerId)
+        public void SetGameManager(GameManager gameManager)
         {
-            PlayerId = playerId;
-
             _gameManager = gameManager;
             _gameUpdater = gameManager.GameUpdater;
         }
@@ -43,16 +46,11 @@ namespace VsadilNestihl.Game.Player
             _gameManager.PlayerRolledDice(this, rolledCount);
         }
 
-        public void SetPlace(IPlace place)
+        public void SetPlacePosition(IPlace place, IPosition position)
         {
             Place = place;
-            _gameUpdater.PlayerSetPlace(this, place);
-        }
-
-        public void SetPosition(IPosition position)
-        {
-            Position = position;
-            _gameUpdater.PlayerSetPosition(this, position);
+            Position = place.GetDefaultPosition();
+            _gameUpdater.PlayerSetPlacePosition(this, place, position);
         }
 
         public void EndTurn()

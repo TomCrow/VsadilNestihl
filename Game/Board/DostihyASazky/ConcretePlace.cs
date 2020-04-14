@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VsadilNestihl.Game.Board.DostihyASazky
 {
-    enum ConcretePlace
+    public enum ConcretePlace
     {
         Start,
         Fantome,
@@ -15,7 +15,7 @@ namespace VsadilNestihl.Game.Board.DostihyASazky
         Clinic1,
         Trainer1,
         LadyAnne,
-        Chandom1,
+        Chance1,
         Pasek,
         Koran,
         Distanc,

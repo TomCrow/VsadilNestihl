@@ -8,6 +8,8 @@ namespace VsadilNestihl.Game.Board
 {
     public interface IPosition
     {
+        IPlace GetPlace();
         int GetPositionId();
+        string GetName();
     }
 }

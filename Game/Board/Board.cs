@@ -24,7 +24,7 @@ namespace VsadilNestihl.Game.Board
 
         public IPosition GetStartPosition()
         {
-            return Places.First.Value.GetPosition();
+            return Places.First.Value.GetDefaultPosition();
         }
 
         public IPlace GetNextPlace(IPlace place)

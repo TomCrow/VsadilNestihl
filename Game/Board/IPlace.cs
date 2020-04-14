@@ -10,6 +10,6 @@ namespace VsadilNestihl.Game.Board
     {
         int GetPlaceId();
         string GetName();
-        IPosition GetPosition();
+        IPosition GetDefaultPosition();
     }
 }

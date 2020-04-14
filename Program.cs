@@ -43,5 +43,43 @@ namespace VsadilNestihl
 
             Application.Run(new GUI.Menu.FormMenu());
         }
+
+        private static void MergeBitmaps(Bitmap bitmapFore, Bitmap bitmapBack)
+        {
+            // Define output polygon and coverage rectangle
+            var curvePoints = new Point[] {
+                new Point(833, 278), new Point(1876, 525),
+                new Point(1876, 837), new Point(833, 830)
+            };
+            var outRect = new Rectangle(833, 278, 1043, 559);
+
+            // Create clipping region from points
+            System.Drawing.Drawing2D.GraphicsPath clipPath = new System.Drawing.Drawing2D.GraphicsPath();
+            clipPath.AddPolygon(curvePoints);
+
+            try
+            {
+                Bitmap imgB = bitmapBack;
+                Bitmap imgF = bitmapFore;
+                Bitmap m = new Bitmap(bitmapBack);
+                System.Drawing.Graphics myGraphic = System.Drawing.Graphics.FromImage(m);
+
+                myGraphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                myGraphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                myGraphic.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+
+                // Draw foreground image into clipping region
+                myGraphic.SetClip(clipPath, System.Drawing.Drawing2D.CombineMode.Replace);
+                myGraphic.DrawImage(imgF, outRect);
+                myGraphic.ResetClip();
+
+                myGraphic.Save();
+                m.Save(@"test.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
+        }
     }
 }

@@ -27,14 +27,19 @@ namespace VsadilNestihl.Game.Board.DostihyASazky
             return Name;
         }
 
-        public IPosition GetPosition()
+        public IPosition GetDefaultPosition()
+        {
+            return this;
+        }
+
+        public IPlace GetPlace()
         {
             return this;
         }
 
         public int GetPositionId()
         {
-            return (int) ConcretePlace;
+            return 0;
         }
     }
 }
