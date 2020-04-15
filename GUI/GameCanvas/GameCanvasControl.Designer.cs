@@ -30,15 +30,13 @@
         {
             this.SuspendLayout();
             // 
-            // BoardControl
+            // GameCanvasControl
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.MaximumSize = new System.Drawing.Size(724, 724);
-            this.MinimumSize = new System.Drawing.Size(724, 724);
-            this.Name = "BoardControl";
-            this.Size = new System.Drawing.Size(724, 724);
+            this.Name = "GameCanvasControl";
+            this.Size = new System.Drawing.Size(162, 141);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BoardControl_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BoardControl_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BoardControl_MouseUp);

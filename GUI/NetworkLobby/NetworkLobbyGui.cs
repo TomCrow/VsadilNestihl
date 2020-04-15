@@ -26,6 +26,8 @@ namespace VsadilNestihl.GUI.NetworkLobby
             _networkLobby.LobbyPlayersUpdated += OnLobbyPlayersUpdated;
             _networkLobby.ChatServerMessage += OnChatServerMessage;
             _networkLobby.ChatPlayerMessage += OnChatPlayerMessage;
+
+            _view.EnableHostFunctions();
         }
 
         public void SetJoiningPlayer(JoiningPlayer joiningPlayer)
@@ -127,6 +129,11 @@ namespace VsadilNestihl.GUI.NetworkLobby
             {
                 _joiningPlayer.ChatSendMessageRequest(message);
             }
+        }
+
+        public void StartClick()
+        {
+
         }
 
         private void OnSetMyPlayerId(int myPlayerId)

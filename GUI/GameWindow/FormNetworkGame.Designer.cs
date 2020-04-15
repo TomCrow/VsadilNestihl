@@ -1,6 +1,6 @@
 ﻿namespace VsadilNestihl.GUI.GameWindow
 {
-    partial class FormNetworkGameWindow
+    partial class FormNetworkGame
     {
         /// <summary>
         /// Required designer variable.
@@ -28,12 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.gameCanvas = new VsadilNestihl.GUI.GameCanvas.GameCanvasControl();
+            this.SuspendLayout();
+            // 
+            // gameCanvas
+            // 
+            this.gameCanvas.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gameCanvas.Location = new System.Drawing.Point(0, 0);
+            this.gameCanvas.Margin = new System.Windows.Forms.Padding(0);
+            this.gameCanvas.Name = "gameCanvas";
+            this.gameCanvas.Size = new System.Drawing.Size(800, 450);
+            this.gameCanvas.TabIndex = 1;
+            // 
+            // FormNetworkGame
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "FormNetworkGameWindow";
+            this.Controls.Add(this.gameCanvas);
+            this.Name = "FormNetworkGame";
+            this.Text = "FormNetworkGame";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private GameCanvas.GameCanvasControl gameCanvas;
     }
 }

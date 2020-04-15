@@ -161,6 +161,11 @@ namespace VsadilNestihl.GUI.NetworkLobby
             });
         }
 
+        public void EnableHostFunctions()
+        {
+            this.InvokeIfRequired(() => { buttonStart.Enabled = true; });
+        }
+
         private void FormNetworkLobby_FormClosed(object sender, FormClosedEventArgs e)
         {
             _networkLobbyGui.LobbyClosed();
@@ -189,6 +194,11 @@ namespace VsadilNestihl.GUI.NetworkLobby
 
             textBoxChat.Clear();
             _networkLobbyGui.ChatSendMessageClick(message);
+        }
+
+        private void buttonStart_Click(object sender, EventArgs e)
+        {
+            _networkLobbyGui.StartClick();
         }
     }
 }

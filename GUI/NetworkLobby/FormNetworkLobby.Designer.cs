@@ -42,36 +42,36 @@
             this.lobbyPlayer3 = new VsadilNestihl.GUI.NetworkLobby.LobbyPlayer();
             this.lobbyPlayer2 = new VsadilNestihl.GUI.NetworkLobby.LobbyPlayer();
             this.lobbyPlayer1 = new VsadilNestihl.GUI.NetworkLobby.LobbyPlayer();
+            this.buttonStart = new System.Windows.Forms.Button();
             this.panelSpectators.SuspendLayout();
             this.SuspendLayout();
             // 
             // richTextBoxChat
             // 
-            this.richTextBoxChat.Location = new System.Drawing.Point(228, 10);
-            this.richTextBoxChat.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.richTextBoxChat.Location = new System.Drawing.Point(304, 12);
+            this.richTextBoxChat.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.richTextBoxChat.Name = "richTextBoxChat";
             this.richTextBoxChat.ReadOnly = true;
-            this.richTextBoxChat.Size = new System.Drawing.Size(364, 311);
+            this.richTextBoxChat.Size = new System.Drawing.Size(484, 382);
             this.richTextBoxChat.TabIndex = 0;
             this.richTextBoxChat.Text = "";
             // 
             // textBoxChat
             // 
-            this.textBoxChat.Location = new System.Drawing.Point(261, 327);
-            this.textBoxChat.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxChat.Location = new System.Drawing.Point(348, 402);
+            this.textBoxChat.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxChat.MaxLength = 1000;
             this.textBoxChat.Name = "textBoxChat";
-            this.textBoxChat.Size = new System.Drawing.Size(276, 20);
+            this.textBoxChat.Size = new System.Drawing.Size(367, 22);
             this.textBoxChat.TabIndex = 1;
             this.textBoxChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxChat_KeyDown);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(226, 329);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(301, 405);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(32, 13);
+            this.label1.Size = new System.Drawing.Size(41, 17);
             this.label1.TabIndex = 2;
             this.label1.Text = "Chat:";
             // 
@@ -79,10 +79,10 @@
             // 
             this.buttonChatSend.AutoSize = true;
             this.buttonChatSend.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.buttonChatSend.Location = new System.Drawing.Point(541, 325);
-            this.buttonChatSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonChatSend.Location = new System.Drawing.Point(721, 400);
+            this.buttonChatSend.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonChatSend.Name = "buttonChatSend";
-            this.buttonChatSend.Size = new System.Drawing.Size(53, 23);
+            this.buttonChatSend.Size = new System.Drawing.Size(67, 27);
             this.buttonChatSend.TabIndex = 3;
             this.buttonChatSend.Text = "Odeslat";
             this.buttonChatSend.UseVisualStyleBackColor = true;
@@ -94,20 +94,20 @@
             this.panelSpectators.Controls.Add(this.buttonJoinSpectators);
             this.panelSpectators.Controls.Add(this.labelSpectatorsList);
             this.panelSpectators.Controls.Add(this.label2);
-            this.panelSpectators.Location = new System.Drawing.Point(228, 359);
-            this.panelSpectators.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelSpectators.Location = new System.Drawing.Point(304, 442);
+            this.panelSpectators.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelSpectators.Name = "panelSpectators";
-            this.panelSpectators.Size = new System.Drawing.Size(206, 65);
+            this.panelSpectators.Size = new System.Drawing.Size(274, 80);
             this.panelSpectators.TabIndex = 10;
             // 
             // buttonJoinSpectators
             // 
             this.buttonJoinSpectators.AutoSize = true;
             this.buttonJoinSpectators.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonJoinSpectators.Location = new System.Drawing.Point(131, -1);
-            this.buttonJoinSpectators.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonJoinSpectators.Location = new System.Drawing.Point(175, -1);
+            this.buttonJoinSpectators.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonJoinSpectators.Name = "buttonJoinSpectators";
-            this.buttonJoinSpectators.Size = new System.Drawing.Size(79, 25);
+            this.buttonJoinSpectators.Size = new System.Drawing.Size(133, 36);
             this.buttonJoinSpectators.TabIndex = 11;
             this.buttonJoinSpectators.Text = "Sledovat hru";
             this.buttonJoinSpectators.UseVisualStyleBackColor = true;
@@ -115,82 +115,92 @@
             // 
             // labelSpectatorsList
             // 
-            this.labelSpectatorsList.Location = new System.Drawing.Point(2, 16);
-            this.labelSpectatorsList.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelSpectatorsList.Location = new System.Drawing.Point(3, 20);
             this.labelSpectatorsList.Name = "labelSpectatorsList";
-            this.labelSpectatorsList.Size = new System.Drawing.Size(200, 47);
+            this.labelSpectatorsList.Size = new System.Drawing.Size(267, 58);
             this.labelSpectatorsList.TabIndex = 1;
             this.labelSpectatorsList.Text = "-";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(2, 2);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Location = new System.Drawing.Point(3, 2);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(40, 13);
+            this.label2.Size = new System.Drawing.Size(50, 17);
             this.label2.TabIndex = 0;
             this.label2.Text = "Diváci:";
             // 
             // lobbyPlayer6
             // 
             this.lobbyPlayer6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lobbyPlayer6.Location = new System.Drawing.Point(9, 359);
-            this.lobbyPlayer6.Margin = new System.Windows.Forms.Padding(2);
+            this.lobbyPlayer6.Location = new System.Drawing.Point(12, 442);
+            this.lobbyPlayer6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lobbyPlayer6.Name = "lobbyPlayer6";
-            this.lobbyPlayer6.Size = new System.Drawing.Size(206, 65);
+            this.lobbyPlayer6.Size = new System.Drawing.Size(274, 80);
             this.lobbyPlayer6.TabIndex = 9;
             // 
             // lobbyPlayer5
             // 
             this.lobbyPlayer5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lobbyPlayer5.Location = new System.Drawing.Point(9, 289);
-            this.lobbyPlayer5.Margin = new System.Windows.Forms.Padding(2);
+            this.lobbyPlayer5.Location = new System.Drawing.Point(12, 356);
+            this.lobbyPlayer5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lobbyPlayer5.Name = "lobbyPlayer5";
-            this.lobbyPlayer5.Size = new System.Drawing.Size(206, 65);
+            this.lobbyPlayer5.Size = new System.Drawing.Size(274, 80);
             this.lobbyPlayer5.TabIndex = 8;
             // 
             // lobbyPlayer4
             // 
             this.lobbyPlayer4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lobbyPlayer4.Location = new System.Drawing.Point(9, 219);
-            this.lobbyPlayer4.Margin = new System.Windows.Forms.Padding(2);
+            this.lobbyPlayer4.Location = new System.Drawing.Point(12, 270);
+            this.lobbyPlayer4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lobbyPlayer4.Name = "lobbyPlayer4";
-            this.lobbyPlayer4.Size = new System.Drawing.Size(206, 65);
+            this.lobbyPlayer4.Size = new System.Drawing.Size(274, 80);
             this.lobbyPlayer4.TabIndex = 7;
             // 
             // lobbyPlayer3
             // 
             this.lobbyPlayer3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lobbyPlayer3.Location = new System.Drawing.Point(9, 150);
-            this.lobbyPlayer3.Margin = new System.Windows.Forms.Padding(2);
+            this.lobbyPlayer3.Location = new System.Drawing.Point(12, 185);
+            this.lobbyPlayer3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lobbyPlayer3.Name = "lobbyPlayer3";
-            this.lobbyPlayer3.Size = new System.Drawing.Size(206, 65);
+            this.lobbyPlayer3.Size = new System.Drawing.Size(274, 80);
             this.lobbyPlayer3.TabIndex = 6;
             // 
             // lobbyPlayer2
             // 
             this.lobbyPlayer2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lobbyPlayer2.Location = new System.Drawing.Point(9, 80);
-            this.lobbyPlayer2.Margin = new System.Windows.Forms.Padding(2);
+            this.lobbyPlayer2.Location = new System.Drawing.Point(12, 98);
+            this.lobbyPlayer2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lobbyPlayer2.Name = "lobbyPlayer2";
-            this.lobbyPlayer2.Size = new System.Drawing.Size(206, 65);
+            this.lobbyPlayer2.Size = new System.Drawing.Size(274, 80);
             this.lobbyPlayer2.TabIndex = 5;
             // 
             // lobbyPlayer1
             // 
             this.lobbyPlayer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lobbyPlayer1.Location = new System.Drawing.Point(9, 10);
-            this.lobbyPlayer1.Margin = new System.Windows.Forms.Padding(2);
+            this.lobbyPlayer1.Location = new System.Drawing.Point(12, 12);
+            this.lobbyPlayer1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lobbyPlayer1.Name = "lobbyPlayer1";
-            this.lobbyPlayer1.Size = new System.Drawing.Size(206, 65);
+            this.lobbyPlayer1.Size = new System.Drawing.Size(274, 80);
             this.lobbyPlayer1.TabIndex = 4;
+            // 
+            // buttonStart
+            // 
+            this.buttonStart.Enabled = false;
+            this.buttonStart.Location = new System.Drawing.Point(619, 445);
+            this.buttonStart.Name = "buttonStart";
+            this.buttonStart.Size = new System.Drawing.Size(152, 63);
+            this.buttonStart.TabIndex = 11;
+            this.buttonStart.Text = "Start";
+            this.buttonStart.UseVisualStyleBackColor = true;
+            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
             // FormNetworkLobby
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(603, 434);
+            this.ClientSize = new System.Drawing.Size(804, 534);
+            this.Controls.Add(this.buttonStart);
             this.Controls.Add(this.panelSpectators);
             this.Controls.Add(this.lobbyPlayer6);
             this.Controls.Add(this.lobbyPlayer5);
@@ -203,7 +213,7 @@
             this.Controls.Add(this.textBoxChat);
             this.Controls.Add(this.richTextBoxChat);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.Name = "FormNetworkLobby";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -232,5 +242,6 @@
         private System.Windows.Forms.Label labelSpectatorsList;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button buttonJoinSpectators;
+        private System.Windows.Forms.Button buttonStart;
     }
 }

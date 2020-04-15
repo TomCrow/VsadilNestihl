@@ -15,5 +15,6 @@ namespace VsadilNestihl.GUI.NetworkLobby
         void ShowLobbyException(string message);
         void CloseLobby();
         void AddChatMessage(string message);
+        void EnableHostFunctions();
     }
 }

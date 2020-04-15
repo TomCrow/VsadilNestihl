@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace VsadilNestihl.GUI.GameWindow
 {
-    class NetworkGameWindowGui
+    public interface INetworkGameView : GameCanvas.IGameCanvas
     {
+        NetworkGameGui GetNetworkGame();
     }
 }
