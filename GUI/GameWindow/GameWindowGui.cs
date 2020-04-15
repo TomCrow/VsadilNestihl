@@ -25,6 +25,9 @@ namespace VsadilNestihl.GUI.GameWindow
                 new Game.Lobby.LobbyPlayer(2, "Hráč 2", System.Drawing.Color.Coral, Game.Lobby.PlayerPosition.Position2),
             };
 
+            var boardPositionsDrawables = GameCanvas.Helpers.CommonDrawables.GetBoardPositions(BoardPositionClicked);
+            _view.AddDrawables(boardPositionsDrawables);
+
             _gameManager = new Game.GameManager(board, gameSettings, this, lobbyPlayers);
             _gameManager.Start();
         }
@@ -38,12 +41,17 @@ namespace VsadilNestihl.GUI.GameWindow
                 var playerId = playerDataKeyVal.Key;
                 var playerData = playerDataKeyVal.Value;
                 var playerDrawable = new GameCanvas.Drawables.PlayerDrawable(playerData.Color);
-                var playerPositionPoint = GameCanvas.PlacesPositions.GetByPlaceAndPosition((Game.Board.DostihyASazky.ConcretePlace)playerData.Place.GetPlaceId(), playerData.Position.GetPositionId());
+                var playerPositionPoint = GameCanvas.Helpers.PlacesPositions.GetByPlaceAndPosition((Game.Board.DostihyASazky.ConcretePlace)playerData.Place.GetPlaceId(), playerData.Position.GetPositionId());
                 playerDrawable.SetPosition(playerPositionPoint.X + 25, playerPositionPoint.Y + 25);
 
                 _playerDrawables.Add(playerId, playerDrawable);
-                _view.AddDrawableToBoard(playerDrawable);
+                _view.AddDrawable(playerDrawable);
             }
+        }
+
+        private void BoardPositionClicked(Game.Board.DostihyASazky.ConcretePlace concretePlace, int positionId)
+        {
+            Console.WriteLine($"Place clicked: {concretePlace} position: {positionId}");
         }
     }
 }

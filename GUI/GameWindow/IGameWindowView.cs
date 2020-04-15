@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace VsadilNestihl.GUI.GameWindow
 {
-    public interface IGameWindowView
+    public interface IGameWindowView : VsadilNestihl.GUI.GameCanvas.IGameCanvas
     {
         GameWindowGui GetGameWindowGui();
-        void AddDrawableToBoard(GameCanvas.IDrawable drawable);
     }
 }

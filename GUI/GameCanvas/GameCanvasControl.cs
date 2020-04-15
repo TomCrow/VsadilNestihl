@@ -13,37 +13,20 @@ using VsadilNestihl.GUI.GameCanvas.Helpers;
 
 namespace VsadilNestihl.GUI.GameCanvas
 {
-    public partial class GameCanvasControl : UserControl
+    public partial class GameCanvasControl : UserControl, IGameCanvas
     {
-        private readonly Bitmap _background;
         private readonly List<IDrawable> _drawables = new List<IDrawable>();
         private IDrawable _mouseOverDrawable = null;
         private IDrawable _mousePressedDrawable = null;
 
         public GameCanvasControl()
         {
-            _background = Properties.Resources.board;
-
-            // Player places
-            foreach (var concretePlace in (ConcretePlace[])Enum.GetValues(typeof(ConcretePlace)))
-            {
-                var point = PlacesPositions.GetByPlaceAndPosition(concretePlace, 0);
-                _drawables.Add(new BoardPositionDrawable(point));
-            }
+            var board = new BoardDrawable(new Point(0, 0));
+            _drawables.Add(board);
 
             var dice = new DiceDrawable(new Point(724 / 2, 724 / 2));
             _drawables.Add(dice);
-
-
-            /*AddTest();
-
-            var playerData = new PlayerData(1, "Tomáš", Color.Red) {Place = new Place(ConcretePlace.Finance2, "Start")};
-            var playerDrawable = new PlayerDrawable();
-            var playerPositionRect =
-                PlacesPositions.GetByPlaceAndPosition((ConcretePlace) playerData.Place.GetPlaceId(), 0);
-            playerDrawable.SetPosition(playerPositionRect.X + 25, playerPositionRect.Y + 25);
-            _drawables.Add(playerDrawable);*/
-
+            
             InitializeComponent();
         }
 
@@ -53,9 +36,17 @@ namespace VsadilNestihl.GUI.GameCanvas
             Refresh();
         }
 
+        public void AddDrawables(IEnumerable<IDrawable> drawables)
+        {
+            foreach (var drawable in drawables)
+                _drawables.Add(drawable);
+
+            Refresh();
+        }
+
         private List<IDrawable> GetDrawablesByDepth()
         {
-            return _drawables.OrderBy(x => x.GetDepth()).ToList();
+            return _drawables.OrderByDescending(x => x.GetDepth()).ToList();
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -63,23 +54,9 @@ namespace VsadilNestihl.GUI.GameCanvas
             base.OnPaint(e);
 
             var g = e.Graphics;
-            g.DrawImage(_background, 0, 0, _background.Width, _background.Height);
 
             foreach (var drawable in GetDrawablesByDepth())
                 drawable.Draw(g);
-
-            /*if (_places.ContainsKey(_mouseOverPlace))
-                g.FillRectangle(new SolidBrush(Color.Yellow), _places[_mouseOverPlace]);
-
-            foreach (var player in _players)
-            {
-                var concretePlace = (ConcretePlace)player.Key.Place.GetPlaceId();
-                if (!_places.ContainsKey(concretePlace))
-                    continue;
-
-                var rectangle = _places[concretePlace];
-                player.Value.Draw(g);
-            }*/
         }
 
         private void BoardControl_MouseMove(object sender, MouseEventArgs e)
@@ -121,7 +98,7 @@ namespace VsadilNestihl.GUI.GameCanvas
         {
             if (_mousePressedDrawable == null)
                 return;
-
+            
             _mousePressedDrawable.SetMousePressed(false);
             Refresh();
 

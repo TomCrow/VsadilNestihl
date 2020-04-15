@@ -32,11 +32,8 @@ namespace VsadilNestihl.GUI.GameCanvas.Drawables
 
             CenterX = 8;
             CenterY = 11;
-        }
-
-        public override bool IsMouseOver(int mouseX, int mouseY)
-        {
-            return false;
+            Depth = -100;
+            MouseOverDisabled = true;
         }
     }
 }

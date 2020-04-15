@@ -26,10 +26,15 @@ namespace VsadilNestihl.GUI.GameWindow
         {
             return _gameWindowGui;
         }
-
-        public void AddDrawableToBoard(IDrawable drawable)
+        
+        public void AddDrawable(IDrawable drawable)
         {
             gameCanvas.AddDrawable(drawable);
+        }
+
+        public void AddDrawables(IEnumerable<IDrawable> drawables)
+        {
+            gameCanvas.AddDrawables(drawables);
         }
     }
 }

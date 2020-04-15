@@ -79,6 +79,7 @@
     <Compile Include="Game\Player\LocalPlayerController.cs" />
     <Compile Include="Game\GameState.cs" />
     <Compile Include="Game\Player\PlayerData.cs" />
+    <Compile Include="GUI\GameCanvas\Drawables\BoardDrawable.cs" />
     <Compile Include="GUI\GameCanvas\Helpers\CommonDrawables.cs" />
     <Compile Include="GUI\GameCanvas\Drawable.cs" />
     <Compile Include="GUI\GameCanvas\Drawables\BoardPositionDrawable.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="GUI\Extensions\InvokingExtensions.cs" />
     <Compile Include="GUI\GameCanvas\IDrawable.cs" />
     <Compile Include="GUI\GameCanvas\Drawables\PlayerDrawable.cs" />
+    <Compile Include="GUI\GameCanvas\IGameCanvas.cs" />
     <Compile Include="GUI\GameWindow\FormGameWindow.cs">
       <SubType>Form</SubType>
     </Compile>

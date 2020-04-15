@@ -12,11 +12,13 @@ namespace VsadilNestihl.GUI.GameCanvas
     {
         protected int X { get; set; }
         protected int Y { get; set; }
+        protected int Depth { get; set; }
         protected int CenterX { get; set; }
         protected int CenterY { get; set; }
         protected Bitmap BitmapStill { get; set; }
         protected Bitmap BitmapMouseOver { get; set; }
         protected Bitmap BitmapMousePressed { get; set; }
+        protected bool MouseOverDisabled { get; set; }
         protected bool MouseOverCheckTransparency { get; set; }
         
         public bool MouseOver { get; private set; }
@@ -41,7 +43,7 @@ namespace VsadilNestihl.GUI.GameCanvas
 
         public virtual int GetDepth()
         {
-            return 0;
+            return Depth;
         }
 
         public virtual void Draw(Graphics graphics)
@@ -71,6 +73,9 @@ namespace VsadilNestihl.GUI.GameCanvas
 
         public virtual bool IsMouseOver(int mouseX, int mouseY)
         {
+            if (MouseOverDisabled)
+                return false;
+
             var leftX = BitmapStill.Width - CenterX;
             var leftY = BitmapStill.Height - CenterY;
 
