@@ -21,10 +21,13 @@ namespace VsadilNestihl.GUI.GameCanvas
         protected bool MouseOverDisabled { get; set; }
         protected bool MouseOverCheckTransparency { get; set; }
         
-        public bool MouseOver { get; private set; }
-        public bool MousePressed { get; private set; }
+        public bool MouseIsOver { get; private set; }
+        public bool MouseIsPressed { get; private set; }
 
         public event Action PositionUpdated;
+        public event Action<int, int> MousePressed;
+        public event Action<int, int> MouseReleased;
+        public event Action<int, int> MouseDragged;
         public event Action Clicked;
 
         public virtual void SetPosition(int x, int y)
@@ -48,9 +51,9 @@ namespace VsadilNestihl.GUI.GameCanvas
 
         public virtual void Draw(Graphics graphics)
         {
-            if (MousePressed && BitmapMousePressed != null)
+            if (MouseIsPressed && BitmapMousePressed != null)
                 DrawMousePressed(graphics);
-            else if (MouseOver && BitmapMouseOver != null)
+            else if (MouseIsOver && BitmapMouseOver != null)
                 DrawMouseOver(graphics);
             else if (BitmapStill != null)
                 DrawStill(graphics);
@@ -71,7 +74,7 @@ namespace VsadilNestihl.GUI.GameCanvas
             graphics.DrawImage(BitmapMousePressed, X - CenterX, Y - CenterY, BitmapMousePressed.Width, BitmapMousePressed.Height);
         }
 
-        public virtual bool IsMouseOver(int mouseX, int mouseY)
+        public virtual bool CheckMouseOver(int mouseX, int mouseY)
         {
             if (MouseOverDisabled)
                 return false;
@@ -97,17 +100,27 @@ namespace VsadilNestihl.GUI.GameCanvas
 
         public virtual void SetMouseOver(bool mouseOver)
         {
-            MouseOver = mouseOver;
+            MouseIsOver = mouseOver;
         }
-
-        public virtual void SetMousePressed(bool pressed)
+        
+        public virtual void SetMousePressed(bool pressed, int mouseX, int mouseY)
         {
-            MousePressed = pressed;
-        }
+            MouseIsPressed = pressed;
 
-        public virtual void Click()
+            if (MouseIsPressed)
+                MousePressed?.Invoke(mouseX, mouseY);
+            else
+                MouseReleased?.Invoke(mouseX, mouseY);
+        }
+        
+        public virtual void MouseClick(int mouseX, int mouseY)
         {
             Clicked?.Invoke();
+        }
+
+        public virtual void MouseDrag(int mouseX, int mouseY)
+        {
+            MouseDragged?.Invoke(mouseX, mouseY);
         }
     }
 }

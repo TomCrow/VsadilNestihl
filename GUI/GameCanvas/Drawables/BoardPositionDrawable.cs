@@ -19,11 +19,11 @@ namespace VsadilNestihl.GUI.GameCanvas.Drawables
 
         public override void Draw(Graphics graphics)
         {
-            if (MouseOver)
+            if (MouseIsOver || MouseIsPressed)
                 graphics.FillRectangle(new SolidBrush(Color.FromArgb(75, Color.White)), X, Y, 49, 49);
         }
 
-        public override bool IsMouseOver(int mouseX, int mouseY)
+        public override bool CheckMouseOver(int mouseX, int mouseY)
         {
             if (mouseX > X && mouseX < X + 49 &&
                 mouseY > Y && mouseY < Y + 49)

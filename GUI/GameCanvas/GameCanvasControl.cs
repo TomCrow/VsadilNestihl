@@ -18,29 +18,33 @@ namespace VsadilNestihl.GUI.GameCanvas
         private readonly List<IDrawable> _drawables = new List<IDrawable>();
         private IDrawable _mouseOverDrawable = null;
         private IDrawable _mousePressedDrawable = null;
+        private bool _mousePressed = false;
 
         public GameCanvasControl()
         {
-            var board = new BoardDrawable(new Point(0, 0));
-            _drawables.Add(board);
-
-            var dice = new DiceDrawable(new Point(724 / 2, 724 / 2));
-            _drawables.Add(dice);
-            
             InitializeComponent();
         }
 
         public void AddDrawable(IDrawable drawable)
         {
             _drawables.Add(drawable);
+            drawable.PositionUpdated += DrawableOnPositionUpdated;
             Refresh();
         }
-
+        
         public void AddDrawables(IEnumerable<IDrawable> drawables)
         {
             foreach (var drawable in drawables)
+            {
+                drawable.PositionUpdated += DrawableOnPositionUpdated;
                 _drawables.Add(drawable);
+            }
 
+            Refresh();
+        }
+
+        private void DrawableOnPositionUpdated()
+        {
             Refresh();
         }
 
@@ -61,12 +65,17 @@ namespace VsadilNestihl.GUI.GameCanvas
 
         private void BoardControl_MouseMove(object sender, MouseEventArgs e)
         {
+            _mousePressedDrawable?.MouseDrag(e.X, e.Y);
+            
             var drawables = GetDrawablesByDepth();
             for (var i = drawables.Count - 1; i >= 0; i--)
             {
-                if (drawables[i].IsMouseOver(e.X, e.Y))
+                if (drawables[i].CheckMouseOver(e.X, e.Y))
                 {
                     if (_mouseOverDrawable == drawables[i])
+                        return;
+
+                    if (_mousePressed)
                         return;
 
                     _mouseOverDrawable?.SetMouseOver(false);
@@ -86,24 +95,26 @@ namespace VsadilNestihl.GUI.GameCanvas
 
         private void BoardControl_MouseDown(object sender, MouseEventArgs e)
         {
+            _mousePressed = true;
             if (_mouseOverDrawable == null)
                 return;
 
-            _mouseOverDrawable.SetMousePressed(true);
+            _mouseOverDrawable.SetMousePressed(true, e.X, e.Y);
             _mousePressedDrawable = _mouseOverDrawable;
             Refresh();
         }
 
         private void BoardControl_MouseUp(object sender, MouseEventArgs e)
         {
+            _mousePressed = false;
             if (_mousePressedDrawable == null)
                 return;
             
-            _mousePressedDrawable.SetMousePressed(false);
+            _mousePressedDrawable.SetMousePressed(false, e.X, e.Y);
             Refresh();
 
             if (_mousePressedDrawable == _mouseOverDrawable)
-                _mousePressedDrawable.Click();
+                _mousePressedDrawable.MouseClick(e.X, e.Y);
 
             _mousePressedDrawable = null;
         }

@@ -19,6 +19,19 @@ namespace VsadilNestihl.GUI.GameCanvas.Drawables
             CenterX = BitmapStill.Width / 2;
             CenterY = BitmapStill.Height / 2;
             MouseOverCheckTransparency = true;
+            Depth = -101;
+        }
+
+        public override void MouseClick(int mouseX, int mouseY)
+        {
+            base.MouseClick(mouseX, mouseY);
+            Console.WriteLine("dice click");
+        }
+
+        public override void MouseDrag(int mouseX, int mouseY)
+        {
+            SetPosition(mouseX, mouseY);
+            //Console.WriteLine($"Dice dragged: {mouseX} , {mouseY}");
         }
     }
 }

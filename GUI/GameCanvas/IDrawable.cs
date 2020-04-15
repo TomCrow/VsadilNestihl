@@ -14,9 +14,10 @@ namespace VsadilNestihl.GUI.GameCanvas
 
         int GetDepth();
         void Draw(Graphics graphics);
-        bool IsMouseOver(int mouseX, int mouseY);
+        bool CheckMouseOver(int mouseX, int mouseY);
         void SetMouseOver(bool mouseOver);
-        void SetMousePressed(bool pressed);
-        void Click();
+        void SetMousePressed(bool mousePressed, int mouseX, int mouseY);
+        void MouseClick(int mouseX, int mouseY);
+        void MouseDrag(int mouseX, int mouseY);
     }
 }

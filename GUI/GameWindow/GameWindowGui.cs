@@ -25,6 +25,12 @@ namespace VsadilNestihl.GUI.GameWindow
                 new Game.Lobby.LobbyPlayer(2, "Hráč 2", System.Drawing.Color.Coral, Game.Lobby.PlayerPosition.Position2),
             };
 
+            var boardDrawable = new GameCanvas.Drawables.BoardDrawable(new System.Drawing.Point(0, 0));
+            _view.AddDrawable(boardDrawable);
+
+            var diceDrawable = new GameCanvas.Drawables.DiceDrawable(new System.Drawing.Point(724 / 2, 724 / 2));
+            _view.AddDrawable(diceDrawable);
+
             var boardPositionsDrawables = GameCanvas.Helpers.CommonDrawables.GetBoardPositions(BoardPositionClicked);
             _view.AddDrawables(boardPositionsDrawables);
 
