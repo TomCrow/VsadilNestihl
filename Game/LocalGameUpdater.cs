@@ -43,10 +43,9 @@ namespace VsadilNestihl.Game
                 CurrentPlayerRolledThisTurn = rolledThisTurn;
         }
 
-        public void PlayerSetPlacePosition(Player.Player player, IPlace place, IPosition position)
+        public void PlayerSetPlace(Player.Player player, IPlace place)
         {
             Players[player.PlayerId].Place = place;
-            Players[player.PlayerId].Position = position;
         }
 
         public virtual void NextRound(Player.Player currentPlayer)

@@ -22,11 +22,6 @@ namespace VsadilNestihl.Game.Board
             return Places.First.Value;
         }
 
-        public IPosition GetStartPosition()
-        {
-            return Places.First.Value.GetDefaultPosition();
-        }
-
         public IPlace GetNextPlace(IPlace place)
         {
             var placeNode = Places.Find(place);

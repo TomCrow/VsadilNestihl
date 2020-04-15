@@ -15,7 +15,6 @@ namespace VsadilNestihl.Game.Player
         string Name { get; }
         Color Color { get; }
         IPlace Place { get; set; }
-        IPosition Position { get; set; }
         int Money { get; set; }
     }
 }

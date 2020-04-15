@@ -12,7 +12,7 @@ namespace VsadilNestihl.Game
         void PlayerSetMoney(Player.Player player, int money);
         void PlayerRolledDice(Player.Player player, int rolledCount);
         void PlayerRolledThisTurn(Player.Player player, bool rolledThisTurn);
-        void PlayerSetPlacePosition(Player.Player player, Board.IPlace place, Board.IPosition position);
+        void PlayerSetPlace(Player.Player player, Board.IPlace place);
         void NextRound(Player.Player currentPlayer);
     }
 }

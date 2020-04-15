@@ -33,7 +33,16 @@ namespace VsadilNestihl.GUI.GameCanvas.Drawables
             CenterX = 8;
             CenterY = 11;
             Depth = -100;
-            MouseOverDisabled = true;
+
+
+            MouseOverCheckTransparency = true;
+            //MouseOverDisabled = true;
+        }
+
+        public override void MouseDrag(int mouseX, int mouseY)
+        {
+            SetPosition(mouseX, mouseY);
+            //Console.WriteLine($"Dice dragged: {mouseX} , {mouseY}");
         }
     }
 }

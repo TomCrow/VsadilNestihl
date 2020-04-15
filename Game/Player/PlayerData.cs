@@ -14,7 +14,6 @@ namespace VsadilNestihl.Game.Player
         public string Name { get; private set; }
         public Color Color { get; private set; }
         public IPlace Place { get; set; }
-        public IPosition Position { get; set; }
         public int Money { get; set; }
 
         public PlayerData(int playerId, string name, Color color)
@@ -29,7 +28,6 @@ namespace VsadilNestihl.Game.Player
             return new PlayerData(player.PlayerId, player.Name, player.Color)
             {
                 Place = player.Place,
-                Position = player.Position
             };
         }
     }

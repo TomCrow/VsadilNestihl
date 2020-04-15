@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VsadilNestihl.GUI.GameWindow
 {
-    public interface IGameWindowView : VsadilNestihl.GUI.GameCanvas.IGameCanvas
+    public interface IGameWindowView : GameCanvas.IGameCanvas
     {
         GameWindowGui GetGameWindowGui();
     }

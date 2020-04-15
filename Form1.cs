@@ -207,7 +207,7 @@ namespace VsadilNestihl
         {
         }
 
-        public void PlayerSetPlacePosition(Player player, IPlace place, IPosition position)
+        public void PlayerSetPlace(Player player, IPlace place)
         {
         }
 

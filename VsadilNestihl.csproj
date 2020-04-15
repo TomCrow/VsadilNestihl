@@ -58,7 +58,6 @@
     <Compile Include="Game\Board\DostihyASazky\ConcretePlace.cs" />
     <Compile Include="Game\Board\DostihyASazky\Place.cs" />
     <Compile Include="Game\Board\IBoard.cs" />
-    <Compile Include="Game\Board\IPosition.cs" />
     <Compile Include="Game\Dices\Dice.cs" />
     <Compile Include="Game\Dices\IDice.cs" />
     <Compile Include="Game\Exceptions\FatalGameException.cs" />
@@ -92,17 +91,19 @@
     </Compile>
     <Compile Include="GUI\GameCanvas\Helpers\PlacesPositions.cs" />
     <Compile Include="GUI\Extensions\InvokingExtensions.cs" />
+    <Compile Include="GUI\GameCanvas\Helpers\PlayerPositionSetterHelper.cs" />
     <Compile Include="GUI\GameCanvas\IDrawable.cs" />
     <Compile Include="GUI\GameCanvas\Drawables\PlayerDrawable.cs" />
     <Compile Include="GUI\GameCanvas\IGameCanvas.cs" />
-    <Compile Include="GUI\GameWindow\FormGameWindow.cs">
+    <Compile Include="GUI\GameWindow\FormNetworkGameWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\GameWindow\FormGameWindow.Designer.cs">
-      <DependentUpon>FormGameWindow.cs</DependentUpon>
+    <Compile Include="GUI\GameWindow\FormNetworkGameWindow.Designer.cs">
+      <DependentUpon>FormNetworkGameWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\GameWindow\GameWindowGui.cs" />
     <Compile Include="GUI\GameWindow\IGameWindowView.cs" />
+    <Compile Include="GUI\GameWindow\NetworkGameWindowGui.cs" />
     <Compile Include="GUI\NetworkLobby\FormNetworkLobby.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,9 +131,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\GameWindow\FormGameWindow.resx">
-      <DependentUpon>FormGameWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\NetworkLobby\FormNetworkLobby.resx">
       <DependentUpon>FormNetworkLobby.cs</DependentUpon>

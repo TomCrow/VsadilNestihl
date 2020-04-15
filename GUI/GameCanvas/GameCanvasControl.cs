@@ -18,6 +18,7 @@ namespace VsadilNestihl.GUI.GameCanvas
         private readonly List<IDrawable> _drawables = new List<IDrawable>();
         private IDrawable _mouseOverDrawable = null;
         private IDrawable _mousePressedDrawable = null;
+        private IDrawable _mouseOverWhilePressedDrawable = null;
         private bool _mousePressed = false;
 
         public GameCanvasControl()
@@ -72,23 +73,32 @@ namespace VsadilNestihl.GUI.GameCanvas
             {
                 if (drawables[i].CheckMouseOver(e.X, e.Y))
                 {
-                    if (_mouseOverDrawable == drawables[i])
-                        return;
-
                     if (_mousePressed)
-                        return;
+                    {
+                        if (_mouseOverWhilePressedDrawable == drawables[i])
+                            return;
 
-                    _mouseOverDrawable?.SetMouseOver(false);
-                    drawables[i].SetMouseOver(true);
-                    _mouseOverDrawable = drawables[i];
-                    Cursor = Cursors.Hand;
-                    Refresh();
-                    return;
+                        _mouseOverWhilePressedDrawable = drawables[i];
+                        return;
+                    }
+                    else
+                    {
+                        if (_mouseOverDrawable == drawables[i])
+                            return;
+
+                        _mouseOverDrawable?.SetMouseOver(false);
+                        drawables[i].SetMouseOver(true);
+                        _mouseOverDrawable = drawables[i];
+                        Cursor = Cursors.Hand;
+                        Refresh();
+                        return;
+                    }
                 }
             }
 
             _mouseOverDrawable?.SetMouseOver(false);
             _mouseOverDrawable = null;
+            _mouseOverWhilePressedDrawable = null;
             Cursor = Cursors.Default;
             Refresh();
         }
@@ -101,6 +111,7 @@ namespace VsadilNestihl.GUI.GameCanvas
 
             _mouseOverDrawable.SetMousePressed(true, e.X, e.Y);
             _mousePressedDrawable = _mouseOverDrawable;
+            _mouseOverWhilePressedDrawable = _mouseOverDrawable;
             Refresh();
         }
 
@@ -113,7 +124,7 @@ namespace VsadilNestihl.GUI.GameCanvas
             _mousePressedDrawable.SetMousePressed(false, e.X, e.Y);
             Refresh();
 
-            if (_mousePressedDrawable == _mouseOverDrawable)
+            if (_mousePressedDrawable == _mouseOverWhilePressedDrawable)
                 _mousePressedDrawable.MouseClick(e.X, e.Y);
 
             _mousePressedDrawable = null;

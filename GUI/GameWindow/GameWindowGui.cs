@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VsadilNestihl.Game.Board.DostihyASazky;
+using VsadilNestihl.GUI.GameCanvas.Drawables;
+using VsadilNestihl.GUI.GameCanvas.Helpers;
 
 namespace VsadilNestihl.GUI.GameWindow
 {
@@ -11,27 +14,31 @@ namespace VsadilNestihl.GUI.GameWindow
         private readonly IGameWindowView _view;
         private readonly Game.GameManager _gameManager;
 
-        private Dictionary<int, GameCanvas.Drawables.PlayerDrawable> _playerDrawables = new Dictionary<int, GameCanvas.Drawables.PlayerDrawable>();
+        private Dictionary<int, PlayerDrawable> _playerDrawables = new Dictionary<int, PlayerDrawable>();
 
         public GameWindowGui(IGameWindowView gameWindowView)
         {
             _view = gameWindowView;
 
-            var board = new Game.Board.DostihyASazky.BoardFactory().CreateBoard();
+            var board = new BoardFactory().CreateBoard();
             var gameSettings = new Game.GameSettings();
             var lobbyPlayers = new List<Game.Lobby.LobbyPlayer>
             {
                 new Game.Lobby.LobbyPlayer(1, "Hráč 1", System.Drawing.Color.Blue, Game.Lobby.PlayerPosition.Position1),
                 new Game.Lobby.LobbyPlayer(2, "Hráč 2", System.Drawing.Color.Coral, Game.Lobby.PlayerPosition.Position2),
+                new Game.Lobby.LobbyPlayer(3, "Hráč 3", System.Drawing.Color.Green, Game.Lobby.PlayerPosition.Position3),
+                new Game.Lobby.LobbyPlayer(4, "Hráč 4", System.Drawing.Color.Red, Game.Lobby.PlayerPosition.Position4),
+                new Game.Lobby.LobbyPlayer(5, "Hráč 5", System.Drawing.Color.Purple, Game.Lobby.PlayerPosition.Position5),
+                new Game.Lobby.LobbyPlayer(6, "Hráč 6", System.Drawing.Color.Yellow, Game.Lobby.PlayerPosition.Position6),
             };
 
-            var boardDrawable = new GameCanvas.Drawables.BoardDrawable(new System.Drawing.Point(0, 0));
+            var boardDrawable = new BoardDrawable(new System.Drawing.Point(0, 0));
             _view.AddDrawable(boardDrawable);
 
-            var diceDrawable = new GameCanvas.Drawables.DiceDrawable(new System.Drawing.Point(724 / 2, 724 / 2));
+            var diceDrawable = new DiceDrawable(new System.Drawing.Point(724 / 2, 724 / 2));
             _view.AddDrawable(diceDrawable);
 
-            var boardPositionsDrawables = GameCanvas.Helpers.CommonDrawables.GetBoardPositions(BoardPositionClicked);
+            var boardPositionsDrawables = CommonDrawables.GetBoardPositions(BoardPositionClicked);
             _view.AddDrawables(boardPositionsDrawables);
 
             _gameManager = new Game.GameManager(board, gameSettings, this, lobbyPlayers);
@@ -41,21 +48,32 @@ namespace VsadilNestihl.GUI.GameWindow
         public override void GameStarted(List<Game.Player.Player> players)
         {
             base.GameStarted(players);
-            
+
+            var placesPlayerDrawables = new Dictionary<ConcretePlace, List<PlayerDrawable>>();
             foreach (var playerDataKeyVal in Players)
             {
                 var playerId = playerDataKeyVal.Key;
                 var playerData = playerDataKeyVal.Value;
-                var playerDrawable = new GameCanvas.Drawables.PlayerDrawable(playerData.Color);
-                var playerPositionPoint = GameCanvas.Helpers.PlacesPositions.GetByPlaceAndPosition((Game.Board.DostihyASazky.ConcretePlace)playerData.Place.GetPlaceId(), playerData.Position.GetPositionId());
-                playerDrawable.SetPosition(playerPositionPoint.X + 25, playerPositionPoint.Y + 25);
-
+                var playerDrawable = new PlayerDrawable(playerData.Color);
                 _playerDrawables.Add(playerId, playerDrawable);
-                _view.AddDrawable(playerDrawable);
+
+                var concretePlace = (ConcretePlace) playerData.Place.GetPlaceId();
+                if (!placesPlayerDrawables.ContainsKey(concretePlace))
+                    placesPlayerDrawables.Add(concretePlace, new List<PlayerDrawable>());
+
+                placesPlayerDrawables[concretePlace].Add(playerDrawable);
             }
+
+            foreach (var placePlayerDrawables in placesPlayerDrawables)
+            {
+                var leftCornerPoint = PlacesPositions.GetByPlaceAndPosition(placePlayerDrawables.Key, 0);
+                PlayerPositionSetterHelper.SetPlayersPositions(placePlayerDrawables.Value, leftCornerPoint);
+            }
+
+            _view.AddDrawables(_playerDrawables.Values);
         }
 
-        private void BoardPositionClicked(Game.Board.DostihyASazky.ConcretePlace concretePlace, int positionId)
+        private void BoardPositionClicked(ConcretePlace concretePlace, int positionId)
         {
             Console.WriteLine($"Place clicked: {concretePlace} position: {positionId}");
         }

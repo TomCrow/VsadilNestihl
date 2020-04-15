@@ -77,7 +77,7 @@ namespace VsadilNestihl.Game
                 place = Board.GetNextPlace(place);
 
             player.SetRolledThisTurn(true);
-            player.SetPlacePosition(place, place.GetDefaultPosition());
+            player.SetPlace(place);
         }
 
         public void PlayerEndTurn(Player.Player player)
