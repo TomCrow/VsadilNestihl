@@ -169,7 +169,7 @@ namespace Playeyr
             foreach (var lobbyPlayer in GetAllLobbyPlayers().Where(x => x.PlayerHandler != null))
                 gameUpdaters.Add(new RemoteGameUpdater(lobbyPlayer.PlayerHandler.Receiver));
 
-            // TODO: remote player controller
+            // TODO: remote player (game) controller
 
             var board = new BoardFactory().CreateBoard();
             var gameSettings = new GameSettings();
