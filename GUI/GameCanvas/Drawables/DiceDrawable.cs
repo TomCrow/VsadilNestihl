@@ -30,7 +30,7 @@ namespace VsadilNestihl.GUI.GameCanvas.Drawables
 
         public override void MouseDrag(int mouseX, int mouseY)
         {
-            SetPosition(mouseX, mouseY);
+            //SetPosition(mouseX, mouseY);
             //Console.WriteLine($"Dice dragged: {mouseX} , {mouseY}");
         }
     }

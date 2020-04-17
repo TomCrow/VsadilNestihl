@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VsadilNestihl.Game.Lobby
+namespace VsadilNestihl.Game.Player
 {
     public enum PlayerPosition
     {

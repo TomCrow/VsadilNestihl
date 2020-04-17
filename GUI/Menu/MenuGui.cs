@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VsadilNestihl.Game.Lobby;
+using VsadilNestihl.Game;
+using Playeyr;
+using VsadilNestihl.GUI.GameWindow;
 
 namespace VsadilNestihl.GUI.Menu
 {
@@ -39,7 +41,7 @@ namespace VsadilNestihl.GUI.Menu
             NetworkLobby.FormNetworkLobby networkLobbyView = null;
             try
             {
-                var networkLobby = new Game.Lobby.NetworkLobby();
+                var networkLobby = new Playeyr.NetworkLobby();
 
                 networkLobbyView = new NetworkLobby.FormNetworkLobby();
                 var networkLobbyGui = networkLobbyView.GetNetworkLobbyGui();
@@ -55,6 +57,9 @@ namespace VsadilNestihl.GUI.Menu
             if (networkLobbyView != null)
             {
                 networkLobbyView.ShowDialog();
+                var networkLobbyGui = networkLobbyView.GetNetworkLobbyGui();
+                if (networkLobbyGui.OpenGameWindow && networkLobbyGui.LocalGame != null)
+                    OpenLocalGame(networkLobbyGui.LocalGame);
             }
         }
 
@@ -97,7 +102,30 @@ namespace VsadilNestihl.GUI.Menu
                 var networkLobbyGui = networkLobbyView.GetNetworkLobbyGui();
                 networkLobbyGui.SetJoiningPlayer(joiningPlayer);
                 networkLobbyView.ShowDialog();
+
+                if (networkLobbyGui.OpenGameWindow && networkLobbyGui.RemoteGame != null)
+                    OpenRemoteGame(networkLobbyGui.RemoteGame);
             }
+        }
+
+        private void OpenLocalGame(LocalGame localGame)
+        {
+            var formGameWindow = new FormGameWindow();
+            var gameWindowGui = formGameWindow.GetGameWindowGui();
+            gameWindowGui.SetGameData(localGame);
+            localGame.SetGameView(gameWindowGui);
+
+            formGameWindow.ShowDialog();
+        }
+
+        private void OpenRemoteGame(RemoteGame remoteGame)
+        {
+            var formGameWindow = new FormGameWindow();
+            var gameWindowGui = formGameWindow.GetGameWindowGui();
+            gameWindowGui.SetGameData(remoteGame);
+            remoteGame.SetGameView(gameWindowGui);
+
+            formGameWindow.ShowDialog();
         }
     }
 }

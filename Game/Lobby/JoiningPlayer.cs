@@ -5,51 +5,56 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VsadilNestihl.Game;
+using VsadilNestihl.Game.Network;
+using VsadilNestihl.Game.Player;
 using VsadilNestihlNetworking.Messages;
 using VsadilNestihlNetworking.Messages.Lobby;
 using VsadilNestihlNetworking.SerializationEngines;
 
-namespace VsadilNestihl.Game.Lobby
+namespace Playeyr
 {
     public class JoiningPlayer
     {
-        private VsadilNestihlNetworking.Client _client;
+        private GameClient _gameClient;
         private int _myPlayerId = 0;
         private List<LobbyPlayer> _lobbyPlayers = null;
 
-        public List<IMessage> ChatMessages { get; private set; } = new List<IMessage>();
-        public bool StoreChatMessages { get; set; } = true;
-
+        public event Action Disconnected;
         public event Action<string> LobbyException;
         public event Action<int> SetMyPlayerId;
         public event Action<List<LobbyPlayer>> LobbyPlayersUpdated;
         public event Action<string> ChatServerMessage;
         public event Action<LobbyPlayer, string> ChatPlayerMessage;
-        public event Action Disconnected;
+        public event Action<RemoteGame> GameStarting;
 
         public JoiningPlayer() { }
 
         public void Join(string playerName, string ip, int port)
         {
-            if (_client != null)
+            if (_gameClient != null)
                 return;
 
-            _client = new VsadilNestihlNetworking.Client(new IdJsonSerialization());
+            _gameClient = new GameClient();
+            _gameClient.Disconnected += () => Disconnected?.Invoke();
+            _gameClient.LobbyException += GameClientOnLobbyException;
+            _gameClient.SetMyPlayerId += GameClientOnSetMyPlayerId;
+            _gameClient.LobbyPlayersUpdated += GameClientOnLobbyPlayersUpdated;
+            _gameClient.ChatServerMessage += GameClientOnChatServerMessage;
+            _gameClient.ChatPlayerMessage += GameClientOnChatPlayerMessage;
+            _gameClient.GameStarting += starting => GameStarting?.Invoke(new RemoteGame(_gameClient, _myPlayerId));
 
-            _client.OnDisonnected += ClientOnOnDisonnected;
-            _client.MessageDispatcher.Add(typeof(LobbyActionException), OnLobbyActionException);
-            _client.MessageDispatcher.Add(typeof(SetPlayerId), OnSetPlayerId);
-            _client.MessageDispatcher.Add(typeof(LobbyPlayersUpdate), OnLobbyPlayersUpdate);
-            _client.MessageDispatcher.Add(typeof(VsadilNestihlNetworking.Messages.Chat.ChatServerMessage), OnChatServerMessage);
-            _client.MessageDispatcher.Add(typeof(VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessage), OnChatPlayerMessage);
+            _gameClient.Join(playerName, ip, port);
+        }
 
-            _client.Connect(ip, port);
-            _client.SendMessage(new PlayerJoinRequest(playerName));
+        public List<IMessage> GetStoredChatMessages()
+        {
+            return _gameClient.ChatMessages;
         }
         
         public void DisconnectPlayer()
         {
-            _client.SendMessage(new Disconnect());
+            _gameClient.DisconnectPlayer();
         }
 
         public int GetMyPlayerId()
@@ -64,79 +69,53 @@ namespace VsadilNestihl.Game.Lobby
 
         public void PositionSwitchRequest(PlayerPosition playerPosition)
         {
-            _client.SendMessage(new PlayerPositionSwitchRequest((int)playerPosition));
+            _gameClient.LobbyPositionSwitchRequest(playerPosition);
         }
 
         public void ColorSwitchRequest()
         {
-            _client.SendMessage(new PlayerColorSwitchRequest());
+            _gameClient.LobbyColorSwitchRequest();
         }
 
         public void ChatSendMessageRequest(string message)
         {
-            _client.SendMessage(new VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessageRequest(message));
+            _gameClient.ChatSendMessageRequest(message);
         }
-
-        private void ClientOnOnDisonnected(object sender, EventArgs e)
+        
+        private void GameClientOnLobbyException(LobbyActionException lobbyActionException)
         {
-            Disconnected?.Invoke();
-        }
-
-        private void OnLobbyActionException(IMessage message)
-        {
-            if (!(message is LobbyActionException lobbyActionException))
-                return;
-
             LobbyException?.Invoke(lobbyActionException.Message);
         }
 
-        private void OnSetPlayerId(IMessage message)
+        private void GameClientOnSetMyPlayerId(SetPlayerId setPlayerId)
         {
-            if (!(message is SetPlayerId setPlayerId))
-                return;
-
             _myPlayerId = setPlayerId.PlayerId;
             SetMyPlayerId?.Invoke(_myPlayerId);
         }
 
-        private void OnLobbyPlayersUpdate(IMessage message)
+        private void GameClientOnLobbyPlayersUpdated(LobbyPlayersUpdate lobbyPlayersUpdate)
         {
-            if (!(message is LobbyPlayersUpdate lobbyPlayersUpdate))
-                return;
-
             var lobbyPlayers = new List<LobbyPlayer>();
             foreach (var lobbyPlayer in lobbyPlayersUpdate.LobbyPlayers)
             {
                 lobbyPlayers.Add(new LobbyPlayer(lobbyPlayer.PlayerId, lobbyPlayer.PlayerName,
-                    Color.FromArgb(lobbyPlayer.Color), (PlayerPosition) lobbyPlayer.PlayerPosition));
+                    Color.FromArgb(lobbyPlayer.Color), (PlayerPosition)lobbyPlayer.PlayerPosition));
             }
 
             _lobbyPlayers = lobbyPlayers;
             LobbyPlayersUpdated?.Invoke(lobbyPlayers);
         }
 
-        private void OnChatServerMessage(IMessage message)
+        private void GameClientOnChatServerMessage(VsadilNestihlNetworking.Messages.Chat.ChatServerMessage chatServerMessage)
         {
-            if (!(message is VsadilNestihlNetworking.Messages.Chat.ChatServerMessage chatServerMessage))
-                return;
-
-            if (StoreChatMessages)
-                ChatMessages.Add(chatServerMessage);
-
             ChatServerMessage?.Invoke(chatServerMessage.Message);
         }
 
-        private void OnChatPlayerMessage(IMessage message)
+        private void GameClientOnChatPlayerMessage(VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessage chatPlayerMessage)
         {
-            if (!(message is VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessage chatPlayerMessage))
-                return;
-
             var lobbyPlayer = _lobbyPlayers.Find(x => x.PlayerId == chatPlayerMessage.PlayerId);
             if (lobbyPlayer == null)
                 return;
-
-            if (StoreChatMessages)
-                ChatMessages.Add(chatPlayerMessage);
 
             ChatPlayerMessage?.Invoke(lobbyPlayer, chatPlayerMessage.Message);
         }

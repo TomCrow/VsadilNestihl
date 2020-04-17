@@ -65,19 +65,25 @@
     <Compile Include="Game\GameManager.cs" />
     <Compile Include="Game\GameSettings.cs" />
     <Compile Include="Game\Board\IPlace.cs" />
+    <Compile Include="Game\IGameData.cs" />
     <Compile Include="Game\IGameUpdater.cs" />
+    <Compile Include="Game\IGameView.cs" />
     <Compile Include="Game\Lobby\JoiningPlayer.cs" />
     <Compile Include="Game\Lobby\LobbyPlayer.cs" />
     <Compile Include="Game\Lobby\PlayerHandler.cs" />
     <Compile Include="Game\Lobby\NetworkLobby.cs" />
-    <Compile Include="Game\Lobby\PlayerPosition.cs" />
-    <Compile Include="Game\LocalGameUpdater.cs" />
+    <Compile Include="Game\Player\PlayerPosition.cs" />
+    <Compile Include="Game\LocalGame.cs" />
+    <Compile Include="Game\MultipleGameUpdater.cs" />
+    <Compile Include="Game\Network\GameClient.cs" />
     <Compile Include="Game\Player\IPlayerController.cs" />
     <Compile Include="Game\Player\IPlayerData.cs" />
     <Compile Include="Game\Player\Player.cs" />
     <Compile Include="Game\Player\LocalPlayerController.cs" />
     <Compile Include="Game\GameState.cs" />
     <Compile Include="Game\Player\PlayerData.cs" />
+    <Compile Include="Game\RemoteGame.cs" />
+    <Compile Include="Game\RemoteGameUpdater.cs" />
     <Compile Include="GUI\GameCanvas\Drawables\BoardDrawable.cs" />
     <Compile Include="GUI\GameCanvas\Helpers\CommonDrawables.cs" />
     <Compile Include="GUI\GameCanvas\Drawable.cs" />
@@ -101,16 +107,8 @@
     <Compile Include="GUI\GameWindow\FormGameWindow.Designer.cs">
       <DependentUpon>FormGameWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\GameWindow\FormNetworkGame.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\GameWindow\FormNetworkGame.Designer.cs">
-      <DependentUpon>FormNetworkGame.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\GameWindow\GameWindowGui.cs" />
     <Compile Include="GUI\GameWindow\IGameWindowView.cs" />
-    <Compile Include="GUI\GameWindow\INetworkGameView.cs" />
-    <Compile Include="GUI\GameWindow\NetworkGameGui.cs" />
     <Compile Include="GUI\NetworkLobby\FormNetworkLobby.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -144,9 +142,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\GameWindow\FormGameWindow.resx">
       <DependentUpon>FormGameWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\GameWindow\FormNetworkGame.resx">
-      <DependentUpon>FormNetworkGame.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\NetworkLobby\FormNetworkLobby.resx">
       <DependentUpon>FormNetworkLobby.cs</DependentUpon>

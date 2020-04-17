@@ -18,15 +18,17 @@ namespace VsadilNestihl.Game.Player
         public int PlayerId { get; private set; }
         public string Name { get; private set; }
         public Color Color { get; private set; }
+        public PlayerPosition PlayerPosition { get; private set; }
         public IPlace Place { get; set; }
 
         public Dices.IDice Dice { get; set; } = new Dices.Dice();
 
-        public Player(Lobby.LobbyPlayer lobbyPlayer, Dices.IDice dice, int startingMoney, IPlace startingPlace)
+        public Player(Playeyr.LobbyPlayer lobbyPlayer, Dices.IDice dice, int startingMoney, IPlace startingPlace)
         {
             PlayerId = lobbyPlayer.PlayerId;
             Name = lobbyPlayer.PlayerName;
             Color = lobbyPlayer.Color;
+            PlayerPosition = lobbyPlayer.PlayerPosition;
             Dice = dice;
             _money = startingMoney;
             Place = startingPlace;

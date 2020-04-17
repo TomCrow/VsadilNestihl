@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using VsadilNestihl.Game.Player;
+
+namespace VsadilNestihl.Game
+{
+    public interface IGameData
+    {
+        Dictionary<int, IPlayerData> GetPlayers();
+        int GetCurrentPlayerId();
+        bool GetCurrentPlayerRolledThisTurn();
+    }
+}

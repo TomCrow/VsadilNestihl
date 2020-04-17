@@ -9,7 +9,7 @@ namespace VsadilNestihl.Game
 {
     public class GameManager
     {
-        private readonly List<Lobby.LobbyPlayer> _lobbyPlayers;
+        private readonly List<Playeyr.LobbyPlayer> _lobbyPlayers;
 
         public Board.IBoard Board { get; private set; }
         public GameSettings GameSettings { get; private set; }
@@ -20,7 +20,7 @@ namespace VsadilNestihl.Game
 
         public IDice DefaultDice { get; set; } = new Dice();
 
-        public GameManager(Board.IBoard board, GameSettings gameSettings, IGameUpdater gameUpdater, List<Lobby.LobbyPlayer> lobbyPlayers)
+        public GameManager(Board.IBoard board, GameSettings gameSettings, IGameUpdater gameUpdater, List<Playeyr.LobbyPlayer> lobbyPlayers)
         {
             _lobbyPlayers = lobbyPlayers;
 
@@ -36,7 +36,7 @@ namespace VsadilNestihl.Game
                 throw new InvalidActionException("Game is already started.");
 
             // All playing players (not spectators)
-            var actualLobbyPlayers = _lobbyPlayers.Where(x => x.PlayerPosition != Lobby.PlayerPosition.Spectator).ToList();
+            var actualLobbyPlayers = _lobbyPlayers.Where(x => x.PlayerPosition != Player.PlayerPosition.Spectator).ToList();
 
             if (actualLobbyPlayers.Count < 2)
                 throw new InvalidActionException("More players are needed.");

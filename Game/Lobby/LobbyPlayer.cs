@@ -4,8 +4,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VsadilNestihl.Game.Player;
 
-namespace VsadilNestihl.Game.Lobby
+namespace Playeyr
 {
     public class LobbyPlayer
     {

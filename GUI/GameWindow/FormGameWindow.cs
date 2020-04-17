@@ -36,5 +36,10 @@ namespace VsadilNestihl.GUI.GameWindow
         {
             gameCanvas.AddDrawables(drawables);
         }
+
+        private void gameCanvas_Load(object sender, EventArgs e)
+        {
+            _gameWindowGui.GameWindowLoaded();
+        }
     }
 }

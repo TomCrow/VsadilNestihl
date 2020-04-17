@@ -7,7 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using VsadilNestihl.Game.Lobby;
+using Playeyr;
+using VsadilNestihl.Game.Player;
 using VsadilNestihl.GUI.Extensions;
 
 namespace VsadilNestihl.GUI.NetworkLobby
@@ -76,7 +77,7 @@ namespace VsadilNestihl.GUI.NetworkLobby
             _myPlayerId = myPlayerId;
         }
 
-        public void UpdateLobbyPlayers(List<Game.Lobby.LobbyPlayer> lobbyPlayers)
+        public void UpdateLobbyPlayers(List<Playeyr.LobbyPlayer> lobbyPlayers)
         {
             this.InvokeIfRequired(() =>
             {

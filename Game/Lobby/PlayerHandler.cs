@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using VsadilNestihl.Game.Exceptions;
+using VsadilNestihl.Game.Player;
 using VsadilNestihlNetworking;
 using VsadilNestihlNetworking.Messages;
 using VsadilNestihlNetworking.Messages.Lobby;
 
-namespace VsadilNestihl.Game.Lobby
+namespace Playeyr
 {
     public class PlayerHandler
     {
@@ -52,6 +53,11 @@ namespace VsadilNestihl.Game.Lobby
         public void ChatPlayerMessage(VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessage chatPlayerMessage)
         {
             Receiver.SendMessage(chatPlayerMessage);
+        }
+
+        public void GameStarting()
+        {
+            Receiver.SendMessage(new GameStarting());
         }
 
         private void OnPlayerJoinRequest(IMessage message, Receiver receiver)

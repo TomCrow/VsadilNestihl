@@ -39,6 +39,7 @@
             this.gameCanvas.Name = "gameCanvas";
             this.gameCanvas.Size = new System.Drawing.Size(1194, 688);
             this.gameCanvas.TabIndex = 0;
+            this.gameCanvas.Load += new System.EventHandler(this.gameCanvas_Load);
             // 
             // FormGameWindow
             // 

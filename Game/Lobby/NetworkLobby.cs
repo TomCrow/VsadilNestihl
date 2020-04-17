@@ -1,16 +1,20 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VsadilNestihl.Game;
+using VsadilNestihl.Game.Board.DostihyASazky;
 using VsadilNestihl.Game.Exceptions;
+using VsadilNestihl.Game.Player;
 using VsadilNestihlNetworking;
 using VsadilNestihlNetworking.Messages.Lobby;
 using VsadilNestihlNetworking.SerializationEngines;
 
-namespace VsadilNestihl.Game.Lobby
+namespace Playeyr
 {
     public class NetworkLobby
     {
@@ -23,6 +27,7 @@ namespace VsadilNestihl.Game.Lobby
         public event Action<List<LobbyPlayer>> LobbyPlayersUpdated;
         public event Action<string> ChatServerMessage;
         public event Action<LobbyPlayer, string> ChatPlayerMessage;
+        public event Action<LocalGame> GameStarting;
 
         public NetworkLobby() { }
 
@@ -143,6 +148,33 @@ namespace VsadilNestihl.Game.Lobby
                 return;
 
             ChatSendMessage(playerHandler.LobbyPlayer, message);
+        }
+
+        public void StartGame()
+        {
+            var playingPlayers = GetAllLobbyPlayers().Where(x => x.PlayerPosition != PlayerPosition.Spectator).ToList();
+            if (playingPlayers.Count < 2)
+                throw new InvalidActionException("Not enough players.");
+
+            _server.OnClientConnected -= ServerOnOnClientConnected;
+            _server.OnClientDisonnected -= ServerOnOnClientDisonnected; // TODO: postarat se o tyto handlery
+
+            foreach (var lobbyPlayer in GetAllLobbyPlayers().Where(x => x.PlayerHandler != null))
+                lobbyPlayer.PlayerHandler.GameStarting();
+
+            // Game updaters
+            var gameUpdaters = new List<IGameUpdater>();
+            var localGame = new LocalGame();
+            gameUpdaters.Add(localGame);
+            foreach (var lobbyPlayer in GetAllLobbyPlayers().Where(x => x.PlayerHandler != null))
+                gameUpdaters.Add(new RemoteGameUpdater(lobbyPlayer.PlayerHandler.Receiver));
+
+            var board = new BoardFactory().CreateBoard();
+            var gameSettings = new GameSettings();
+            var gameManager = new GameManager(board, gameSettings, new MultipleGameUpdater(gameUpdaters), GetAllLobbyPlayers());
+            gameManager.Start();
+
+            GameStarting?.Invoke(localGame);
         }
 
         private void ServerChatSendMessage(string message)
