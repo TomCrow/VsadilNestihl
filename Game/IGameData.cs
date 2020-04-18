@@ -10,6 +10,7 @@ namespace VsadilNestihl.Game
     public interface IGameData
     {
         Dictionary<int, IPlayerData> GetPlayers();
+        IPlayerData GetPlayerById(int playerId);
         int GetCurrentPlayerId();
         bool GetCurrentPlayerRolledThisTurn();
     }

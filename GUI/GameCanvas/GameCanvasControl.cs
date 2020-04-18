@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VsadilNestihl.Game.Board.DostihyASazky;
+using VsadilNestihl.GUI.Extensions;
 using VsadilNestihl.GUI.GameCanvas.Drawables;
 using VsadilNestihl.GUI.GameCanvas.Helpers;
 
@@ -44,9 +45,14 @@ namespace VsadilNestihl.GUI.GameCanvas
             Refresh();
         }
 
+        public void RefreshCanvas()
+        {
+            this.InvokeIfRequired(Refresh);
+        }
+
         private void DrawableOnPositionUpdated()
         {
-            Refresh();
+            this.InvokeIfRequired(Refresh);
         }
 
         private List<IDrawable> GetDrawablesByDepth()

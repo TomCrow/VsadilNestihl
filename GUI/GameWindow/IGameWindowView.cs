@@ -9,5 +9,6 @@ namespace VsadilNestihl.GUI.GameWindow
     public interface IGameWindowView : GameCanvas.IGameCanvas
     {
         GameWindowGui GetGameWindowGui();
+        void ShowGameActionException(string message);
     }
 }

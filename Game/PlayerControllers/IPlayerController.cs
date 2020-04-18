@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VsadilNestihl.Game.Player
+namespace VsadilNestihl.Game.PlayerControllers
 {
     public interface IPlayerController
     {

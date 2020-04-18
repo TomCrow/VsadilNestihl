@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -72,19 +75,22 @@
     <Compile Include="Game\Lobby\LobbyPlayer.cs" />
     <Compile Include="Game\Lobby\PlayerHandler.cs" />
     <Compile Include="Game\Lobby\NetworkLobby.cs" />
+    <Compile Include="Game\PlayerControllers\InnerRemotePlayerController.cs" />
+    <Compile Include="Game\PlayerControllers\RemotePlayerController.cs" />
     <Compile Include="Game\Player\PlayerPosition.cs" />
     <Compile Include="Game\LocalGame.cs" />
     <Compile Include="Game\MultipleGameUpdater.cs" />
     <Compile Include="Game\Network\GameClient.cs" />
-    <Compile Include="Game\Player\IPlayerController.cs" />
+    <Compile Include="Game\PlayerControllers\IPlayerController.cs" />
     <Compile Include="Game\Player\IPlayerData.cs" />
     <Compile Include="Game\Player\Player.cs" />
-    <Compile Include="Game\Player\LocalPlayerController.cs" />
+    <Compile Include="Game\PlayerControllers\LocalPlayerController.cs" />
     <Compile Include="Game\GameState.cs" />
     <Compile Include="Game\Player\PlayerData.cs" />
     <Compile Include="Game\RemoteGame.cs" />
     <Compile Include="Game\RemoteGameUpdater.cs" />
     <Compile Include="GUI\GameCanvas\Drawables\BoardDrawable.cs" />
+    <Compile Include="GUI\GameCanvas\Drawables\DebugInfoDrawable.cs" />
     <Compile Include="GUI\GameCanvas\Helpers\CommonDrawables.cs" />
     <Compile Include="GUI\GameCanvas\Drawable.cs" />
     <Compile Include="GUI\GameCanvas\Drawables\BoardPositionDrawable.cs" />
@@ -204,6 +210,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\dice_still.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

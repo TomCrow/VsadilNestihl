@@ -10,6 +10,7 @@ using VsadilNestihl.Game;
 using VsadilNestihl.Game.Board.DostihyASazky;
 using VsadilNestihl.Game.Exceptions;
 using VsadilNestihl.Game.Player;
+using VsadilNestihl.Game.PlayerControllers;
 using VsadilNestihlNetworking;
 using VsadilNestihlNetworking.Messages.Lobby;
 using VsadilNestihlNetworking.SerializationEngines;
@@ -164,17 +165,22 @@ namespace Playeyr
 
             // Game updaters
             var gameUpdaters = new List<IGameUpdater>();
-            var localGame = new LocalGame();
+            var localGame = new LocalGame(_hostPlayer.PlayerId);
             gameUpdaters.Add(localGame);
             foreach (var lobbyPlayer in GetAllLobbyPlayers().Where(x => x.PlayerHandler != null))
                 gameUpdaters.Add(new RemoteGameUpdater(lobbyPlayer.PlayerHandler.Receiver));
-
-            // TODO: remote player (game) controller
 
             var board = new BoardFactory().CreateBoard();
             var gameSettings = new GameSettings();
             var gameManager = new GameManager(board, gameSettings, new MultipleGameUpdater(gameUpdaters), GetAllLobbyPlayers());
             gameManager.Start();
+
+            var hostPlayer = gameManager.Players.Find(x => x.PlayerId == _hostPlayer.PlayerId);
+            if (hostPlayer == null)
+                throw new FatalGameException("Invalid host player id");
+
+            var hostPlayerController = new LocalPlayerController(hostPlayer);
+            localGame.SetPlayerController(hostPlayerController);
 
             GameStarting?.Invoke(localGame);
         }

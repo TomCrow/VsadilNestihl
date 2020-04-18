@@ -5,11 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using VsadilNestihl.Game.Board;
 using VsadilNestihl.Game.Player;
+using VsadilNestihl.Game.PlayerControllers;
 
 namespace VsadilNestihl.Game
 {
     public class LocalGame : IGameUpdater, IGameData
     {
+        private IPlayerController _playerController;
+        private readonly int _myPlayerId;
         private IGameView _gameView;
         private bool _gameViewLoaded = false;
         
@@ -17,10 +20,22 @@ namespace VsadilNestihl.Game
         private int _currentPlayerId;
         private bool _currentPlayerRolledThisTurn;
 
+        public LocalGame(int myPlayerId)
+        {
+            _myPlayerId = myPlayerId;
+        }
+
+        public void SetPlayerController(LocalPlayerController playerController)
+        {
+            _playerController = playerController;
+            playerController.GameActionException += OnGameActionException;
+        }
+
         public void SetGameView(IGameView gameView)
         {
             _gameView = gameView;
             _gameView.Loaded += GameViewOnLoaded;
+            _gameView.SetPlayerController(_playerController);
         }
 
         private void GameViewOnLoaded()
@@ -35,6 +50,11 @@ namespace VsadilNestihl.Game
             return _players;
         }
 
+        public IPlayerData GetPlayerById(int playerId)
+        {
+            return _players[playerId];
+        }
+
         public int GetCurrentPlayerId()
         {
             return _currentPlayerId;
@@ -43,6 +63,11 @@ namespace VsadilNestihl.Game
         public bool GetCurrentPlayerRolledThisTurn()
         {
             return _currentPlayerRolledThisTurn;
+        }
+
+        public void OnGameActionException(string message)
+        {
+            _gameView.ShowGameActionException(message);
         }
 
         public void GameStarted(List<Player.Player> players)
@@ -67,7 +92,7 @@ namespace VsadilNestihl.Game
 
         public void PlayerRolledDice(Player.Player player, int rolledCount)
         {
-            // TODO:
+            _gameView.PlayerRolledDice(player.PlayerId, rolledCount);
         }
 
         public void PlayerRolledThisTurn(Player.Player player, bool rolledThisTurn)
@@ -79,11 +104,13 @@ namespace VsadilNestihl.Game
         public void PlayerSetPlace(Player.Player player, IPlace place)
         {
             _players[player.PlayerId].Place = place;
+            _gameView.UpdatePlayerPlace(player.PlayerId);
         }
 
-        public virtual void NextRound(Player.Player currentPlayer)
+        public void NextRound(Player.Player currentPlayer)
         {
             _currentPlayerId = currentPlayer.PlayerId;
+            _gameView?.NextRound();
         }
     }
 }

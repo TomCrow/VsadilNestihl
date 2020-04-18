@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using VsadilNestihl.Game.Exceptions;
 using VsadilNestihl.Game.Player;
+using VsadilNestihl.Game.PlayerControllers;
 using VsadilNestihlNetworking;
 using VsadilNestihlNetworking.Messages;
 using VsadilNestihlNetworking.Messages.Lobby;
@@ -58,6 +59,11 @@ namespace Playeyr
         public void GameStarting()
         {
             Receiver.SendMessage(new GameStarting());
+        }
+
+        public InnerRemotePlayerController CreateInnerRemotePlayerController(Player player)
+        {
+            return new InnerRemotePlayerController(Receiver, player);
         }
 
         private void OnPlayerJoinRequest(IMessage message, Receiver receiver)

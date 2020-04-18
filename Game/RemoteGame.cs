@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VsadilNestihl.Game.Board.DostihyASazky;
 using VsadilNestihl.Game.Player;
+using VsadilNestihl.Game.PlayerControllers;
 using VsadilNestihlNetworking.Messages.Game;
 
 namespace VsadilNestihl.Game
@@ -13,6 +14,7 @@ namespace VsadilNestihl.Game
     public class RemoteGame : IGameData
     {
         private readonly Network.GameClient _gameClient;
+        private readonly IPlayerController _playerController;
         private readonly int _myPlayerId;
         private IGameView _gameView;
         private bool _gameViewLoaded = false;
@@ -25,7 +27,9 @@ namespace VsadilNestihl.Game
         {
             _gameClient = gameClient;
             _myPlayerId = myPlayerId;
+            _playerController = new RemotePlayerController(gameClient);
 
+            _gameClient.GameActionException += GameClientOnGameActionException;
             _gameClient.GameStarted += GameClientOnGameStarted;
             _gameClient.PlayerSetMoney += GameClientOnPlayerSetMoney;
             _gameClient.PlayerRolledDice += GameClientOnPlayerRolledDice;
@@ -38,6 +42,7 @@ namespace VsadilNestihl.Game
         {
             _gameView = gameView;
             _gameView.Loaded += GameViewOnLoaded;
+            _gameView.SetPlayerController(_playerController);
         }
 
         private void GameViewOnLoaded()
@@ -52,6 +57,14 @@ namespace VsadilNestihl.Game
             return _players;
         }
 
+        public IPlayerData GetPlayerById(int playerId)
+        {
+            if (!_players.ContainsKey(playerId))
+                return null;
+
+            return _players[playerId];
+        }
+
         public int GetCurrentPlayerId()
         {
             return _currentPlayerId;
@@ -60,6 +73,11 @@ namespace VsadilNestihl.Game
         public bool GetCurrentPlayerRolledThisTurn()
         {
             return _currentPlayerRolledThisTurn;
+        }
+
+        private void GameClientOnGameActionException(GameActionException gameActionException)
+        {
+            _gameView.ShowGameActionException(gameActionException.Message);
         }
 
         private void GameClientOnGameStarted(GameStarted gameStarted)
@@ -89,7 +107,7 @@ namespace VsadilNestihl.Game
 
         private void GameClientOnPlayerRolledDice(PlayerRolledDice playerRolledDice)
         {
-            // TODO:
+            _gameView.PlayerRolledDice(playerRolledDice.PlayerId, playerRolledDice.RolledCount);
         }
 
         private void GameClientOnPlayerRolledThisTurn(PlayerRolledThisTurn playerRolledThisTurn)
@@ -100,11 +118,13 @@ namespace VsadilNestihl.Game
         private void GameClientOnPlayerSetPlace(PlayerSetPlace playerSetPlace)
         {
             _players[playerSetPlace.PlayerId].Place = new Place((ConcretePlace)playerSetPlace.PlaceId, "");
+            _gameView.UpdatePlayerPlace(playerSetPlace.PlayerId);
         }
 
         private void GameClientOnNextRound(NextRound nextRound)
         {
             _currentPlayerId = nextRound.PlayerId;
+            _gameView.NextRound();
         }
     }
 }

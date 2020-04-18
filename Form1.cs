@@ -11,6 +11,7 @@ using VsadilNestihl.Game;
 using VsadilNestihl.Game.Board;
 using VsadilNestihl.Game.Board.DostihyASazky;
 using VsadilNestihl.Game.Player;
+using VsadilNestihl.Game.PlayerControllers;
 
 namespace VsadilNestihl
 {
@@ -219,6 +220,11 @@ namespace VsadilNestihl
                 cp.ExStyle |= 0x02000000;    // Turn on WS_EX_COMPOSITED
                 return cp;
             }
+        }
+
+        private void buttonEndTrn_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

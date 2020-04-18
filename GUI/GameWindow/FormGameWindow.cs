@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VsadilNestihl.GUI.Extensions;
 using VsadilNestihl.GUI.GameCanvas;
 
 namespace VsadilNestihl.GUI.GameWindow
@@ -26,7 +27,16 @@ namespace VsadilNestihl.GUI.GameWindow
         {
             return _gameWindowGui;
         }
-        
+
+        public void ShowGameActionException(string message)
+        {
+            this.InvokeIfRequired(() =>
+            {
+                MessageBox.Show(message, "GAME ACTION EXCEPTION", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            });
+
+        }
+
         public void AddDrawable(IDrawable drawable)
         {
             gameCanvas.AddDrawable(drawable);
@@ -37,9 +47,19 @@ namespace VsadilNestihl.GUI.GameWindow
             gameCanvas.AddDrawables(drawables);
         }
 
+        public void RefreshCanvas()
+        {
+            gameCanvas.RefreshCanvas();
+        }
+
         private void gameCanvas_Load(object sender, EventArgs e)
         {
             _gameWindowGui.GameWindowLoaded();
+        }
+
+        private void buttonEndTurn_Click(object sender, EventArgs e)
+        {
+            _gameWindowGui.TEST_EndTurn();
         }
     }
 }

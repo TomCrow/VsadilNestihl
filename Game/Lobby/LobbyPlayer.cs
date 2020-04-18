@@ -24,5 +24,11 @@ namespace Playeyr
             Color = color;
             PlayerPosition = playerPosition;
         }
+
+        public void PlayerCreated(Player player)
+        {
+            // Attach inner player controller for player
+            PlayerHandler?.CreateInnerRemotePlayerController(player);
+        }
     }
 }

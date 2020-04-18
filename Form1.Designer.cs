@@ -71,6 +71,7 @@
             this.panel38 = new System.Windows.Forms.Panel();
             this.panel39 = new System.Windows.Forms.Panel();
             this.boardControl1 = new VsadilNestihl.GUI.GameCanvas.GameCanvasControl();
+            this.buttonEndTrn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // panelStart
@@ -465,10 +466,21 @@
             this.boardControl1.Size = new System.Drawing.Size(724, 724);
             this.boardControl1.TabIndex = 4;
             // 
+            // buttonEndTrn
+            // 
+            this.buttonEndTrn.Location = new System.Drawing.Point(495, 288);
+            this.buttonEndTrn.Name = "buttonEndTrn";
+            this.buttonEndTrn.Size = new System.Drawing.Size(75, 23);
+            this.buttonEndTrn.TabIndex = 5;
+            this.buttonEndTrn.Text = "Ukončit kolo";
+            this.buttonEndTrn.UseVisualStyleBackColor = true;
+            this.buttonEndTrn.Click += new System.EventHandler(this.buttonEndTrn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1540, 845);
+            this.Controls.Add(this.buttonEndTrn);
             this.Controls.Add(this.boardControl1);
             this.Controls.Add(this.panel39);
             this.Controls.Add(this.panel38);
@@ -565,6 +577,7 @@
         private System.Windows.Forms.Panel panel38;
         private System.Windows.Forms.Panel panel39;
         private GUI.GameCanvas.GameCanvasControl boardControl1;
+        private System.Windows.Forms.Button buttonEndTrn;
     }
 }
 

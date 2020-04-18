@@ -52,6 +52,7 @@ namespace VsadilNestihl.Game
                                                GameSettings.StartMoney,
                                                startPlace);
                 player.SetGameManager(this);
+                lobbyPlayer.PlayerCreated(player);
                 Players.Add(player);
             }
 

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMenu));
             this.buttonSoloGame = new System.Windows.Forms.Button();
             this.labelPlayerName = new System.Windows.Forms.Label();
             this.textBoxPlayerName = new System.Windows.Forms.TextBox();
@@ -70,7 +71,7 @@
             this.labelPlayerName.ForeColor = System.Drawing.Color.White;
             this.labelPlayerName.Location = new System.Drawing.Point(672, 10);
             this.labelPlayerName.Name = "labelPlayerName";
-            this.labelPlayerName.Size = new System.Drawing.Size(117, 20);
+            this.labelPlayerName.Size = new System.Drawing.Size(144, 25);
             this.labelPlayerName.TabIndex = 1;
             this.labelPlayerName.Text = "Jméno hráče:";
             // 
@@ -84,7 +85,7 @@
             this.textBoxPlayerName.Location = new System.Drawing.Point(677, 37);
             this.textBoxPlayerName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxPlayerName.Name = "textBoxPlayerName";
-            this.textBoxPlayerName.Size = new System.Drawing.Size(293, 26);
+            this.textBoxPlayerName.Size = new System.Drawing.Size(293, 30);
             this.textBoxPlayerName.TabIndex = 2;
             this.textBoxPlayerName.Text = "Hráč";
             // 
@@ -129,7 +130,7 @@
             this.labelHostPort.ForeColor = System.Drawing.Color.White;
             this.labelHostPort.Location = new System.Drawing.Point(672, 127);
             this.labelHostPort.Name = "labelHostPort";
-            this.labelHostPort.Size = new System.Drawing.Size(47, 20);
+            this.labelHostPort.Size = new System.Drawing.Size(58, 25);
             this.labelHostPort.TabIndex = 5;
             this.labelHostPort.Text = "Port:";
             // 
@@ -148,7 +149,7 @@
             0,
             0});
             this.numericUpDownHostPort.Name = "numericUpDownHostPort";
-            this.numericUpDownHostPort.Size = new System.Drawing.Size(233, 26);
+            this.numericUpDownHostPort.Size = new System.Drawing.Size(233, 30);
             this.numericUpDownHostPort.TabIndex = 6;
             this.numericUpDownHostPort.Value = new decimal(new int[] {
             42121,
@@ -170,7 +171,7 @@
             0,
             0});
             this.numericUpDownJoinPort.Name = "numericUpDownJoinPort";
-            this.numericUpDownJoinPort.Size = new System.Drawing.Size(233, 26);
+            this.numericUpDownJoinPort.Size = new System.Drawing.Size(233, 30);
             this.numericUpDownJoinPort.TabIndex = 8;
             this.numericUpDownJoinPort.Value = new decimal(new int[] {
             42121,
@@ -187,7 +188,7 @@
             this.labelJoinPort.ForeColor = System.Drawing.Color.White;
             this.labelJoinPort.Location = new System.Drawing.Point(672, 240);
             this.labelJoinPort.Name = "labelJoinPort";
-            this.labelJoinPort.Size = new System.Drawing.Size(47, 20);
+            this.labelJoinPort.Size = new System.Drawing.Size(58, 25);
             this.labelJoinPort.TabIndex = 7;
             this.labelJoinPort.Text = "Port:";
             // 
@@ -200,7 +201,7 @@
             this.labelJoinIp.ForeColor = System.Drawing.Color.White;
             this.labelJoinIp.Location = new System.Drawing.Point(672, 206);
             this.labelJoinIp.Name = "labelJoinIp";
-            this.labelJoinIp.Size = new System.Drawing.Size(31, 20);
+            this.labelJoinIp.Size = new System.Drawing.Size(39, 25);
             this.labelJoinIp.TabIndex = 9;
             this.labelJoinIp.Text = "IP:";
             // 
@@ -214,7 +215,7 @@
             this.textBoxJoinIp.Location = new System.Drawing.Point(717, 204);
             this.textBoxJoinIp.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxJoinIp.Name = "textBoxJoinIp";
-            this.textBoxJoinIp.Size = new System.Drawing.Size(252, 26);
+            this.textBoxJoinIp.Size = new System.Drawing.Size(252, 30);
             this.textBoxJoinIp.TabIndex = 10;
             this.textBoxJoinIp.Text = "127.0.0.1";
             // 
@@ -247,6 +248,7 @@
             this.Controls.Add(this.buttonSoloGame);
             this.Controls.Add(this.pictureBoxBackground);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.Name = "FormMenu";

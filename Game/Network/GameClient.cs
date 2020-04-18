@@ -30,6 +30,7 @@ namespace VsadilNestihl.Game.Network
         public event Action<GameStarting> GameStarting;
 
         // Game
+        public event Action<GameActionException> GameActionException;
         public event Action<GameStarted> GameStarted;
         public event Action<PlayerSetMoney> PlayerSetMoney;
         public event Action<PlayerRolledDice> PlayerRolledDice;
@@ -57,6 +58,7 @@ namespace VsadilNestihl.Game.Network
             _client.MessageDispatcher.Add(typeof(GameStarting), OnGameStarting);
 
             // Game
+            _client.MessageDispatcher.Add(typeof(GameActionException), OnGameActionException);
             _client.MessageDispatcher.Add(typeof(GameStarted), OnGameStarted);
             _client.MessageDispatcher.Add(typeof(PlayerSetMoney), OnPlayerSetMoney );
             _client.MessageDispatcher.Add(typeof(PlayerRolledDice), OnPlayerRolledDice );
@@ -66,6 +68,11 @@ namespace VsadilNestihl.Game.Network
 
             _client.Connect(ip, port);
             _client.SendMessage(new PlayerJoinRequest(playerName));
+        }
+
+        public void SendMessage(IMessage message)
+        {
+            _client.SendMessage(message);
         }
 
         public void DisconnectPlayer()
@@ -145,6 +152,14 @@ namespace VsadilNestihl.Game.Network
                 return;
 
             GameStarting?.Invoke(gameStarting);
+        }
+
+        private void OnGameActionException(IMessage message)
+        {
+            if (!(message is GameActionException gameActionException))
+                return;
+
+            GameActionException?.Invoke(gameActionException);
         }
 
         private void OnGameStarted(IMessage message)
