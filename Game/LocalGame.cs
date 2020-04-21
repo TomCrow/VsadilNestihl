@@ -124,10 +124,15 @@ namespace VsadilNestihl.Game
                 _currentPlayerRolledThisTurn = rolledThisTurn;
         }
 
+        public void PlayerPassedPlace(Player.Player player, IPlace place)
+        {
+            _gameView.PlayerPassedPlace(player.PlayerId, place.GetPlaceId());
+        }
+
         public void PlayerSetPlace(Player.Player player, IPlace place)
         {
             _players[player.PlayerId].Place = place;
-            _gameView.UpdatePlayerPlace(player.PlayerId);
+            _gameView.PlayerSetPlace(player.PlayerId, place.GetPlaceId());
         }
 
         public void NextRound(Player.Player currentPlayer)

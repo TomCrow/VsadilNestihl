@@ -44,6 +44,11 @@ namespace VsadilNestihl.GUI.GameCanvas
             PositionUpdated?.Invoke();
         }
 
+        public virtual Point GetPosition()
+        {
+            return new Point(X, Y);
+        }
+
         public virtual int GetDepth()
         {
             return Depth;

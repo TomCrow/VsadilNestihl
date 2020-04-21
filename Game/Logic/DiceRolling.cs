@@ -28,7 +28,10 @@ namespace VsadilNestihl.Game.Logic
 
             var place = player.Place;
             for (var i = 0; i < rolledCount; i++)
+            {
                 place = _gameManager.Board.GetNextPlace(place);
+                _gameManager.GameUpdater.PlayerPassedPlace(player, place);
+            }
 
             if (rolledCount != 6)
                 player.SetRolledThisTurn(true);

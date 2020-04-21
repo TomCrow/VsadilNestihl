@@ -19,6 +19,8 @@ namespace VsadilNestihl.Game
         private IGameView _gameView;
         private bool _gameViewLoaded = false;
 
+        private List<string> _preGameLoadServerMessages = new List<string>();
+
         private readonly Dictionary<int, IPlayerData> _players = new Dictionary<int, IPlayerData>();
         private int _currentPlayerId;
         private bool _currentPlayerRolledThisTurn;
@@ -38,10 +40,11 @@ namespace VsadilNestihl.Game
             _gameClient.PlayerSetMoney += GameClientOnPlayerSetMoney;
             _gameClient.PlayerRolledDice += GameClientOnPlayerRolledDice;
             _gameClient.PlayerRolledThisTurn += GameClientOnPlayerRolledThisTurn;
+            _gameClient.PlayerPassedPlace += GameClientOnPlayerPassedPlace;
             _gameClient.PlayerSetPlace += GameClientOnPlayerSetPlace;
             _gameClient.NextRound += GameClientOnNextRound;
         }
-        
+
         public void SetGameView(IGameView gameView)
         {
             _gameView = gameView;
@@ -52,8 +55,14 @@ namespace VsadilNestihl.Game
         private void GameViewOnLoaded()
         {
             _gameViewLoaded = true;
+
             if (_players.Any())
                 _gameView.ReloadAllPlayers();
+
+            foreach (var message in _preGameLoadServerMessages)
+                _gameView.ChatServerMessage(message);
+
+            _gameView.NextRound();
         }
 
         public Dictionary<int, IPlayerData> GetPlayers()
@@ -106,6 +115,12 @@ namespace VsadilNestihl.Game
 
         private void GameClientOnChatServerMessage(VsadilNestihlNetworking.Messages.Chat.ChatServerMessage chatServerMessage)
         {
+            if (!_gameViewLoaded)
+            {
+                _preGameLoadServerMessages.Add(chatServerMessage.Message);
+                return;
+            }
+
             _gameView.ChatServerMessage(chatServerMessage.Message);
         }
 
@@ -129,16 +144,21 @@ namespace VsadilNestihl.Game
             if (playerRolledThisTurn.PlayerId == _currentPlayerId)
                 _currentPlayerRolledThisTurn = playerRolledThisTurn.RolledThisTurn;
         }
+
+        private void GameClientOnPlayerPassedPlace(PlayerPassedPlace playerPassedPlace)
+        {
+            _gameView.PlayerPassedPlace(playerPassedPlace.PlayerId, playerPassedPlace.PlaceId);
+        }
         private void GameClientOnPlayerSetPlace(PlayerSetPlace playerSetPlace)
         {
             _players[playerSetPlace.PlayerId].Place = new Place((ConcretePlace)playerSetPlace.PlaceId, "");
-            _gameView.UpdatePlayerPlace(playerSetPlace.PlayerId);
+            _gameView.PlayerSetPlace(playerSetPlace.PlayerId, playerSetPlace.PlaceId);
         }
 
         private void GameClientOnNextRound(NextRound nextRound)
         {
             _currentPlayerId = nextRound.PlayerId;
-            _gameView.NextRound();
+            _gameView?.NextRound();
         }
     }
 }

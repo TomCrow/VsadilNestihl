@@ -64,6 +64,11 @@ namespace VsadilNestihl.Game
             _receiver.SendMessage(new PlayerRolledThisTurn(player.PlayerId, rolledThisTurn));
         }
 
+        public void PlayerPassedPlace(Player.Player player, IPlace place)
+        {
+            _receiver.SendMessage(new PlayerPassedPlace(player.PlayerId, place.GetPlaceId()));
+        }
+
         public void PlayerSetPlace(Player.Player player, IPlace place)
         {
             _receiver.SendMessage(new PlayerSetPlace(player.PlayerId, place.GetPlaceId()));

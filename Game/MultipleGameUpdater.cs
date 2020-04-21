@@ -64,6 +64,14 @@ namespace VsadilNestihl.Game
             }
         }
 
+        public void PlayerPassedPlace(Player.Player player, IPlace place)
+        {
+            foreach (var gameUpdater in _gameUpdaters)
+            {
+                gameUpdater.PlayerPassedPlace(player, place);
+            }
+        }
+
         public void PlayerSetPlace(Player.Player player, IPlace place)
         {
             foreach (var gameUpdater in _gameUpdaters)

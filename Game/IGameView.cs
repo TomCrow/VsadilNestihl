@@ -16,7 +16,8 @@ namespace VsadilNestihl.Game
         void ChatServerMessage(string message);
         void ChatPlayerMessage(int playerId, string message);
         void ShowGameActionException(string message);
-        void UpdatePlayerPlace(int playerId);
+        void PlayerPassedPlace(int playerId, int placeId);
+        void PlayerSetPlace(int playerId, int placeId);
         void PlayerRolledDice(int playerId, int rolledCount);
         void NextRound();
     }

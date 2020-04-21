@@ -18,10 +18,6 @@ namespace VsadilNestihl.Game.Dices
         public int Roll()
         {
             var roll = _random.Next(1, 7);
-            if (roll == 7)
-            {
-                int a = 0;
-            }
             return roll;
         }
     }

@@ -36,6 +36,7 @@ namespace VsadilNestihl.Game.Network
         public event Action<PlayerSetMoney> PlayerSetMoney;
         public event Action<PlayerRolledDice> PlayerRolledDice;
         public event Action<PlayerRolledThisTurn> PlayerRolledThisTurn;
+        public event Action<PlayerPassedPlace> PlayerPassedPlace;
         public event Action<PlayerSetPlace> PlayerSetPlace;
         public event Action<NextRound> NextRound;
 
@@ -64,6 +65,7 @@ namespace VsadilNestihl.Game.Network
             _client.MessageDispatcher.Add(typeof(PlayerSetMoney), OnPlayerSetMoney );
             _client.MessageDispatcher.Add(typeof(PlayerRolledDice), OnPlayerRolledDice );
             _client.MessageDispatcher.Add(typeof(PlayerRolledThisTurn), OnPlayerRolledThisTurn );
+            _client.MessageDispatcher.Add(typeof(PlayerPassedPlace), OnPlayerPassedPlace);
             _client.MessageDispatcher.Add(typeof(PlayerSetPlace), OnPlayerSetPlace);
             _client.MessageDispatcher.Add(typeof(NextRound), OnNextRound);
 
@@ -192,6 +194,14 @@ namespace VsadilNestihl.Game.Network
                 return;
 
             PlayerRolledThisTurn?.Invoke(playerRolledThisTurn);
+        }
+
+        private void OnPlayerPassedPlace(IMessage message)
+        {
+            if (!(message is PlayerPassedPlace playerPassedPlace))
+                return;
+
+            PlayerPassedPlace?.Invoke(playerPassedPlace);
         }
 
         private void OnPlayerSetPlace(IMessage message)
