@@ -34,20 +34,38 @@ namespace VsadilNestihl.GUI.GameCanvas.Animators
             {
                 if (!_running)
                 {
-                    var animator = new Animator2D(FPSLimiterKnownValues.LimitTwoHundred);
+                    var animator = new Animator2D(FPSLimiterKnownValues.LimitSixty);
                     var currPos = _playerDrawable.GetPosition();
-                    animator.Paths = new Path2D(currPos.X, x, currPos.Y, y, 300).ToArray();
+
+                    animator.Paths = CreatePath(currPos.X, currPos.Y, x, y);
+
                     _lastPathEnd = animator.Paths.Last().End;
                     animator.Play(_frameCallbackInvoker, _endCallback);
                     _running = true;
                 }
                 else
                 {
-                    var path = new Path2D(_lastPathEnd.X, x, _lastPathEnd.Y, y, 300);
-                    _lastPathEnd = path.End;
-                    _waitingPaths.Add(path);
+                    var path = CreatePath((int)_lastPathEnd.X, (int)_lastPathEnd.Y, x, y);
+                    _lastPathEnd = path.Last().End;
+
+                    foreach (var path2D in path)
+                        _waitingPaths.Add(path2D);
                 }
             }
+        }
+
+        private Path2D[] CreatePath(int startX, int startY, int endX, int endY)
+        {
+            var middleX = (startX + endX) / 2;
+            var middleY = (startY + endY) / 2;
+            middleY -= 15;
+
+            return new Path2D(
+                    new Path(startX, middleX, 150, AnimationFunctions.Liner),
+                    new Path(startY, middleY, 150, AnimationFunctions.QuadraticEaseIn))
+                .ContinueTo(new Path2D(
+                    new Path(middleX, endX, 150, AnimationFunctions.Liner),
+                    new Path(middleY, endY, 150, AnimationFunctions.QuadraticEaseOut)));
         }
 
         private void FrameCallback(Float2D float2D)
@@ -57,12 +75,11 @@ namespace VsadilNestihl.GUI.GameCanvas.Animators
 
         private void EndCallback()
         {
-            Console.WriteLine("END CALLBACK");
             lock (_runningLock)
             {
                 if (_waitingPaths.Any())
                 {
-                    var animator = new Animator2D(FPSLimiterKnownValues.LimitTwoHundred)
+                    var animator = new Animator2D(FPSLimiterKnownValues.LimitSixty)
                     {
                         Paths = _waitingPaths.ToArray()
                     };
