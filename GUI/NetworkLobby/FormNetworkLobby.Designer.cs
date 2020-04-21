@@ -105,7 +105,7 @@
             // 
             this.buttonJoinSpectators.AutoSize = true;
             this.buttonJoinSpectators.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonJoinSpectators.Location = new System.Drawing.Point(175, -1);
+            this.buttonJoinSpectators.Location = new System.Drawing.Point(140, -1);
             this.buttonJoinSpectators.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonJoinSpectators.Name = "buttonJoinSpectators";
             this.buttonJoinSpectators.Size = new System.Drawing.Size(133, 36);
@@ -198,8 +198,7 @@
             // 
             // FormNetworkLobby
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(804, 534);
             this.Controls.Add(this.buttonStart);
             this.Controls.Add(this.panelSpectators);

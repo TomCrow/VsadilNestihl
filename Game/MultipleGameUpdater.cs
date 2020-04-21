@@ -24,6 +24,22 @@ namespace VsadilNestihl.Game
             }
         }
 
+        public void ChatServerMessage(string message)
+        {
+            foreach (var gameUpdater in _gameUpdaters)
+            {
+                gameUpdater.ChatServerMessage(message);
+            }
+        }
+
+        public void ChatPlayerMessage(Player.Player player, string message)
+        {
+            foreach (var gameUpdater in _gameUpdaters)
+            {
+                gameUpdater.ChatPlayerMessage(player, message);
+            }
+        }
+
         public void PlayerSetMoney(Player.Player player, int money)
         {
             foreach (var gameUpdater in _gameUpdaters)

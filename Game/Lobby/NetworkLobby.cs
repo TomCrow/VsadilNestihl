@@ -9,13 +9,14 @@ using System.Windows.Forms;
 using VsadilNestihl.Game;
 using VsadilNestihl.Game.Board.DostihyASazky;
 using VsadilNestihl.Game.Exceptions;
+using VsadilNestihl.Game.Logic;
 using VsadilNestihl.Game.Player;
 using VsadilNestihl.Game.PlayerControllers;
 using VsadilNestihlNetworking;
 using VsadilNestihlNetworking.Messages.Lobby;
 using VsadilNestihlNetworking.SerializationEngines;
 
-namespace Playeyr
+namespace VsadilNestihl.Game.Lobby
 {
     public class NetworkLobby
     {
@@ -172,7 +173,11 @@ namespace Playeyr
 
             var board = new BoardFactory().CreateBoard();
             var gameSettings = new GameSettings();
+
+            // Build the game manager
             var gameManager = new GameManager(board, gameSettings, new MultipleGameUpdater(gameUpdaters), GetAllLobbyPlayers());
+            gameManager.DiceRolling = new DiceRolling(gameManager);
+            gameManager.TurnLogic = new TurnLogic(gameManager);
             gameManager.Start();
 
             var hostPlayer = gameManager.Players.Find(x => x.PlayerId == _hostPlayer.PlayerId);

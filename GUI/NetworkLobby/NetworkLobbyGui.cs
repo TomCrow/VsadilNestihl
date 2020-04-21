@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using VsadilNestihl.Game;
 using VsadilNestihl.Game.Exceptions;
-using Playeyr;
 using VsadilNestihl.Game.Player;
 
 namespace VsadilNestihl.GUI.NetworkLobby
@@ -14,8 +13,8 @@ namespace VsadilNestihl.GUI.NetworkLobby
     public class NetworkLobbyGui
     {
         private readonly INetworkLobbyView _view;
-        private Playeyr.NetworkLobby _networkLobby;
-        private Playeyr.JoiningPlayer _joiningPlayer;
+        private Game.Lobby.NetworkLobby _networkLobby;
+        private Game.Lobby.JoiningPlayer _joiningPlayer;
         private bool _lobbyIsClosed = false;
 
         public bool OpenGameWindow { get; private set; }
@@ -27,7 +26,7 @@ namespace VsadilNestihl.GUI.NetworkLobby
             _view = view;
         }
 
-        public void SetNetworkLobby(Playeyr.NetworkLobby networkLobby)
+        public void SetNetworkLobby(Game.Lobby.NetworkLobby networkLobby)
         {
             _networkLobby = networkLobby;
             _networkLobby.SetMyPlayerId += OnSetMyPlayerId;
@@ -39,7 +38,7 @@ namespace VsadilNestihl.GUI.NetworkLobby
             _view.EnableHostFunctions();
         }
 
-        public void SetJoiningPlayer(JoiningPlayer joiningPlayer)
+        public void SetJoiningPlayer(Game.Lobby.JoiningPlayer joiningPlayer)
         {
             _joiningPlayer = joiningPlayer;
             _joiningPlayer.Disconnected += () =>
@@ -161,7 +160,7 @@ namespace VsadilNestihl.GUI.NetworkLobby
             _view.SetMyPlayerId(myPlayerId);
         }
 
-        private void OnLobbyPlayersUpdated(List<Playeyr.LobbyPlayer> lobbyPlayers)
+        private void OnLobbyPlayersUpdated(List<Game.Lobby.LobbyPlayer> lobbyPlayers)
         {
             _view.UpdateLobbyPlayers(lobbyPlayers);
         }
@@ -171,7 +170,7 @@ namespace VsadilNestihl.GUI.NetworkLobby
             _view.AddChatMessage($"SERVER: {message}");
         }
 
-        private void OnChatPlayerMessage(Playeyr.LobbyPlayer lobbyPlayer, string message)
+        private void OnChatPlayerMessage(Game.Lobby.LobbyPlayer lobbyPlayer, string message)
         {
             _view.AddChatMessage($"{lobbyPlayer.PlayerName}: {message}");
         }

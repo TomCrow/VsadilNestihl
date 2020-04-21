@@ -183,6 +183,11 @@ namespace VsadilNestihl
         {
         }
 
+        public void ChatPlayerMessage(Player player, string message)
+        {
+            throw new NotImplementedException();
+        }
+
         public void PlayerSetMoney(Player player, int money)
         {
         }
@@ -198,6 +203,11 @@ namespace VsadilNestihl
 
         public void GameStarted(List<Player> players)
         {
+        }
+
+        public void ChatServerMessage(string message)
+        {
+            throw new NotImplementedException();
         }
 
         public void PlayerRolledThisTurn(Player player, bool rolledThisTurn)

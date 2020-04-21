@@ -28,16 +28,20 @@ namespace VsadilNestihl.Game
             _gameClient = gameClient;
             _myPlayerId = myPlayerId;
             _playerController = new RemotePlayerController(gameClient);
+            _playerController.GameActionException += PlayerControllerOnGameActionException;
 
-            _gameClient.GameActionException += GameClientOnGameActionException;
+            _gameClient.StoreChatMessages = false;
+
             _gameClient.GameStarted += GameClientOnGameStarted;
+            _gameClient.ChatServerMessage += GameClientOnChatServerMessage;
+            _gameClient.ChatPlayerMessage += GameClientOnChatPlayerMessage;
             _gameClient.PlayerSetMoney += GameClientOnPlayerSetMoney;
             _gameClient.PlayerRolledDice += GameClientOnPlayerRolledDice;
             _gameClient.PlayerRolledThisTurn += GameClientOnPlayerRolledThisTurn;
             _gameClient.PlayerSetPlace += GameClientOnPlayerSetPlace;
             _gameClient.NextRound += GameClientOnNextRound;
         }
-
+        
         public void SetGameView(IGameView gameView)
         {
             _gameView = gameView;
@@ -75,11 +79,11 @@ namespace VsadilNestihl.Game
             return _currentPlayerRolledThisTurn;
         }
 
-        private void GameClientOnGameActionException(GameActionException gameActionException)
+        private void PlayerControllerOnGameActionException(string message)
         {
-            _gameView.ShowGameActionException(gameActionException.Message);
+            _gameView.ShowGameActionException(message);
         }
-
+        
         private void GameClientOnGameStarted(GameStarted gameStarted)
         {
             foreach (var player in gameStarted.Players)
@@ -98,6 +102,16 @@ namespace VsadilNestihl.Game
 
             if (_gameViewLoaded)
                 _gameView.ReloadAllPlayers();
+        }
+
+        private void GameClientOnChatServerMessage(VsadilNestihlNetworking.Messages.Chat.ChatServerMessage chatServerMessage)
+        {
+            _gameView.ChatServerMessage(chatServerMessage.Message);
+        }
+
+        private void GameClientOnChatPlayerMessage(VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessage chatPlayerMessage)
+        {
+            _gameView.ChatPlayerMessage(chatPlayerMessage.PlayerId, chatPlayerMessage.Message);
         }
 
         private void GameClientOnPlayerSetMoney(PlayerSetMoney playerSetMoney)

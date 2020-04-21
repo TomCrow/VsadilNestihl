@@ -15,10 +15,14 @@ namespace VsadilNestihl.Game
         private readonly int _myPlayerId;
         private IGameView _gameView;
         private bool _gameViewLoaded = false;
-        
+
+        private List<Tuple<int, string>> _chatMessages = new List<Tuple<int, string>>();
+
         private readonly Dictionary<int, IPlayerData> _players = new Dictionary<int, IPlayerData>();
         private int _currentPlayerId;
         private bool _currentPlayerRolledThisTurn;
+
+        
 
         public LocalGame(int myPlayerId)
         {
@@ -43,6 +47,14 @@ namespace VsadilNestihl.Game
             _gameViewLoaded = true;
             if (_players.Any())
                 _gameView.ReloadAllPlayers();
+
+            foreach (var chatMessage in _chatMessages)
+            {
+                if (chatMessage.Item1 == 0)
+                    _gameView.ChatServerMessage(chatMessage.Item2);
+                else
+                    _gameView.ChatPlayerMessage(chatMessage.Item1, chatMessage.Item2);
+            }
         }
 
         public Dictionary<int, IPlayerData> GetPlayers()
@@ -65,11 +77,6 @@ namespace VsadilNestihl.Game
             return _currentPlayerRolledThisTurn;
         }
 
-        public void OnGameActionException(string message)
-        {
-            _gameView.ShowGameActionException(message);
-        }
-
         public void GameStarted(List<Player.Player> players)
         {
             foreach (var player in players)
@@ -83,6 +90,22 @@ namespace VsadilNestihl.Game
 
             if (_gameViewLoaded)
                 _gameView.ReloadAllPlayers();
+        }
+
+        public void ChatServerMessage(string message)
+        {
+            if (_gameViewLoaded)
+                _gameView.ChatServerMessage(message);
+            else
+                _chatMessages.Add(new Tuple<int, string>(0, message));
+        }
+
+        public void ChatPlayerMessage(Player.Player player, string message)
+        {
+            if (_gameViewLoaded)
+                _gameView.ChatPlayerMessage(player.PlayerId, message);
+            else
+                _chatMessages.Add(new Tuple<int, string>(player.PlayerId, message));
         }
 
         public void PlayerSetMoney(Player.Player player, int money)
@@ -111,6 +134,11 @@ namespace VsadilNestihl.Game
         {
             _currentPlayerId = currentPlayer.PlayerId;
             _gameView?.NextRound();
+        }
+
+        private void OnGameActionException(string message)
+        {
+            _gameView.ShowGameActionException(message);
         }
     }
 }

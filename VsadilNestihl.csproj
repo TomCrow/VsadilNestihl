@@ -75,6 +75,10 @@
     <Compile Include="Game\Lobby\LobbyPlayer.cs" />
     <Compile Include="Game\Lobby\PlayerHandler.cs" />
     <Compile Include="Game\Lobby\NetworkLobby.cs" />
+    <Compile Include="Game\Logic\DiceRolling.cs" />
+    <Compile Include="Game\Logic\IDiceRolling.cs" />
+    <Compile Include="Game\Logic\ITurnLogic.cs" />
+    <Compile Include="Game\Logic\TurnLogic.cs" />
     <Compile Include="Game\PlayerControllers\InnerRemotePlayerController.cs" />
     <Compile Include="Game\PlayerControllers\RemotePlayerController.cs" />
     <Compile Include="Game\Player\PlayerPosition.cs" />
@@ -91,6 +95,7 @@
     <Compile Include="Game\RemoteGameUpdater.cs" />
     <Compile Include="GUI\GameCanvas\Drawables\BoardDrawable.cs" />
     <Compile Include="GUI\GameCanvas\Drawables\DebugInfoDrawable.cs" />
+    <Compile Include="GUI\GameCanvas\Drawables\UnderShadowDrawable.cs" />
     <Compile Include="GUI\GameCanvas\Helpers\CommonDrawables.cs" />
     <Compile Include="GUI\GameCanvas\Drawable.cs" />
     <Compile Include="GUI\GameCanvas\Drawables\BoardPositionDrawable.cs" />
@@ -193,9 +198,7 @@
   <ItemGroup>
     <None Include="Resources\menu_background.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GUI\NetworkLobby\Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\board.png" />
   </ItemGroup>

@@ -17,5 +17,25 @@ namespace VsadilNestihl.GUI.GameCanvas.Drawables
             BitmapStill = Properties.Resources.board;
             MouseOverDisabled = true;
         }
+
+        public int GetX()
+        {
+            return X;
+        }
+
+        public int GetY()
+        {
+            return Y;
+        }
+
+        public int GetWidth()
+        {
+            return BitmapStill.Width;
+        }
+
+        public int GetHeight()
+        {
+            return BitmapStill.Height;
+        }
     }
 }

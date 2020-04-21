@@ -10,6 +10,7 @@ namespace VsadilNestihl.GUI.GameCanvas
     {
         void AddDrawable(IDrawable drawable);
         void AddDrawables(IEnumerable<IDrawable> drawables);
+        void RemoveDrawable(IDrawable drawable);
         void RefreshCanvas();
     }
 }

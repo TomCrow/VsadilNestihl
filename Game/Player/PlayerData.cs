@@ -30,6 +30,7 @@ namespace VsadilNestihl.Game.Player
             return new PlayerData(player.PlayerId, player.Name, player.Color, player.PlayerPosition)
             {
                 Place = player.Place,
+                Money = player.GetMoney()
             };
         }
     }

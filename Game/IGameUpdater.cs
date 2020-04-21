@@ -9,6 +9,8 @@ namespace VsadilNestihl.Game
     public interface IGameUpdater
     {
         void GameStarted(List<Player.Player> players);
+        void ChatServerMessage(string message);
+        void ChatPlayerMessage(Player.Player player, string message);
         void PlayerSetMoney(Player.Player player, int money);
         void PlayerRolledDice(Player.Player player, int rolledCount);
         void PlayerRolledThisTurn(Player.Player player, bool rolledThisTurn);

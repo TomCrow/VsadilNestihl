@@ -12,7 +12,7 @@ using VsadilNestihlNetworking.Messages;
 using VsadilNestihlNetworking.Messages.Lobby;
 using VsadilNestihlNetworking.SerializationEngines;
 
-namespace Playeyr
+namespace VsadilNestihl.Game.Lobby
 {
     public class JoiningPlayer
     {

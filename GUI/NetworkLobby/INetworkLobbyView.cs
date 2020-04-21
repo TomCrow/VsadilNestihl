@@ -11,7 +11,7 @@ namespace VsadilNestihl.GUI.NetworkLobby
     {
         NetworkLobbyGui GetNetworkLobbyGui();
         void SetMyPlayerId(int myPlayerId);
-        void UpdateLobbyPlayers(List<Playeyr.LobbyPlayer> lobbyPlayers);
+        void UpdateLobbyPlayers(List<Game.Lobby.LobbyPlayer> lobbyPlayers);
         void ShowLobbyException(string message);
         void CloseLobby();
         void AddChatMessage(string message);

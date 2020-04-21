@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Playeyr;
 using VsadilNestihl.Game.Player;
 using VsadilNestihl.GUI.Extensions;
 
@@ -77,7 +76,7 @@ namespace VsadilNestihl.GUI.NetworkLobby
             _myPlayerId = myPlayerId;
         }
 
-        public void UpdateLobbyPlayers(List<Playeyr.LobbyPlayer> lobbyPlayers) // TODO: někdy při připojování do lobby se zavolá s null lobbyPlayers
+        public void UpdateLobbyPlayers(List<Game.Lobby.LobbyPlayer> lobbyPlayers) // TODO: někdy při připojování do lobby se zavolá s null lobbyPlayers
         {
             this.InvokeIfRequired(() =>
             {

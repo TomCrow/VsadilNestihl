@@ -8,13 +8,13 @@ namespace VsadilNestihl.GUI.Menu.Helpers
 {
     public class JoiningPlayerDelegates
     {
-        private readonly Playeyr.JoiningPlayer _joiningPlayer;
+        private readonly Game.Lobby.JoiningPlayer _joiningPlayer;
 
         public Action<int> SetMyPlayerId;
         public Action<string> LobbyException;
         public Action Disconnected;
 
-        public JoiningPlayerDelegates(Playeyr.JoiningPlayer joiningPlayer)
+        public JoiningPlayerDelegates(Game.Lobby.JoiningPlayer joiningPlayer)
         {
             _joiningPlayer = joiningPlayer;
 

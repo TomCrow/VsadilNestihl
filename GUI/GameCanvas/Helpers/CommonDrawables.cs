@@ -10,16 +10,32 @@ namespace VsadilNestihl.GUI.GameCanvas.Helpers
 {
     public static class CommonDrawables
     {
-        public static List<IDrawable> GetBoardPositions(Action<ConcretePlace, int> positionClickedAction)
+        public static List<IDrawable> GetBoardPlacePositions(Action<ConcretePlace> clickedAction)
         {
             var list = new List<IDrawable>();
             foreach (var concretePlace in (ConcretePlace[])Enum.GetValues(typeof(ConcretePlace)))
             {
-                var point = PlacesPositions.GetByPlaceAndPosition(concretePlace, 0);
-                var drawable = new BoardPositionDrawable(point);
+                var rect = PlacesPositions.GetPlayerPosition(concretePlace);
+                var drawable = new BoardPositionDrawable(rect);
 
-                if (positionClickedAction != null)
-                    drawable.Clicked += () => positionClickedAction?.Invoke(concretePlace, 0);
+                if (clickedAction != null)
+                    drawable.Clicked += () => clickedAction?.Invoke(concretePlace);
+
+                list.Add(drawable);
+            }
+            return list;
+        }
+
+        public static List<IDrawable> GetBoardIconPositions(Action<ConcretePlace> clickedAction)
+        {
+            var list = new List<IDrawable>();
+            foreach (var concretePlace in (ConcretePlace[])Enum.GetValues(typeof(ConcretePlace)))
+            {
+                var rect = PlacesPositions.GetIconPosition(concretePlace);
+                var drawable = new BoardPositionDrawable(rect);
+
+                if (clickedAction != null)
+                    drawable.Clicked += () => clickedAction?.Invoke(concretePlace);
 
                 list.Add(drawable);
             }

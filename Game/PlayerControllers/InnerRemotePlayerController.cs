@@ -21,8 +21,24 @@ namespace VsadilNestihl.Game.PlayerControllers
             _receiver = receiver;
             _player = player;
 
+            _receiver.MessageDispatcher.Add(typeof(VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessageRequest), OnChatPlayerMessageRequest);
             _receiver.MessageDispatcher.Add(typeof(RollDice), OnRollDice);
             _receiver.MessageDispatcher.Add(typeof(EndTurn), OnEndTurn);
+        }
+
+        private void OnChatPlayerMessageRequest(IMessage message, Receiver receiver)
+        {
+            if (!(message is VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessageRequest chatPlayerMessageRequest))
+                return;
+
+            try
+            {
+                _player.SendChatMessage(chatPlayerMessageRequest.Message);
+            }
+            catch (Exception exception)
+            {
+                _receiver.SendMessage(new GameActionException(exception.Message));
+            }
         }
 
         private void OnRollDice(IMessage message, Receiver receiver)

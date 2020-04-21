@@ -23,7 +23,7 @@ namespace VsadilNestihl.GUI.NetworkLobby
             InitializeComponent();
         }
 
-        public void SetLobbyPlayer(Playeyr.LobbyPlayer lobbyPlayer, bool isMe)
+        public void SetLobbyPlayer(Game.Lobby.LobbyPlayer lobbyPlayer, bool isMe)
         {
             IsMe = isMe;
 

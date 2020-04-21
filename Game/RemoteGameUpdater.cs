@@ -39,6 +39,16 @@ namespace VsadilNestihl.Game
             _receiver.SendMessage(message);
         }
 
+        public void ChatServerMessage(string message)
+        {
+            _receiver.SendMessage(new VsadilNestihlNetworking.Messages.Chat.ChatServerMessage(message));
+        }
+
+        public void ChatPlayerMessage(Player.Player player, string message)
+        {
+            _receiver.SendMessage(new VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessage(player.PlayerId, message));
+        }
+
         public void PlayerSetMoney(Player.Player player, int money)
         {
             _receiver.SendMessage(new PlayerSetMoney(player.PlayerId, money));

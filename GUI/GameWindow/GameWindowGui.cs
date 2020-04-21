@@ -20,7 +20,8 @@ namespace VsadilNestihl.GUI.GameWindow
         private readonly Dictionary<int, PlayerDrawable> _playerDrawables = new Dictionary<int, PlayerDrawable>();
         private readonly Dictionary<int, ConcretePlace> _playerConcretePlaces = new Dictionary<int, ConcretePlace>();
 
-        private readonly DebugInfoDrawable _debugInfoDrawable;
+        private BoardDrawable _boardDrawable;
+        private DebugInfoDrawable _debugInfoDrawable = new DebugInfoDrawable(new Point(), null);
 
         public IGameData GameData { get; private set; }
         public IPlayerController PlayerController { get; private set; }
@@ -31,18 +32,18 @@ namespace VsadilNestihl.GUI.GameWindow
         {
             _view = gameWindowView;
 
-            var boardDrawable = new BoardDrawable(new System.Drawing.Point(0, 0));
-            _view.AddDrawable(boardDrawable);
+            _boardDrawable = new BoardDrawable(new Point(0, 0));
+            _view.AddDrawable(_boardDrawable);
 
-            var diceDrawable = new DiceDrawable(new System.Drawing.Point(724 / 2, 724 / 2));
+            var diceDrawable = new DiceDrawable(new Point(724 / 2, 724 / 2));
             diceDrawable.Clicked += DiceDrawableOnClicked;
             _view.AddDrawable(diceDrawable);
 
-            var boardPositionsDrawables = CommonDrawables.GetBoardPositions(BoardPositionClicked);
-            _view.AddDrawables(boardPositionsDrawables);
+            /*var boardPositionsDrawables = CommonDrawables.GetBoardPlacePositions(BoardPositionClicked);
+            _view.AddDrawables(boardPositionsDrawables);*/
 
-            _debugInfoDrawable = new DebugInfoDrawable(new Point(145, 145));
-            _view.AddDrawable(_debugInfoDrawable);
+            var boardIconsDrawables = CommonDrawables.GetBoardIconPositions(BoardIconClicked);
+            _view.AddDrawables(boardIconsDrawables);
         }
 
         public void TEST_EndTurn()
@@ -53,6 +54,10 @@ namespace VsadilNestihl.GUI.GameWindow
         public void SetGameData(IGameData gameData)
         {
             GameData = gameData;
+
+            _debugInfoDrawable = new DebugInfoDrawable(new Point(145, 145), gameData.GetPlayers());
+            _debugInfoDrawable.UpdateCurrentPlayerId(gameData.GetCurrentPlayerId());
+            _view.AddDrawable(_debugInfoDrawable);
         }
 
         public void SetPlayerController(IPlayerController playerController)
@@ -63,6 +68,11 @@ namespace VsadilNestihl.GUI.GameWindow
         public void GameWindowLoaded()
         {
             Loaded?.Invoke();
+        }
+
+        public void ChatSendMessageClick(string message)
+        {
+            PlayerController?.ChatSendMessage(message);
         }
 
         public void ReloadAllPlayers()
@@ -86,14 +96,24 @@ namespace VsadilNestihl.GUI.GameWindow
                 var playerIds = _playerConcretePlaces.Where(x => x.Value == concretePlace).Select(x => x.Key).ToList();
                 var playerDrawables = _playerDrawables.Where(x => playerIds.Contains(x.Key)).Select(x => x.Value).ToList();
 
-                var leftCornerPoint = PlacesPositions.GetByPlaceAndPosition(concretePlace, 0);
+                var leftCornerPoint = PlacesPositions.GetPlayerPosition(concretePlace);
                 PlayerPositionSetterHelper.SetPlayersPositions(playerDrawables, leftCornerPoint);
             }
 
-            if (GameData.GetPlayerById(GameData.GetCurrentPlayerId()) != null)
-                _debugInfoDrawable.NaTahu = GameData.GetPlayerById(GameData.GetCurrentPlayerId()).Name;
-            
+            _debugInfoDrawable.UpdateCurrentPlayerId(GameData.GetCurrentPlayerId());
+
             _view.AddDrawables(_playerDrawables.Values);
+        }
+
+        public void ChatServerMessage(string message)
+        {
+            _view.AddChatMessage($"SERVER: {message}");
+        }
+
+        public void ChatPlayerMessage(int playerId, string message)
+        {
+            var playerData = GameData.GetPlayerById(playerId);
+            _view.AddChatMessage($"{playerData.Name}: {message}");
         }
 
         public void ShowGameActionException(string message)
@@ -109,20 +129,19 @@ namespace VsadilNestihl.GUI.GameWindow
 
             var playerIds = _playerConcretePlaces.Where(x => x.Value == concretePlace).Select(x => x.Key).ToList();
             var playerDrawables = _playerDrawables.Where(x => playerIds.Contains(x.Key)).Select(x => x.Value).ToList();
-            var leftCornerPoint = PlacesPositions.GetByPlaceAndPosition(concretePlace, 0);
+            var leftCornerPoint = PlacesPositions.GetPlayerPosition(concretePlace);
             PlayerPositionSetterHelper.SetPlayersPositions(playerDrawables, leftCornerPoint);
         }
 
         public void PlayerRolledDice(int playerId, int rolledCount)
         {
-            _debugInfoDrawable.Hodil = rolledCount.ToString();
-            _view.RefreshCanvas();
+            /*_debugInfoDrawable.Hodil = rolledCount.ToString();
+            _view.RefreshCanvas();*/
         }
 
         public void NextRound()
         {
-            _debugInfoDrawable.NaTahu = GameData.GetPlayerById(GameData.GetCurrentPlayerId()).Name;
-            _debugInfoDrawable.Hodil = "";
+            _debugInfoDrawable.UpdateCurrentPlayerId(GameData.GetCurrentPlayerId());
             _view.RefreshCanvas();
         }
 
@@ -131,9 +150,19 @@ namespace VsadilNestihl.GUI.GameWindow
             PlayerController.RollDice();
         }
 
-        private void BoardPositionClicked(ConcretePlace concretePlace, int positionId)
+        private void BoardPositionClicked(ConcretePlace concretePlace)
         {
-            Console.WriteLine($"Place clicked: {concretePlace} position: {positionId}");
+            Console.WriteLine($"Place clicked: {concretePlace}");
+        }
+
+        private void BoardIconClicked(ConcretePlace concretePlace)
+        {
+            Console.WriteLine($"Icon clicked: {concretePlace}");
+
+            var underShadowDrawable = new UnderShadowDrawable(new Rectangle(_boardDrawable.GetX(),
+                _boardDrawable.GetY(), _boardDrawable.GetWidth(), _boardDrawable.GetHeight()));
+            underShadowDrawable.Clicked += () => _view.RemoveDrawable(underShadowDrawable);
+            _view.AddDrawable(underShadowDrawable);
         }
     }
 }

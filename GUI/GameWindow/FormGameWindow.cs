@@ -28,6 +28,22 @@ namespace VsadilNestihl.GUI.GameWindow
             return _gameWindowGui;
         }
 
+        public void AddChatMessage(string message)
+        {
+            this.InvokeIfRequired(() =>
+            {
+                if (!string.IsNullOrWhiteSpace(richTextBoxChat.Text))
+                {
+                    richTextBoxChat.AppendText("\r\n" + message);
+                }
+                else
+                {
+                    richTextBoxChat.AppendText(message);
+                }
+                richTextBoxChat.ScrollToCaret();
+            });
+        }
+
         public void ShowGameActionException(string message)
         {
             this.InvokeIfRequired(() =>
@@ -47,6 +63,11 @@ namespace VsadilNestihl.GUI.GameWindow
             gameCanvas.AddDrawables(drawables);
         }
 
+        public void RemoveDrawable(IDrawable drawable)
+        {
+            gameCanvas.RemoveDrawable(drawable);
+        }
+
         public void RefreshCanvas()
         {
             gameCanvas.RefreshCanvas();
@@ -60,6 +81,31 @@ namespace VsadilNestihl.GUI.GameWindow
         private void buttonEndTurn_Click(object sender, EventArgs e)
         {
             _gameWindowGui.TEST_EndTurn();
+        }
+
+        private void FormGameWindow_Load(object sender, EventArgs e)
+        {
+            this.ClientSize = new Size(724 + 400, 724);
+        }
+
+        private void textBoxChat_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                buttonChatSend.PerformClick();
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void buttonChatSend_Click(object sender, EventArgs e)
+        {
+            var message = textBoxChat.Text;
+            if (string.IsNullOrWhiteSpace(message))
+                return;
+
+            textBoxChat.Clear();
+            _gameWindowGui.ChatSendMessageClick(message);
         }
     }
 }

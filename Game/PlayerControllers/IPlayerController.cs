@@ -8,6 +8,9 @@ namespace VsadilNestihl.Game.PlayerControllers
 {
     public interface IPlayerController
     {
+        event Action<string> GameActionException;
+
+        void ChatSendMessage(string message);
         void RollDice();
         void EndTurn();
     }

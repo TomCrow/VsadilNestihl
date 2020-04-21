@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VsadilNestihl.Game;
-using Playeyr;
 using VsadilNestihl.GUI.GameWindow;
 
 namespace VsadilNestihl.GUI.Menu
@@ -41,7 +40,7 @@ namespace VsadilNestihl.GUI.Menu
             NetworkLobby.FormNetworkLobby networkLobbyView = null;
             try
             {
-                var networkLobby = new Playeyr.NetworkLobby();
+                var networkLobby = new Game.Lobby.NetworkLobby();
 
                 networkLobbyView = new NetworkLobby.FormNetworkLobby();
                 var networkLobbyGui = networkLobbyView.GetNetworkLobbyGui();
@@ -72,7 +71,7 @@ namespace VsadilNestihl.GUI.Menu
             }
 
             var result = 0; // 0 = no result yet, 1 = success, 2 = fail
-            var joiningPlayer = new JoiningPlayer();
+            var joiningPlayer = new Game.Lobby.JoiningPlayer();
             var joiningPlayerDelegates = new Helpers.JoiningPlayerDelegates(joiningPlayer);
             joiningPlayerDelegates.SetMyPlayerId += i => result = 1;
             joiningPlayerDelegates.LobbyException += s => _view.ShowException(new Exception(s));

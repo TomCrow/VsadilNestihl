@@ -45,6 +45,13 @@ namespace VsadilNestihl.GUI.GameCanvas
             Refresh();
         }
 
+        public void RemoveDrawable(IDrawable drawable)
+        {
+            _drawables.Remove(drawable);
+            drawable.PositionUpdated -= DrawableOnPositionUpdated;
+            Refresh();
+        }
+
         public void RefreshCanvas()
         {
             this.InvokeIfRequired(Refresh);

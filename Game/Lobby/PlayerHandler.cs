@@ -11,7 +11,7 @@ using VsadilNestihlNetworking;
 using VsadilNestihlNetworking.Messages;
 using VsadilNestihlNetworking.Messages.Lobby;
 
-namespace Playeyr
+namespace VsadilNestihl.Game.Lobby
 {
     public class PlayerHandler
     {
@@ -61,8 +61,13 @@ namespace Playeyr
             Receiver.SendMessage(new GameStarting());
         }
 
-        public InnerRemotePlayerController CreateInnerRemotePlayerController(Player player)
+        public InnerRemotePlayerController CreateInnerRemotePlayerController(VsadilNestihl.Game.Player.Player player)
         {
+            Receiver.MessageDispatcher.Remove(typeof(PlayerJoinRequest));
+            Receiver.MessageDispatcher.Remove(typeof(PlayerPositionSwitchRequest));
+            Receiver.MessageDispatcher.Remove(typeof(PlayerColorSwitchRequest));
+            Receiver.MessageDispatcher.Remove(typeof(VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessageRequest));
+
             return new InnerRemotePlayerController(Receiver, player);
         }
 

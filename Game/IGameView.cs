@@ -13,6 +13,8 @@ namespace VsadilNestihl.Game
 
         void SetPlayerController(IPlayerController playerController);
         void ReloadAllPlayers();
+        void ChatServerMessage(string message);
+        void ChatPlayerMessage(int playerId, string message);
         void ShowGameActionException(string message);
         void UpdatePlayerPlace(int playerId);
         void PlayerRolledDice(int playerId, int rolledCount);

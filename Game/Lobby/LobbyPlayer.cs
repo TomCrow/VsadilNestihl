@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VsadilNestihl.Game.Player;
 
-namespace Playeyr
+namespace VsadilNestihl.Game.Lobby
 {
     public class LobbyPlayer
     {
@@ -25,7 +25,7 @@ namespace Playeyr
             PlayerPosition = playerPosition;
         }
 
-        public void PlayerCreated(Player player)
+        public void PlayerCreated(VsadilNestihl.Game.Player.Player player)
         {
             // Attach inner player controller for player
             PlayerHandler?.CreateInnerRemotePlayerController(player);

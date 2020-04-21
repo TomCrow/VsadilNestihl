@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Playeyr;
 using VsadilNestihl.Game.Player;
 using VsadilNestihlNetworking.Messages;
 using VsadilNestihlNetworking.Messages.Chat;
@@ -25,9 +24,11 @@ namespace VsadilNestihl.Game.Network
         public event Action<LobbyActionException> LobbyException;
         public event Action<SetPlayerId> SetMyPlayerId;
         public event Action<LobbyPlayersUpdate> LobbyPlayersUpdated;
+        public event Action<GameStarting> GameStarting;
+
+        // Chat
         public event Action<ChatServerMessage> ChatServerMessage;
         public event Action<ChatPlayerMessage> ChatPlayerMessage;
-        public event Action<GameStarting> GameStarting;
 
         // Game
         public event Action<GameActionException> GameActionException;

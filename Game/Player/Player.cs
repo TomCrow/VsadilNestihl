@@ -23,7 +23,7 @@ namespace VsadilNestihl.Game.Player
 
         public Dices.IDice Dice { get; set; } = new Dices.Dice();
 
-        public Player(Playeyr.LobbyPlayer lobbyPlayer, Dices.IDice dice, int startingMoney, IPlace startingPlace)
+        public Player(Lobby.LobbyPlayer lobbyPlayer, Dices.IDice dice, int startingMoney, IPlace startingPlace)
         {
             PlayerId = lobbyPlayer.PlayerId;
             Name = lobbyPlayer.PlayerName;
@@ -38,6 +38,11 @@ namespace VsadilNestihl.Game.Player
         {
             _gameManager = gameManager;
             _gameUpdater = gameManager.GameUpdater;
+        }
+
+        public void SendChatMessage(string message)
+        {
+            _gameManager.PlayerSendChatMessage(this, message);
         }
 
         public void RollDice()

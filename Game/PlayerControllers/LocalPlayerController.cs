@@ -23,6 +23,18 @@ namespace VsadilNestihl.Game.PlayerControllers
             return _player;
         }
 
+        public void ChatSendMessage(string message)
+        {
+            try
+            {
+                _player.SendChatMessage(message);
+            }
+            catch (Exception exception)
+            {
+                GameActionException?.Invoke(exception.Message);
+            }
+        }
+
         public void RollDice()
         {
             try

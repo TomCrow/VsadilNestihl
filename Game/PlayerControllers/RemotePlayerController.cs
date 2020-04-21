@@ -12,9 +12,22 @@ namespace VsadilNestihl.Game.PlayerControllers
     {
         private readonly GameClient _gameClient;
 
+        public event Action<string> GameActionException;
+
         public RemotePlayerController(GameClient gameClient)
         {
             _gameClient = gameClient;
+            gameClient.GameActionException += exception => RaiseGameActionException(exception.Message);
+        }
+
+        public void RaiseGameActionException(string message)
+        {
+            GameActionException?.Invoke(message);
+        }
+
+        public void ChatSendMessage(string message)
+        {
+            _gameClient.SendMessage(new VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessageRequest(message));
         }
 
         public void RollDice()
