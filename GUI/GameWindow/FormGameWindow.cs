@@ -16,12 +16,11 @@ namespace VsadilNestihl.GUI.GameWindow
     {
         private readonly GameWindowGui _gameWindowGui;
 
-        private readonly Color _activeTextColor = Color.FromArgb(68, 68, 68);
-        private readonly Color _hoverTextColor = Color.FromArgb(62, 109, 181);
-        private readonly Color _downTextColor = Color.FromArgb(25, 71, 138);
-        private readonly Color _hoverBackColor = Color.FromArgb(213, 225, 242);
-        private readonly Color _downBackColor = Color.FromArgb(163, 189, 227);
-        private readonly Color _normalBackColor = Color.White;
+        private readonly Color _normalBackColor = Color.Green;
+        private readonly Color _hoverMinimalizeBackColor = Color.SeaGreen;
+        private readonly Color _hoverCloseBackColor = Color.DarkRed;
+        private readonly Color _downMinimalizeBackColor = Color.DarkSlateGray;
+        private readonly Color _downCloseBackColor = Color.Maroon;
 
         public FormGameWindow()
         {
@@ -36,8 +35,16 @@ namespace VsadilNestihl.GUI.GameWindow
                 control.MouseDown += (s, e) => SetLabelColors((Control)s, CustomBorderMouseState.Down);
             }
 
-            labelWindowMinimize.MouseClick += (s, e) => { if (e.Button == MouseButtons.Left) WindowState = FormWindowState.Minimized; };
-            labelWindowClose.MouseClick += (s, e) => { if (e.Button == MouseButtons.Left) Close(); };
+            labelWindowMinimize.MouseClick += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left) WindowState = FormWindowState.Minimized;
+                labelWindowMinimize.BackColor = _normalBackColor;
+            };
+            labelWindowClose.MouseClick += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left) Close();
+                labelWindowClose.BackColor = _normalBackColor;
+            };
         }
         
         public GameWindowGui GetGameWindowGui()
@@ -67,7 +74,6 @@ namespace VsadilNestihl.GUI.GameWindow
             {
                 MessageBox.Show(message, "GAME ACTION EXCEPTION", MessageBoxButtons.OK, MessageBoxIcon.Error);
             });
-
         }
 
         public void AddDrawable(IDrawable drawable)
@@ -101,7 +107,7 @@ namespace VsadilNestihl.GUI.GameWindow
             rect.Height -= 3;
             e.Graphics.DrawRectangle(new Pen(Color.DarkGreen, 3f), rect);
         }
-
+        
         private void labelWindowTitle_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -112,22 +118,18 @@ namespace VsadilNestihl.GUI.GameWindow
         {
             if (!ContainsFocus) return;
 
-            var textColor = _activeTextColor;
             var backColor = _normalBackColor;
 
             switch (mouseState)
             {
                 case CustomBorderMouseState.Hover:
-                    textColor = _hoverTextColor;
-                    backColor = _hoverBackColor;
+                    backColor = control == labelWindowClose ? _hoverCloseBackColor : _hoverMinimalizeBackColor;
                     break;
                 case CustomBorderMouseState.Down:
-                    textColor = _downTextColor;
-                    backColor = _downBackColor;
+                    backColor = control == labelWindowClose ? _downCloseBackColor : _downMinimalizeBackColor;
                     break;
             }
-
-            control.ForeColor = textColor;
+            
             control.BackColor = backColor;
         }
         

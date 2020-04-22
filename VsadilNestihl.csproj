@@ -151,6 +151,9 @@
     <EmbeddedResource Include="GUI\GameCanvas\GameCanvasControl.resx">
       <DependentUpon>GameCanvasControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\GameWindow\FormCustomBorderBase.resx">
+      <DependentUpon>FormCustomBorderBase.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\GameWindow\FormGameWindow.resx">
       <DependentUpon>FormGameWindow.cs</DependentUpon>
     </EmbeddedResource>

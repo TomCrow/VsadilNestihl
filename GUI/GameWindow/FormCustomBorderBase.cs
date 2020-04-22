@@ -217,5 +217,18 @@ namespace VsadilNestihl.GUI.GameWindow
                 msg.Result = NativeConstants.TRUE;
             }
         }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // FormCustomBorderBase
+            // 
+            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.DoubleBuffered = true;
+            this.Name = "FormCustomBorderBase";
+            this.ResumeLayout(false);
+
+        }
     }
 }
