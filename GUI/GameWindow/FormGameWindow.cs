@@ -12,15 +12,32 @@ using VsadilNestihl.GUI.GameCanvas;
 
 namespace VsadilNestihl.GUI.GameWindow
 {
-    public partial class FormGameWindow : Form, IGameWindowView
+    public partial class FormGameWindow : FormCustomBorderBase, IGameWindowView
     {
         private readonly GameWindowGui _gameWindowGui;
+
+        private readonly Color _activeTextColor = Color.FromArgb(68, 68, 68);
+        private readonly Color _hoverTextColor = Color.FromArgb(62, 109, 181);
+        private readonly Color _downTextColor = Color.FromArgb(25, 71, 138);
+        private readonly Color _hoverBackColor = Color.FromArgb(213, 225, 242);
+        private readonly Color _downBackColor = Color.FromArgb(163, 189, 227);
+        private readonly Color _normalBackColor = Color.White;
 
         public FormGameWindow()
         {
             InitializeComponent();
 
             _gameWindowGui = new GameWindowGui(this);
+
+            foreach (var control in new[] { labelWindowMinimize, labelWindowClose })
+            {
+                control.MouseEnter += (s, e) => SetLabelColors((Control)s, CustomBorderMouseState.Hover);
+                control.MouseLeave += (s, e) => SetLabelColors((Control)s, CustomBorderMouseState.Normal);
+                control.MouseDown += (s, e) => SetLabelColors((Control)s, CustomBorderMouseState.Down);
+            }
+
+            labelWindowMinimize.MouseClick += (s, e) => { if (e.Button == MouseButtons.Left) WindowState = FormWindowState.Minimized; };
+            labelWindowClose.MouseClick += (s, e) => { if (e.Button == MouseButtons.Left) Close(); };
         }
         
         public GameWindowGui GetGameWindowGui()
@@ -73,19 +90,50 @@ namespace VsadilNestihl.GUI.GameWindow
             gameCanvas.RefreshCanvas();
         }
 
-        private void gameCanvas_Load(object sender, EventArgs e)
+        #region WindowSetup
+
+        private void FormGameWindow_Paint(object sender, PaintEventArgs e)
         {
-            _gameWindowGui.GameWindowLoaded();
+            var rect = e.ClipRectangle;
+            rect.X += 1;
+            rect.Y += 1;
+            rect.Width -= 3;
+            rect.Height -= 3;
+            e.Graphics.DrawRectangle(new Pen(Color.DarkGreen, 3f), rect);
         }
 
-        private void buttonEndTurn_Click(object sender, EventArgs e)
+        private void labelWindowTitle_MouseDown(object sender, MouseEventArgs e)
         {
-            _gameWindowGui.TEST_EndTurn();
+            if (e.Button == MouseButtons.Left)
+                DecorationMouseDown(HitTestValues.HTCAPTION);
         }
 
+        private void SetLabelColors(Control control, CustomBorderMouseState mouseState)
+        {
+            if (!ContainsFocus) return;
+
+            var textColor = _activeTextColor;
+            var backColor = _normalBackColor;
+
+            switch (mouseState)
+            {
+                case CustomBorderMouseState.Hover:
+                    textColor = _hoverTextColor;
+                    backColor = _hoverBackColor;
+                    break;
+                case CustomBorderMouseState.Down:
+                    textColor = _downTextColor;
+                    backColor = _downBackColor;
+                    break;
+            }
+
+            control.ForeColor = textColor;
+            control.BackColor = backColor;
+        }
+        
         private void FormGameWindow_Load(object sender, EventArgs e)
         {
-            this.ClientSize = new Size(724 + 400, 724);
+            this.ClientSize = new Size(724 + 400, 691);
         }
 
         private void textBoxChat_KeyDown(object sender, KeyEventArgs e)
@@ -106,6 +154,22 @@ namespace VsadilNestihl.GUI.GameWindow
 
             textBoxChat.Clear();
             _gameWindowGui.ChatSendMessageClick(message);
+        }
+
+        #endregion
+
+
+
+
+
+        private void gameCanvas_Load(object sender, EventArgs e)
+        {
+            _gameWindowGui.GameWindowLoaded();
+        }
+
+        private void buttonEndTurn_Click(object sender, EventArgs e)
+        {
+            _gameWindowGui.TEST_EndTurn();
         }
     }
 }

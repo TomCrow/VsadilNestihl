@@ -110,6 +110,7 @@
     <Compile Include="GUI\GameCanvas\IDrawable.cs" />
     <Compile Include="GUI\GameCanvas\Drawables\PlayerDrawable.cs" />
     <Compile Include="GUI\GameCanvas\IGameCanvas.cs" />
+    <Compile Include="GUI\GameWindow\CustomBorderMouseState.cs" />
     <Compile Include="GUI\GameWindow\FormGameWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,6 +119,10 @@
     </Compile>
     <Compile Include="GUI\GameWindow\GameWindowGui.cs" />
     <Compile Include="GUI\GameWindow\IGameWindowView.cs" />
+    <Compile Include="GUI\GameWindow\Native.cs" />
+    <Compile Include="GUI\GameWindow\FormCustomBorderBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GUI\NetworkLobby\FormNetworkLobby.cs">
       <SubType>Form</SubType>
     </Compile>
