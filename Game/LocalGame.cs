@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VsadilNestihl.Game.Board;
+using VsadilNestihl.Game.Board.DostihyASazky;
 using VsadilNestihl.Game.Player;
 using VsadilNestihl.Game.PlayerControllers;
 
@@ -16,17 +17,22 @@ namespace VsadilNestihl.Game
         private IGameView _gameView;
         private bool _gameViewLoaded = false;
 
-        private List<Tuple<int, string>> _chatMessages = new List<Tuple<int, string>>();
+        private readonly List<Tuple<int, string>> _chatMessages = new List<Tuple<int, string>>();
 
+        private readonly IBoard _board;
+        private readonly Dictionary<int, IPlace> _places = new Dictionary<int, IPlace>();
         private readonly Dictionary<int, IPlayerData> _players = new Dictionary<int, IPlayerData>();
         private int _currentPlayerId;
         private bool _currentPlayerRolledThisTurn;
 
-        
-
         public LocalGame(int myPlayerId)
         {
             _myPlayerId = myPlayerId;
+
+            // todo: make board data to come from game manager
+            _board = new BoardFactory().CreateBoard();
+            foreach (var place in _board.GetPlaces())
+                _places.Add(place.GetPlaceId(), place);
         }
 
         public void SetPlayerController(LocalPlayerController playerController)
@@ -75,6 +81,11 @@ namespace VsadilNestihl.Game
         public bool GetCurrentPlayerRolledThisTurn()
         {
             return _currentPlayerRolledThisTurn;
+        }
+
+        public IPlace GetPlaceById(int placeId)
+        {
+            return _places[placeId];
         }
 
         public void GameStarted(List<Player.Player> players)

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VsadilNestihl.Game.Board;
 using VsadilNestihl.Game.Board.DostihyASazky;
 using VsadilNestihl.Game.Player;
 using VsadilNestihl.Game.PlayerControllers;
@@ -19,8 +20,10 @@ namespace VsadilNestihl.Game
         private IGameView _gameView;
         private bool _gameViewLoaded = false;
 
-        private List<string> _preGameLoadServerMessages = new List<string>();
+        private readonly List<string> _preGameLoadServerMessages = new List<string>();
 
+        private readonly IBoard _board;
+        private readonly Dictionary<int, IPlace> _places = new Dictionary<int, IPlace>();
         private readonly Dictionary<int, IPlayerData> _players = new Dictionary<int, IPlayerData>();
         private int _currentPlayerId;
         private bool _currentPlayerRolledThisTurn;
@@ -29,6 +32,12 @@ namespace VsadilNestihl.Game
         {
             _gameClient = gameClient;
             _myPlayerId = myPlayerId;
+
+            // todo: make board data to come from game manager
+            _board = new BoardFactory().CreateBoard();
+            foreach (var place in _board.GetPlaces())
+                _places.Add(place.GetPlaceId(), place);
+
             _playerController = new RemotePlayerController(gameClient);
             _playerController.GameActionException += PlayerControllerOnGameActionException;
 
@@ -88,6 +97,11 @@ namespace VsadilNestihl.Game
             return _currentPlayerRolledThisTurn;
         }
 
+        public IPlace GetPlaceById(int placeId)
+        {
+            return _places[placeId];
+        }
+
         private void PlayerControllerOnGameActionException(string message)
         {
             _gameView.ShowGameActionException(message);
@@ -102,7 +116,7 @@ namespace VsadilNestihl.Game
                     Color.FromArgb(player.Color),
                     (PlayerPosition) player.PlayerPosition)
                 {
-                    Place = new Place((ConcretePlace)player.PlaceId, ""),
+                    Place = GetPlaceById(player.PlaceId),
                     Money = player.Money
                 };
 
@@ -151,7 +165,7 @@ namespace VsadilNestihl.Game
         }
         private void GameClientOnPlayerSetPlace(PlayerSetPlace playerSetPlace)
         {
-            _players[playerSetPlace.PlayerId].Place = new Place((ConcretePlace)playerSetPlace.PlaceId, "");
+            _players[playerSetPlace.PlayerId].Place = GetPlaceById(playerSetPlace.PlaceId);
             _gameView.PlayerSetPlace(playerSetPlace.PlayerId, playerSetPlace.PlaceId);
         }
 

@@ -17,6 +17,11 @@ namespace VsadilNestihl.Game.Board
             Places = places;
         }
 
+        public List<IPlace> GetPlaces()
+        {
+            return Places.ToList();
+        }
+
         public IPlace GetStartPlace()
         {
             return Places.First.Value;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,5 +13,6 @@ namespace VsadilNestihl.GUI.GameCanvas
         void AddDrawables(IEnumerable<IDrawable> drawables);
         void RemoveDrawable(IDrawable drawable);
         void RefreshCanvas();
+        Point GetCurrentMouseLocation();
     }
 }

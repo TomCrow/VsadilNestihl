@@ -8,6 +8,7 @@ namespace VsadilNestihl.Game.Board
 {
     public interface IBoard
     {
+        List<IPlace> GetPlaces();
         IPlace GetStartPlace();
         IPlace GetNextPlace(IPlace place);
     }

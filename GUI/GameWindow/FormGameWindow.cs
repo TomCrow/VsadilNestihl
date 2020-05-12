@@ -70,6 +70,7 @@ namespace VsadilNestihl.GUI.GameWindow
 
         public void ShowGameActionException(string message)
         {
+
             this.InvokeIfRequired(() =>
             {
                 MessageBox.Show(message, "GAME ACTION EXCEPTION", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -96,16 +97,31 @@ namespace VsadilNestihl.GUI.GameWindow
             gameCanvas.RefreshCanvas();
         }
 
+        public Point GetCurrentMouseLocation()
+        {
+            return gameCanvas.GetCurrentMouseLocation();
+        }
+
         #region WindowSetup
 
         private void FormGameWindow_Paint(object sender, PaintEventArgs e)
         {
             var rect = e.ClipRectangle;
-            rect.X += 1;
-            rect.Y += 1;
-            rect.Width -= 3;
-            rect.Height -= 3;
-            e.Graphics.DrawRectangle(new Pen(Color.DarkGreen, 3f), rect);
+            rect.Width--;
+            rect.Height--;
+            e.Graphics.DrawRectangle(new Pen(Color.DarkGreen, 1f), rect);
+
+            rect.X++;
+            rect.Y++;
+            rect.Width -= 2;
+            rect.Height -= 2;
+            e.Graphics.DrawRectangle(new Pen(Color.DarkGreen, 1f), rect);
+
+            rect.X++;
+            rect.Y++;
+            rect.Width -= 2;
+            rect.Height -= 2;
+            e.Graphics.DrawRectangle(new Pen(Color.DarkGreen, 1f), rect);
         }
         
         private void labelWindowTitle_MouseDown(object sender, MouseEventArgs e)

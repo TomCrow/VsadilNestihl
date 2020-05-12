@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace VsadilNestihl.Game.Board
 {
-    public interface IPlace
+    public interface IProperty
     {
-        int GetPlaceId();
-        string GetName();
-        Color GetPlaceColor();
+        int? GetOwnerId();
+        int GetPrice();
+        int GetVisitPrice();
     }
 }

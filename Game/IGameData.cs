@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VsadilNestihl.Game.Board;
 using VsadilNestihl.Game.Player;
 
 namespace VsadilNestihl.Game
@@ -13,5 +14,6 @@ namespace VsadilNestihl.Game
         IPlayerData GetPlayerById(int playerId);
         int GetCurrentPlayerId();
         bool GetCurrentPlayerRolledThisTurn();
+        IPlace GetPlaceById(int placeId);
     }
 }

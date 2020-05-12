@@ -21,6 +21,7 @@ namespace VsadilNestihl.GUI.GameCanvas
         private IDrawable _mousePressedDrawable = null;
         private IDrawable _mouseOverWhilePressedDrawable = null;
         private bool _mousePressed = false;
+        private Point _currentMouseLocation = new Point(0, 0);
 
         public GameCanvasControl()
         {
@@ -57,6 +58,11 @@ namespace VsadilNestihl.GUI.GameCanvas
             this.InvokeIfRequired(Refresh);
         }
 
+        public Point GetCurrentMouseLocation()
+        {
+            return _currentMouseLocation;
+        }
+
         private void DrawableOnPositionUpdated()
         {
             this.InvokeIfRequired(Refresh);
@@ -79,6 +85,7 @@ namespace VsadilNestihl.GUI.GameCanvas
 
         private void BoardControl_MouseMove(object sender, MouseEventArgs e)
         {
+            _currentMouseLocation = e.Location;
             _mousePressedDrawable?.MouseDrag(e.X, e.Y);
             
             var drawables = GetDrawablesByDepth();

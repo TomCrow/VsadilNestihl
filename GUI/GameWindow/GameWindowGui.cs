@@ -100,9 +100,10 @@ namespace VsadilNestihl.GUI.GameWindow
             {
                 var playerIds = _playerConcretePlaces.Where(x => x.Value == concretePlace).Select(x => x.Key).ToList();
                 var playerDrawables = _playerDrawables.Where(x => playerIds.Contains(x.Key)).Select(x => x.Value).ToList();
+                var playerAnimators = _playerAnimators.Where(x => playerDrawables.Contains(x.Key)).Select(x => x.Value).ToList();
 
                 var leftCornerPoint = PlacesPositions.GetPlayerPosition(concretePlace);
-                PlayerPositionSetterHelper.SetPlayersPositions(playerDrawables, leftCornerPoint);
+                PlayerPositionSetterHelper.SetPlayersPositions(playerAnimators, leftCornerPoint);
             }
 
             _debugInfoDrawable.UpdateCurrentPlayerId(GameData.GetCurrentPlayerId());
@@ -123,22 +124,48 @@ namespace VsadilNestihl.GUI.GameWindow
 
         public void ShowGameActionException(string message)
         {
-            _view.ShowGameActionException(message);
+            var mouseLocation = _view.GetCurrentMouseLocation();
+            var gameActionExceptionMessageDrawable = new OverMouseMessageDrawable(
+                mouseLocation,
+                message,
+                Color.DarkRed, 
+                Color.White);
+            _view.AddDrawable(gameActionExceptionMessageDrawable);
+
+            var timer = new Timer();
+            timer.Interval = 1500;
+            timer.Tick += (sender, args) =>
+            {
+                timer.Enabled = false;
+                timer.Dispose();
+                _view.RemoveDrawable(gameActionExceptionMessageDrawable);
+            };
+            timer.Start();
         }
 
         public void PlayerPassedPlace(int playerId, int placeId)
         {
             var player = GameData.GetPlayerById(playerId);
             var concretePlace = (ConcretePlace)placeId;
+            _playerConcretePlaces[playerId] = concretePlace;
 
 
-            var playerDrawable = _playerDrawables[playerId];
+            /*var playerDrawable = _playerDrawables[playerId];
             var playerAnimator = _playerAnimators[playerDrawable];
             var placePosition = PlacesPositions.GetPlayerPosition(concretePlace);
 
-            playerAnimator.MoveTo(placePosition.X + 25, placePosition.Y + 25);
+            playerAnimator.MoveTo(placePosition.X + 25, placePosition.Y + 25);*/
 
             // TODO: animace skakani figurky
+            
+            
+
+            var playerIds = _playerConcretePlaces.Where(x => x.Value == concretePlace).Select(x => x.Key).ToList();
+            var playerDrawables = _playerDrawables.Where(x => playerIds.Contains(x.Key)).Select(x => x.Value).ToList();
+            var playerAnimators = _playerAnimators.Where(x => playerDrawables.Contains(x.Key)).Select(x => x.Value).ToList();
+
+            var leftCornerPoint = PlacesPositions.GetPlayerPosition(concretePlace);
+            PlayerPositionSetterHelper.SetPlayersPositions(playerAnimators, leftCornerPoint);
 
             //_playerConcretePlaces[playerId] = concretePlace;
 
@@ -186,10 +213,22 @@ namespace VsadilNestihl.GUI.GameWindow
         {
             Console.WriteLine($"Icon clicked: {concretePlace}");
 
-            var underShadowDrawable = new UnderShadowDrawable(new Rectangle(_boardDrawable.GetX(),
-                _boardDrawable.GetY(), _boardDrawable.GetWidth(), _boardDrawable.GetHeight()));
-            underShadowDrawable.Clicked += () => _view.RemoveDrawable(underShadowDrawable);
-            _view.AddDrawable(underShadowDrawable);
+            var place = GameData.GetPlaceById((int) concretePlace);
+            if (place is IHorse horse)
+            {
+                var underShadowDrawable = new UnderShadowDrawable(new Rectangle(_boardDrawable.GetX(),
+                    _boardDrawable.GetY(), _boardDrawable.GetWidth(), _boardDrawable.GetHeight()));
+                var cardDrawable = new HorseCardDrawable(new Point(724 / 2, 724 / 2), horse);
+
+                underShadowDrawable.Clicked += () =>
+                {
+                    _view.RemoveDrawable(underShadowDrawable);
+                    _view.RemoveDrawable(cardDrawable);
+                };
+
+                _view.AddDrawable(underShadowDrawable);
+                _view.AddDrawable(cardDrawable);
+            }
         }
     }
 }

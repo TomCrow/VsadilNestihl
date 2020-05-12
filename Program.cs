@@ -13,12 +13,17 @@ namespace VsadilNestihl
 {
     static class Program
     {
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool SetProcessDPIAware();
+
         /// <summary>
         /// Hlavní vstupní bod aplikace.
         /// </summary>
         [STAThread]
         static void Main()
         {
+            //SetProcessDPIAware();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
