@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VsadilNestihl.Game.Player;
-using VsadilNestihlNetworking.Messages;
-using VsadilNestihlNetworking.Messages.Chat;
-using VsadilNestihlNetworking.Messages.Game;
-using VsadilNestihlNetworking.Messages.Lobby;
+using VsadilNestihl.Networking.Messages;
+using VsadilNestihl.Networking.Messages.Chat;
+using VsadilNestihl.Networking.Messages.Game;
+using VsadilNestihl.Networking.Messages.Lobby;
 
 namespace VsadilNestihl.Game.Network
 {
     public class GameClient
     {
-        private VsadilNestihlNetworking.Client _client;
+        private VsadilNestihl.Networking.Client _client;
 
         public List<IMessage> ChatMessages { get; private set; } = new List<IMessage>();
         public bool StoreChatMessages { get; set; } = true;
@@ -47,7 +47,7 @@ namespace VsadilNestihl.Game.Network
             if (_client != null)
                 return;
 
-            _client = new VsadilNestihlNetworking.Client(new VsadilNestihlNetworking.SerializationEngines.IdJsonSerialization());
+            _client = new VsadilNestihl.Networking.Client(new VsadilNestihl.Networking.SerializationEngines.IdJsonSerialization());
 
             _client.OnDisonnected += ClientOnOnDisonnected;
 

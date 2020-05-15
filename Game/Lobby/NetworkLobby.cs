@@ -12,9 +12,9 @@ using VsadilNestihl.Game.Exceptions;
 using VsadilNestihl.Game.Logic;
 using VsadilNestihl.Game.Player;
 using VsadilNestihl.Game.PlayerControllers;
-using VsadilNestihlNetworking;
-using VsadilNestihlNetworking.Messages.Lobby;
-using VsadilNestihlNetworking.SerializationEngines;
+using VsadilNestihl.Networking;
+using VsadilNestihl.Networking.Messages.Lobby;
+using VsadilNestihl.Networking.SerializationEngines;
 
 namespace VsadilNestihl.Game.Lobby
 {
@@ -205,7 +205,7 @@ namespace VsadilNestihl.Game.Lobby
 
             ChatPlayerMessage?.Invoke(player, message);
 
-            var chatPlayerMessage = new VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessage(player.PlayerId, message);
+            var chatPlayerMessage = new VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessage(player.PlayerId, message);
             foreach (var lobbyPlayer in GetAllLobbyPlayers().Where(x => x.PlayerHandler != null))
                 lobbyPlayer.PlayerHandler.ChatPlayerMessage(chatPlayerMessage);
         }
@@ -293,10 +293,10 @@ namespace VsadilNestihl.Game.Lobby
         {
             var allLobbyPlayers = GetAllLobbyPlayers();
 
-            var lobbyPlayersUpdate = new LobbyPlayersUpdate(new List<VsadilNestihlNetworking.Messages.Lobby.LobbyPlayer>());
+            var lobbyPlayersUpdate = new LobbyPlayersUpdate(new List<VsadilNestihl.Networking.Messages.Lobby.LobbyPlayer>());
             foreach (var lobbyPlayer in allLobbyPlayers)
             {
-                lobbyPlayersUpdate.LobbyPlayers.Add(new VsadilNestihlNetworking.Messages.Lobby.LobbyPlayer(
+                lobbyPlayersUpdate.LobbyPlayers.Add(new VsadilNestihl.Networking.Messages.Lobby.LobbyPlayer(
                     lobbyPlayer.PlayerId, lobbyPlayer.PlayerName, lobbyPlayer.Color.ToArgb(), (int) lobbyPlayer.PlayerPosition));
             }
 

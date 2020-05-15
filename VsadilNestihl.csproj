@@ -36,6 +36,9 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -174,6 +177,36 @@
     <Compile Include="GUI\Menu\MenuGui.cs" />
     <Compile Include="GUI\NetworkLobby\NetworkLobbyGui.cs" />
     <Compile Include="GUI\NetworkLobby\INetworkLobbyView.cs" />
+    <Compile Include="Networking\Client.cs" />
+    <Compile Include="Networking\Messages\Chat\ChatPlayerMessage.cs" />
+    <Compile Include="Networking\Messages\Chat\ChatPlayerMessageRequest.cs" />
+    <Compile Include="Networking\Messages\Chat\ChatServerMessage.cs" />
+    <Compile Include="Networking\Messages\Disconnect.cs" />
+    <Compile Include="Networking\Messages\GameControlls\EndTurn.cs" />
+    <Compile Include="Networking\Messages\GameControlls\RollDice.cs" />
+    <Compile Include="Networking\Messages\Game\GameActionException.cs" />
+    <Compile Include="Networking\Messages\Game\GameStarted.cs" />
+    <Compile Include="Networking\Messages\Game\Models\PlayerData.cs" />
+    <Compile Include="Networking\Messages\Game\NextRound.cs" />
+    <Compile Include="Networking\Messages\Game\PlayerPassedPlace.cs" />
+    <Compile Include="Networking\Messages\Game\PlayerRolledDice.cs" />
+    <Compile Include="Networking\Messages\Game\PlayerRolledThisTurn.cs" />
+    <Compile Include="Networking\Messages\Game\PlayerSetMoney.cs" />
+    <Compile Include="Networking\Messages\Game\PlayerSetPlace.cs" />
+    <Compile Include="Networking\Messages\Heartbeat.cs" />
+    <Compile Include="Networking\Messages\IMessage.cs" />
+    <Compile Include="Networking\Messages\Lobby\GameStarting.cs" />
+    <Compile Include="Networking\Messages\Lobby\LobbyActionException.cs" />
+    <Compile Include="Networking\Messages\Lobby\LobbyPlayer.cs" />
+    <Compile Include="Networking\Messages\Lobby\LobbyPlayersUpdate.cs" />
+    <Compile Include="Networking\Messages\Lobby\PlayerColorSwitchRequest.cs" />
+    <Compile Include="Networking\Messages\Lobby\PlayerJoinRequest.cs" />
+    <Compile Include="Networking\Messages\Lobby\PlayerPositionSwitchRequest.cs" />
+    <Compile Include="Networking\Messages\Lobby\SetPlayerId.cs" />
+    <Compile Include="Networking\Receiver.cs" />
+    <Compile Include="Networking\SerializationEngines\IdJsonSerialization.cs" />
+    <Compile Include="Networking\SerializationEngines\ISerializationEngine.cs" />
+    <Compile Include="Networking\Server.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="GUI\GameCanvas\GameCanvasControl.resx">
@@ -217,12 +250,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\VsadilNestihlNetworking\VsadilNestihlNetworking.csproj">
-      <Project>{94244e33-9d02-484d-83a2-52980d6d40e2}</Project>
-      <Name>VsadilNestihlNetworking</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\menu_background.jpg" />

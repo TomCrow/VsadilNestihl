@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VsadilNestihl.Game.Network;
-using VsadilNestihlNetworking.Messages.GameControlls;
+using VsadilNestihl.Networking.Messages.GameControlls;
 
 namespace VsadilNestihl.Game.PlayerControllers
 {
@@ -27,7 +27,7 @@ namespace VsadilNestihl.Game.PlayerControllers
 
         public void ChatSendMessage(string message)
         {
-            _gameClient.SendMessage(new VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessageRequest(message));
+            _gameClient.SendMessage(new VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessageRequest(message));
         }
 
         public void RollDice()

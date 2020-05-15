@@ -8,7 +8,7 @@ using VsadilNestihl.Game.Board;
 using VsadilNestihl.Game.Board.DostihyASazky;
 using VsadilNestihl.Game.Player;
 using VsadilNestihl.Game.PlayerControllers;
-using VsadilNestihlNetworking.Messages.Game;
+using VsadilNestihl.Networking.Messages.Game;
 
 namespace VsadilNestihl.Game
 {
@@ -127,7 +127,7 @@ namespace VsadilNestihl.Game
                 _gameView.ReloadAllPlayers();
         }
 
-        private void GameClientOnChatServerMessage(VsadilNestihlNetworking.Messages.Chat.ChatServerMessage chatServerMessage)
+        private void GameClientOnChatServerMessage(VsadilNestihl.Networking.Messages.Chat.ChatServerMessage chatServerMessage)
         {
             if (!_gameViewLoaded)
             {
@@ -138,7 +138,7 @@ namespace VsadilNestihl.Game
             _gameView.ChatServerMessage(chatServerMessage.Message);
         }
 
-        private void GameClientOnChatPlayerMessage(VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessage chatPlayerMessage)
+        private void GameClientOnChatPlayerMessage(VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessage chatPlayerMessage)
         {
             _gameView.ChatPlayerMessage(chatPlayerMessage.PlayerId, chatPlayerMessage.Message);
         }

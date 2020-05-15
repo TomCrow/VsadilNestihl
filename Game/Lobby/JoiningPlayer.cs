@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using VsadilNestihl.Game;
 using VsadilNestihl.Game.Network;
 using VsadilNestihl.Game.Player;
-using VsadilNestihlNetworking.Messages;
-using VsadilNestihlNetworking.Messages.Lobby;
-using VsadilNestihlNetworking.SerializationEngines;
+using VsadilNestihl.Networking.Messages;
+using VsadilNestihl.Networking.Messages.Lobby;
+using VsadilNestihl.Networking.SerializationEngines;
 
 namespace VsadilNestihl.Game.Lobby
 {
@@ -106,12 +106,12 @@ namespace VsadilNestihl.Game.Lobby
             LobbyPlayersUpdated?.Invoke(lobbyPlayers);
         }
 
-        private void GameClientOnChatServerMessage(VsadilNestihlNetworking.Messages.Chat.ChatServerMessage chatServerMessage)
+        private void GameClientOnChatServerMessage(VsadilNestihl.Networking.Messages.Chat.ChatServerMessage chatServerMessage)
         {
             ChatServerMessage?.Invoke(chatServerMessage.Message);
         }
 
-        private void GameClientOnChatPlayerMessage(VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessage chatPlayerMessage)
+        private void GameClientOnChatPlayerMessage(VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessage chatPlayerMessage)
         {
             var lobbyPlayer = _lobbyPlayers.Find(x => x.PlayerId == chatPlayerMessage.PlayerId);
             if (lobbyPlayer == null)

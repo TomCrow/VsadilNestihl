@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VsadilNestihl.Game.Board;
-using VsadilNestihlNetworking;
-using VsadilNestihlNetworking.Messages.Game;
-using VsadilNestihlNetworking.Messages.Game.Models;
+using VsadilNestihl.Networking;
+using VsadilNestihl.Networking.Messages.Game;
+using VsadilNestihl.Networking.Messages.Game.Models;
 
 namespace VsadilNestihl.Game
 {
@@ -41,12 +41,12 @@ namespace VsadilNestihl.Game
 
         public void ChatServerMessage(string message)
         {
-            _receiver.SendMessage(new VsadilNestihlNetworking.Messages.Chat.ChatServerMessage(message));
+            _receiver.SendMessage(new VsadilNestihl.Networking.Messages.Chat.ChatServerMessage(message));
         }
 
         public void ChatPlayerMessage(Player.Player player, string message)
         {
-            _receiver.SendMessage(new VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessage(player.PlayerId, message));
+            _receiver.SendMessage(new VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessage(player.PlayerId, message));
         }
 
         public void PlayerSetMoney(Player.Player player, int money)

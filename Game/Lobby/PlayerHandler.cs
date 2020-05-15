@@ -7,9 +7,9 @@ using System.Timers;
 using VsadilNestihl.Game.Exceptions;
 using VsadilNestihl.Game.Player;
 using VsadilNestihl.Game.PlayerControllers;
-using VsadilNestihlNetworking;
-using VsadilNestihlNetworking.Messages;
-using VsadilNestihlNetworking.Messages.Lobby;
+using VsadilNestihl.Networking;
+using VsadilNestihl.Networking.Messages;
+using VsadilNestihl.Networking.Messages.Lobby;
 
 namespace VsadilNestihl.Game.Lobby
 {
@@ -29,7 +29,7 @@ namespace VsadilNestihl.Game.Lobby
             receiver.MessageDispatcher.Add(typeof(PlayerJoinRequest), OnPlayerJoinRequest);
             receiver.MessageDispatcher.Add(typeof(PlayerPositionSwitchRequest), OnPlayerPositionSwitchRequest);
             receiver.MessageDispatcher.Add(typeof(PlayerColorSwitchRequest), OnPlayerColorSwitchRequest);
-            receiver.MessageDispatcher.Add(typeof(VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessageRequest), OnChatPlayerMessageRequest);
+            receiver.MessageDispatcher.Add(typeof(VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessageRequest), OnChatPlayerMessageRequest);
 
             var joinTimer = new Timer {AutoReset = false, Interval = 7000};
             joinTimer.Elapsed += JoinTimerOnElapsed;
@@ -48,10 +48,10 @@ namespace VsadilNestihl.Game.Lobby
 
         public void ChatServerMessage(string message)
         {
-            Receiver.SendMessage(new VsadilNestihlNetworking.Messages.Chat.ChatServerMessage(message));
+            Receiver.SendMessage(new VsadilNestihl.Networking.Messages.Chat.ChatServerMessage(message));
         }
 
-        public void ChatPlayerMessage(VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessage chatPlayerMessage)
+        public void ChatPlayerMessage(VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessage chatPlayerMessage)
         {
             Receiver.SendMessage(chatPlayerMessage);
         }
@@ -66,7 +66,7 @@ namespace VsadilNestihl.Game.Lobby
             Receiver.MessageDispatcher.Remove(typeof(PlayerJoinRequest));
             Receiver.MessageDispatcher.Remove(typeof(PlayerPositionSwitchRequest));
             Receiver.MessageDispatcher.Remove(typeof(PlayerColorSwitchRequest));
-            Receiver.MessageDispatcher.Remove(typeof(VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessageRequest));
+            Receiver.MessageDispatcher.Remove(typeof(VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessageRequest));
 
             return new InnerRemotePlayerController(Receiver, player);
         }
@@ -131,7 +131,7 @@ namespace VsadilNestihl.Game.Lobby
 
         private void OnChatPlayerMessageRequest(IMessage message, Receiver receiver)
         {
-            if (!(message is VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessageRequest chatPlayerMessageRequest))
+            if (!(message is VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessageRequest chatPlayerMessageRequest))
                 return;
 
             if (!_joined)

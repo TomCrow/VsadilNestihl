@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VsadilNestihl.Game.Exceptions;
-using VsadilNestihlNetworking;
-using VsadilNestihlNetworking.Messages;
-using VsadilNestihlNetworking.Messages.Game;
-using VsadilNestihlNetworking.Messages.GameControlls;
+using VsadilNestihl.Networking;
+using VsadilNestihl.Networking.Messages;
+using VsadilNestihl.Networking.Messages.Game;
+using VsadilNestihl.Networking.Messages.GameControlls;
 
 namespace VsadilNestihl.Game.PlayerControllers
 {
@@ -21,14 +21,14 @@ namespace VsadilNestihl.Game.PlayerControllers
             _receiver = receiver;
             _player = player;
 
-            _receiver.MessageDispatcher.Add(typeof(VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessageRequest), OnChatPlayerMessageRequest);
+            _receiver.MessageDispatcher.Add(typeof(VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessageRequest), OnChatPlayerMessageRequest);
             _receiver.MessageDispatcher.Add(typeof(RollDice), OnRollDice);
             _receiver.MessageDispatcher.Add(typeof(EndTurn), OnEndTurn);
         }
 
         private void OnChatPlayerMessageRequest(IMessage message, Receiver receiver)
         {
-            if (!(message is VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessageRequest chatPlayerMessageRequest))
+            if (!(message is VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessageRequest chatPlayerMessageRequest))
                 return;
 
             try

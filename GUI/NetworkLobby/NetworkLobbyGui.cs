@@ -61,10 +61,10 @@ namespace VsadilNestihl.GUI.NetworkLobby
             
             foreach (var chatMessage in _joiningPlayer.GetStoredChatMessages())
             {
-                if (chatMessage is VsadilNestihlNetworking.Messages.Chat.ChatServerMessage chatServerMessage)
+                if (chatMessage is VsadilNestihl.Networking.Messages.Chat.ChatServerMessage chatServerMessage)
                     OnChatServerMessage(chatServerMessage.Message);
 
-                if (chatMessage is VsadilNestihlNetworking.Messages.Chat.ChatPlayerMessage chatPlayerMessage)
+                if (chatMessage is VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessage chatPlayerMessage)
                 {
                     var lobbyPlayer = lobbyPlayers.Find(x => x.PlayerId == chatPlayerMessage.PlayerId);
                     if (lobbyPlayer == null)
