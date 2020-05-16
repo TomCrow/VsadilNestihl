@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using VsadilNestihl.Networking.Messages;
 using VsadilNestihl.Networking.Messages.Game;
 
 namespace VsadilNestihl.Networking
@@ -13,6 +14,7 @@ namespace VsadilNestihl.Networking
     {
         private Thread receivingThread;
         private Thread sendingThread;
+        private Dictionary<Type, IMessageDispatcher> _messageDispatcher;
 
         public TcpClient TcpClient { get; private set; }
         public String Address { get; private set; }
@@ -26,9 +28,7 @@ namespace VsadilNestihl.Networking
         public int MaxMessageSize { get; set; }
 
         public SerializationEngines.ISerializationEngine SerializationEngine { get; private set; }
-
-        public delegate void IncomingMessage(Messages.IMessage message);
-        public Dictionary<Type, IncomingMessage> MessageDispatcher { get; private set; }
+        
 
         #region Events
 
@@ -40,6 +40,8 @@ namespace VsadilNestihl.Networking
 
         public Client(SerializationEngines.ISerializationEngine serializationEngine)
         {
+            _messageDispatcher = new Dictionary<Type, IMessageDispatcher>();
+
             MessageQueue = new List<Messages.IMessage>();
             Connected = false;
             SendingInterval = 30;
@@ -47,8 +49,7 @@ namespace VsadilNestihl.Networking
             HeartbeatInterval = 3000;
             MaxMessageSize = 10000;
 
-            this.SerializationEngine = serializationEngine;
-            MessageDispatcher = new Dictionary<Type, IncomingMessage>();
+            SerializationEngine = serializationEngine;
         }
 
         #endregion
@@ -95,6 +96,18 @@ namespace VsadilNestihl.Networking
 
             Connected = false;
             OnDisonnected?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void SubscribeForMessage<T>(Action<T> messageReceived)
+            where T : IMessage
+        {
+
+        }
+
+        public void UnsubscribeFromMessage<T>(Action<T> messageReceived)
+            where T : IMessage
+        {
+
         }
 
         public void SendMessage(Messages.IMessage message)
