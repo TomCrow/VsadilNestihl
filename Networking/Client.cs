@@ -12,9 +12,9 @@ namespace VsadilNestihl.Networking
 {
     public class Client
     {
-        private Thread receivingThread;
-        private Thread sendingThread;
-        private Dictionary<Type, IMessageDispatcher> _messageDispatcher;
+        private Thread _receivingThread;
+        private Thread _sendingThread;
+        private readonly Dictionary<Type, IClientSideMessageDispatcher> _messageDispatchers;
 
         public TcpClient TcpClient { get; private set; }
         public String Address { get; private set; }
@@ -40,7 +40,7 @@ namespace VsadilNestihl.Networking
 
         public Client(SerializationEngines.ISerializationEngine serializationEngine)
         {
-            _messageDispatcher = new Dictionary<Type, IMessageDispatcher>();
+            _messageDispatchers = new Dictionary<Type, IClientSideMessageDispatcher>();
 
             MessageQueue = new List<Messages.IMessage>();
             Connected = false;
@@ -70,13 +70,13 @@ namespace VsadilNestihl.Networking
 
             Connected = true;
 
-            receivingThread = new Thread(ReceivingMethod);
-            receivingThread.IsBackground = true;
-            receivingThread.Start();
+            _receivingThread = new Thread(ReceivingMethod);
+            _receivingThread.IsBackground = true;
+            _receivingThread.Start();
 
-            sendingThread = new Thread(SendingMethod);
-            sendingThread.IsBackground = true;
-            sendingThread.Start();
+            _sendingThread = new Thread(SendingMethod);
+            _sendingThread.IsBackground = true;
+            _sendingThread.Start();
         }
 
         public void Disconnect()
@@ -101,13 +101,27 @@ namespace VsadilNestihl.Networking
         public void SubscribeForMessage<T>(Action<T> messageReceived)
             where T : IMessage
         {
+            if (!_messageDispatchers.ContainsKey(typeof(T)))
+                _messageDispatchers.Add(typeof(T), new ClientSideMessageDispatcher<T>());
 
+            var dispatcher = _messageDispatchers[typeof(T)] as ClientSideMessageDispatcher<T>;
+            if (dispatcher == null)
+                throw new InvalidCastException(nameof(dispatcher));
+
+            dispatcher.MessageReceived += messageReceived;
         }
 
         public void UnsubscribeFromMessage<T>(Action<T> messageReceived)
             where T : IMessage
         {
+            if (!_messageDispatchers.ContainsKey(typeof(T)))
+                return;
 
+            var dispatcher = _messageDispatchers[typeof(T)] as ClientSideMessageDispatcher<T>;
+            if (dispatcher == null)
+                throw new InvalidCastException(nameof(dispatcher));
+
+            dispatcher.MessageReceived -= messageReceived;
         }
 
         public void SendMessage(Messages.IMessage message)
@@ -234,8 +248,8 @@ namespace VsadilNestihl.Networking
                                         }
 
                                         // local message dispatcher
-                                        if (MessageDispatcher.ContainsKey(message.GetType()))
-                                            MessageDispatcher[message.GetType()]?.Invoke((message));
+                                        if (_messageDispatchers.ContainsKey(message.GetType()))
+                                            _messageDispatchers[message.GetType()].Dispatch(message);
 
                                         // reset frame and data
                                         frame = new byte[4];

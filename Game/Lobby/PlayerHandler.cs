@@ -26,10 +26,10 @@ namespace VsadilNestihl.Game.Lobby
             _networkLobby = networkLobby;
             Receiver = receiver;
 
-            receiver.MessageDispatcher.Add(typeof(PlayerJoinRequest), OnPlayerJoinRequest);
-            receiver.MessageDispatcher.Add(typeof(PlayerPositionSwitchRequest), OnPlayerPositionSwitchRequest);
-            receiver.MessageDispatcher.Add(typeof(PlayerColorSwitchRequest), OnPlayerColorSwitchRequest);
-            receiver.MessageDispatcher.Add(typeof(VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessageRequest), OnChatPlayerMessageRequest);
+            receiver.SubscribeForMessage<PlayerJoinRequest>(OnPlayerJoinRequest);
+            receiver.SubscribeForMessage<PlayerPositionSwitchRequest>(OnPlayerPositionSwitchRequest);
+            receiver.SubscribeForMessage<PlayerColorSwitchRequest>(OnPlayerColorSwitchRequest);
+            receiver.SubscribeForMessage<Networking.Messages.Chat.ChatPlayerMessageRequest>(OnChatPlayerMessageRequest);
 
             var joinTimer = new Timer {AutoReset = false, Interval = 7000};
             joinTimer.Elapsed += JoinTimerOnElapsed;
@@ -63,20 +63,17 @@ namespace VsadilNestihl.Game.Lobby
 
         public InnerRemotePlayerController CreateInnerRemotePlayerController(VsadilNestihl.Game.Player.Player player)
         {
-            Receiver.MessageDispatcher.Remove(typeof(PlayerJoinRequest));
-            Receiver.MessageDispatcher.Remove(typeof(PlayerPositionSwitchRequest));
-            Receiver.MessageDispatcher.Remove(typeof(PlayerColorSwitchRequest));
-            Receiver.MessageDispatcher.Remove(typeof(VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessageRequest));
+            Receiver.UnsubscribeFromMessage<PlayerJoinRequest>(OnPlayerJoinRequest);
+            Receiver.UnsubscribeFromMessage<PlayerPositionSwitchRequest>(OnPlayerPositionSwitchRequest);
+            Receiver.UnsubscribeFromMessage<PlayerColorSwitchRequest>(OnPlayerColorSwitchRequest);
+            Receiver.UnsubscribeFromMessage<Networking.Messages.Chat.ChatPlayerMessageRequest>(OnChatPlayerMessageRequest);
 
             return new InnerRemotePlayerController(Receiver, player);
         }
 
-        private void OnPlayerJoinRequest(IMessage message, Receiver receiver)
+        private void OnPlayerJoinRequest(PlayerJoinRequest playerJoinRequest, Receiver receiver)
         {
-            if (!(message is PlayerJoinRequest playerJoinRequest))
-                return;
-
-            Receiver.MessageDispatcher.Remove(typeof(PlayerJoinRequest));
+            Receiver.UnsubscribeFromMessage<PlayerJoinRequest>(OnPlayerJoinRequest);
 
             if (_joined)
                 return;
@@ -107,33 +104,24 @@ namespace VsadilNestihl.Game.Lobby
                 disposable.Dispose();
         }
 
-        private void OnPlayerPositionSwitchRequest(IMessage message, Receiver receiver)
+        private void OnPlayerPositionSwitchRequest(PlayerPositionSwitchRequest playerPositionSwitchRequest, Receiver receiver)
         {
-            if (!(message is PlayerPositionSwitchRequest playerPositionSwitchRequest))
-                return;
-
             if (!_joined)
                 return;
 
             _networkLobby.PlayerPositionSwitchRequest(this, (PlayerPosition)playerPositionSwitchRequest.PlayerPosition);
         }
 
-        private void OnPlayerColorSwitchRequest(IMessage message, Receiver receiver)
+        private void OnPlayerColorSwitchRequest(PlayerColorSwitchRequest playerColorSwitchRequest, Receiver receiver)
         {
-            if (!(message is PlayerColorSwitchRequest))
-                return;
-
             if (!_joined)
                 return;
 
             _networkLobby.PlayerColorSwitchRequest(this);
         }
 
-        private void OnChatPlayerMessageRequest(IMessage message, Receiver receiver)
+        private void OnChatPlayerMessageRequest(Networking.Messages.Chat.ChatPlayerMessageRequest chatPlayerMessageRequest, Receiver receiver)
         {
-            if (!(message is VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessageRequest chatPlayerMessageRequest))
-                return;
-
             if (!_joined)
                 return;
 

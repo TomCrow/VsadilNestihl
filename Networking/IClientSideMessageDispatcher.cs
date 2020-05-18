@@ -7,7 +7,7 @@ using VsadilNestihl.Networking.Messages;
 
 namespace VsadilNestihl.Networking
 {
-    interface IMessageDispatcher
+    interface IClientSideMessageDispatcher
     {
         void Dispatch(IMessage message);
     }

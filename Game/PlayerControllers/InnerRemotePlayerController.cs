@@ -21,16 +21,13 @@ namespace VsadilNestihl.Game.PlayerControllers
             _receiver = receiver;
             _player = player;
 
-            _receiver.MessageDispatcher.Add(typeof(VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessageRequest), OnChatPlayerMessageRequest);
-            _receiver.MessageDispatcher.Add(typeof(RollDice), OnRollDice);
-            _receiver.MessageDispatcher.Add(typeof(EndTurn), OnEndTurn);
+            _receiver.SubscribeForMessage<Networking.Messages.Chat.ChatPlayerMessageRequest>(OnChatPlayerMessageRequest);
+            _receiver.SubscribeForMessage<RollDice>(OnRollDice);
+            _receiver.SubscribeForMessage<EndTurn>(OnEndTurn);
         }
 
-        private void OnChatPlayerMessageRequest(IMessage message, Receiver receiver)
+        private void OnChatPlayerMessageRequest(Networking.Messages.Chat.ChatPlayerMessageRequest chatPlayerMessageRequest, Receiver receiver)
         {
-            if (!(message is VsadilNestihl.Networking.Messages.Chat.ChatPlayerMessageRequest chatPlayerMessageRequest))
-                return;
-
             try
             {
                 _player.SendChatMessage(chatPlayerMessageRequest.Message);
@@ -41,11 +38,8 @@ namespace VsadilNestihl.Game.PlayerControllers
             }
         }
 
-        private void OnRollDice(IMessage message, Receiver receiver)
+        private void OnRollDice(RollDice rollDice, Receiver receiver)
         {
-            if (!(message is RollDice rollDice))
-                return;
-
             try
             {
                 _player.RollDice();
@@ -56,11 +50,8 @@ namespace VsadilNestihl.Game.PlayerControllers
             }
         }
 
-        private void OnEndTurn(IMessage message, Receiver receiver)
+        private void OnEndTurn(EndTurn endTurn, Receiver receiver)
         {
-            if (!(message is EndTurn endTurn))
-                return;
-
             try
             {
                 _player.EndTurn();

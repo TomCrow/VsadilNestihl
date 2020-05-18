@@ -52,22 +52,22 @@ namespace VsadilNestihl.Game.Network
             _client.OnDisonnected += ClientOnOnDisonnected;
 
             // Lobby
-            _client.MessageDispatcher.Add(typeof(LobbyActionException), OnLobbyActionException);
-            _client.MessageDispatcher.Add(typeof(SetPlayerId), OnSetPlayerId);
-            _client.MessageDispatcher.Add(typeof(LobbyPlayersUpdate), OnLobbyPlayersUpdate);
-            _client.MessageDispatcher.Add(typeof(ChatServerMessage), OnChatServerMessage);
-            _client.MessageDispatcher.Add(typeof(ChatPlayerMessage), OnChatPlayerMessage);
-            _client.MessageDispatcher.Add(typeof(GameStarting), OnGameStarting);
+            _client.SubscribeForMessage<LobbyActionException>(OnLobbyActionException);
+            _client.SubscribeForMessage<SetPlayerId>(OnSetPlayerId);
+            _client.SubscribeForMessage<LobbyPlayersUpdate>(OnLobbyPlayersUpdate);
+            _client.SubscribeForMessage<ChatServerMessage>(OnChatServerMessage);
+            _client.SubscribeForMessage<ChatPlayerMessage>(OnChatPlayerMessage);
+            _client.SubscribeForMessage<GameStarting>(OnGameStarting);
 
             // Game
-            _client.MessageDispatcher.Add(typeof(GameActionException), OnGameActionException);
-            _client.MessageDispatcher.Add(typeof(GameStarted), OnGameStarted);
-            _client.MessageDispatcher.Add(typeof(PlayerSetMoney), OnPlayerSetMoney );
-            _client.MessageDispatcher.Add(typeof(PlayerRolledDice), OnPlayerRolledDice );
-            _client.MessageDispatcher.Add(typeof(PlayerRolledThisTurn), OnPlayerRolledThisTurn );
-            _client.MessageDispatcher.Add(typeof(PlayerPassedPlace), OnPlayerPassedPlace);
-            _client.MessageDispatcher.Add(typeof(PlayerSetPlace), OnPlayerSetPlace);
-            _client.MessageDispatcher.Add(typeof(NextRound), OnNextRound);
+            _client.SubscribeForMessage<GameActionException>(OnGameActionException);
+            _client.SubscribeForMessage<GameStarted>(OnGameStarted);
+            _client.SubscribeForMessage<PlayerSetMoney>(OnPlayerSetMoney);
+            _client.SubscribeForMessage<PlayerRolledDice>(OnPlayerRolledDice);
+            _client.SubscribeForMessage<PlayerRolledThisTurn>(OnPlayerRolledThisTurn);
+            _client.SubscribeForMessage<PlayerPassedPlace>(OnPlayerPassedPlace);
+            _client.SubscribeForMessage<PlayerSetPlace>(OnPlayerSetPlace);
+            _client.SubscribeForMessage<NextRound>(OnNextRound);
 
             _client.Connect(ip, port);
             _client.SendMessage(new PlayerJoinRequest(playerName));
@@ -103,119 +103,77 @@ namespace VsadilNestihl.Game.Network
             Disconnected?.Invoke();
         }
 
-        private void OnLobbyActionException(IMessage message)
+        private void OnLobbyActionException(LobbyActionException lobbyActionException)
         {
-            if (!(message is LobbyActionException lobbyActionException))
-                return;
-
             LobbyException?.Invoke(lobbyActionException);
         }
 
-        private void OnSetPlayerId(IMessage message)
+        private void OnSetPlayerId(SetPlayerId setPlayerId)
         {
-            if (!(message is SetPlayerId setPlayerId))
-                return;
-            
             SetMyPlayerId?.Invoke(setPlayerId);
         }
 
-        private void OnLobbyPlayersUpdate(IMessage message)
+        private void OnLobbyPlayersUpdate(LobbyPlayersUpdate lobbyPlayersUpdate)
         {
-            if (!(message is LobbyPlayersUpdate lobbyPlayersUpdate))
-                return;
-            
             LobbyPlayersUpdated?.Invoke(lobbyPlayersUpdate);
         }
 
-        private void OnChatServerMessage(IMessage message)
+        private void OnChatServerMessage(ChatServerMessage chatServerMessage)
         {
-            if (!(message is ChatServerMessage chatServerMessage))
-                return;
-
             if (StoreChatMessages)
                 ChatMessages.Add(chatServerMessage);
 
             ChatServerMessage?.Invoke(chatServerMessage);
         }
 
-        private void OnChatPlayerMessage(IMessage message)
+        private void OnChatPlayerMessage(ChatPlayerMessage chatPlayerMessage)
         {
-            if (!(message is ChatPlayerMessage chatPlayerMessage))
-                return;
-            
             if (StoreChatMessages)
                 ChatMessages.Add(chatPlayerMessage);
 
             ChatPlayerMessage?.Invoke(chatPlayerMessage);
         }
 
-        private void OnGameStarting(IMessage message)
+        private void OnGameStarting(GameStarting gameStarting)
         {
-            if (!(message is GameStarting gameStarting))
-                return;
-
             GameStarting?.Invoke(gameStarting);
         }
 
-        private void OnGameActionException(IMessage message)
+        private void OnGameActionException(GameActionException gameActionException)
         {
-            if (!(message is GameActionException gameActionException))
-                return;
-
             GameActionException?.Invoke(gameActionException);
         }
 
-        private void OnGameStarted(IMessage message)
+        private void OnGameStarted(GameStarted gameStarted)
         {
-            if (!(message is GameStarted gameStarted))
-                return;
-
             GameStarted?.Invoke(gameStarted);
         }
 
-        private void OnPlayerSetMoney(IMessage message)
+        private void OnPlayerSetMoney(PlayerSetMoney playerSetMoney)
         {
-            if (!(message is PlayerSetMoney playerSetMoney))
-                return;
-
             PlayerSetMoney?.Invoke(playerSetMoney);
         }
-        private void OnPlayerRolledDice(IMessage message)
+        private void OnPlayerRolledDice(PlayerRolledDice playerRolledDice)
         {
-            if (!(message is PlayerRolledDice playerRolledDice))
-                return;
-
             PlayerRolledDice?.Invoke(playerRolledDice);
         }
 
-        private void OnPlayerRolledThisTurn(IMessage message)
+        private void OnPlayerRolledThisTurn(PlayerRolledThisTurn playerRolledThisTurn)
         {
-            if (!(message is PlayerRolledThisTurn playerRolledThisTurn))
-                return;
-
             PlayerRolledThisTurn?.Invoke(playerRolledThisTurn);
         }
 
-        private void OnPlayerPassedPlace(IMessage message)
+        private void OnPlayerPassedPlace(PlayerPassedPlace playerPassedPlace)
         {
-            if (!(message is PlayerPassedPlace playerPassedPlace))
-                return;
-
             PlayerPassedPlace?.Invoke(playerPassedPlace);
         }
 
-        private void OnPlayerSetPlace(IMessage message)
+        private void OnPlayerSetPlace(PlayerSetPlace playerSetPlace)
         {
-            if (!(message is PlayerSetPlace playerSetPlace))
-                return;
-
             PlayerSetPlace?.Invoke(playerSetPlace);
         }
-        private void OnNextRound(IMessage message)
+        private void OnNextRound(NextRound nextRound)
         {
-            if (!(message is NextRound nextRound))
-                return;
-
             NextRound?.Invoke(nextRound);
         }
     }

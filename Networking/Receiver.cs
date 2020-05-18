@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading;
+using VsadilNestihl.Networking.Messages;
 
 namespace VsadilNestihl.Networking
 {
@@ -9,6 +10,7 @@ namespace VsadilNestihl.Networking
     {
         private Thread _receivingThread;
         private Thread _sendingThread;
+        private readonly Dictionary<Type, IServerSideMessageDispatcher> _messageDispatchers;
 
         public Guid ID { get; set; }
         public Server Server { get; private set; }
@@ -23,10 +25,10 @@ namespace VsadilNestihl.Networking
 
         private event EventHandler NoticeServerMyDisconnection;
 
-        public Dictionary<Type, Server.IncomingMessage> MessageDispatcher { get; private set; }
-
         private Receiver()
         {
+            _messageDispatchers = new Dictionary<Type, IServerSideMessageDispatcher>();
+
             ID = Guid.NewGuid();
             MessageQueue = new List<Messages.IMessage>();
             Connected = true;
@@ -34,17 +36,15 @@ namespace VsadilNestihl.Networking
             ReceivingInterval = 30;
             HeartbeatInterval = 3000;
             MaxMessageSize = 10000000;
-
-            MessageDispatcher = new Dictionary<Type, Server.IncomingMessage>();
         }
 
-        public Receiver(TcpClient client, Server server, EventHandler NoticeDisconnection)
+        public Receiver(TcpClient client, Server server, EventHandler noticeDisconnection)
             : this()
         {
             Server = server;
             Client = client;
 
-            NoticeServerMyDisconnection += NoticeDisconnection;
+            NoticeServerMyDisconnection += noticeDisconnection;
 
             //Client.ReceiveBufferSize = 1024;
             //Client.SendBufferSize = 1024;
@@ -77,6 +77,32 @@ namespace VsadilNestihl.Networking
             catch (Exception) { }
 
             NoticeServerMyDisconnection?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void SubscribeForMessage<T>(Action<T, Receiver> messageReceived)
+            where T : IMessage
+        {
+            if (!_messageDispatchers.ContainsKey(typeof(T)))
+                _messageDispatchers.Add(typeof(T), new ServerSideMessageDispatcher<T>());
+
+            var dispatcher = _messageDispatchers[typeof(T)] as ServerSideMessageDispatcher<T>;
+            if (dispatcher == null)
+                throw new InvalidCastException(nameof(dispatcher));
+
+            dispatcher.MessageReceived += messageReceived;
+        }
+
+        public void UnsubscribeFromMessage<T>(Action<T, Receiver> messageReceived)
+            where T : IMessage
+        {
+            if (!_messageDispatchers.ContainsKey(typeof(T)))
+                return;
+
+            var dispatcher = _messageDispatchers[typeof(T)] as ServerSideMessageDispatcher<T>;
+            if (dispatcher == null)
+                throw new InvalidCastException(nameof(dispatcher));
+
+            dispatcher.MessageReceived -= messageReceived;
         }
 
         public void SendMessage(Messages.IMessage message)
@@ -204,12 +230,12 @@ namespace VsadilNestihl.Networking
                                         }
 
                                         // global message dispatcher
-                                        if (Server.MessageDispatcher.ContainsKey(message.GetType()))
-                                            Server.MessageDispatcher[message.GetType()]?.Invoke(message, this);
+                                        if (Server.GetMessageDispatchers().ContainsKey(message.GetType()))
+                                            Server.GetMessageDispatchers()[message.GetType()].Dispatch(message, this);
 
                                         // local message dispatcher
-                                        if (MessageDispatcher.ContainsKey(message.GetType()))
-                                            MessageDispatcher[message.GetType()]?.Invoke(message, this);
+                                        if (_messageDispatchers.ContainsKey(message.GetType()))
+                                            _messageDispatchers[message.GetType()].Dispatch(message, this);
 
                                         // reset frame and data
                                         frame = new byte[4];
