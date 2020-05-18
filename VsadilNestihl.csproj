@@ -178,6 +178,9 @@
     <Compile Include="GUI\NetworkLobby\NetworkLobbyGui.cs" />
     <Compile Include="GUI\NetworkLobby\INetworkLobbyView.cs" />
     <Compile Include="Networking\Client.cs" />
+    <Compile Include="Networking\IClientSideMessageDispatcher.cs" />
+    <Compile Include="Networking\ClientSideMessageDispatcher.cs" />
+    <Compile Include="Networking\IServerSideMessageDispatcher.cs" />
     <Compile Include="Networking\Messages\Chat\ChatPlayerMessage.cs" />
     <Compile Include="Networking\Messages\Chat\ChatPlayerMessageRequest.cs" />
     <Compile Include="Networking\Messages\Chat\ChatServerMessage.cs" />
@@ -207,6 +210,7 @@
     <Compile Include="Networking\SerializationEngines\IdJsonSerialization.cs" />
     <Compile Include="Networking\SerializationEngines\ISerializationEngine.cs" />
     <Compile Include="Networking\Server.cs" />
+    <Compile Include="Networking\ServerSideMessageDispatcher.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="GUI\GameCanvas\GameCanvasControl.resx">

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using VsadilNestihl.Networking.Messages;
 
 namespace VsadilNestihl.Networking
 {
     public class Server
     {
+        private readonly Dictionary<Type, IServerSideMessageDispatcher> _messageDispatchers;
+
         public TcpListener Listener { get; set; }
         public int Port { get; set; }
         public bool IsStarted { get; private set; }
@@ -14,9 +17,6 @@ namespace VsadilNestihl.Networking
         private readonly object ReceiversLock = new object();
 
         public SerializationEngines.ISerializationEngine SerializationEngine { get; private set; }
-
-        public delegate void IncomingMessage(Messages.IMessage message, Receiver receiver);
-        public Dictionary<Type, IncomingMessage> MessageDispatcher { get; private set; }
 
 
         #region Events
@@ -30,15 +30,21 @@ namespace VsadilNestihl.Networking
 
         public Server(int port, SerializationEngines.ISerializationEngine serializationEngine)
         {
+            _messageDispatchers = new Dictionary<Type, IServerSideMessageDispatcher>();
+
             lock (ReceiversLock)
                 Receivers = new List<Receiver>();
 
             Port = port;
             this.SerializationEngine = serializationEngine;
-            this.MessageDispatcher = new Dictionary<Type, IncomingMessage>();
         }
 
         #endregion
+
+        internal Dictionary<Type, IServerSideMessageDispatcher> GetMessageDispatchers()
+        {
+            return _messageDispatchers;
+        }
 
         #region Public Methods
         public void Start()
@@ -64,6 +70,32 @@ namespace VsadilNestihl.Networking
 
                 Receivers.Clear();
             }
+        }
+
+        public void SubscribeForMessage<T>(Action<T, Receiver> messageReceived)
+            where T : IMessage
+        {
+            if (!_messageDispatchers.ContainsKey(typeof(T)))
+                _messageDispatchers.Add(typeof(T), new ServerSideMessageDispatcher<T>());
+
+            var dispatcher = _messageDispatchers[typeof(T)] as ServerSideMessageDispatcher<T>;
+            if (dispatcher == null)
+                throw new InvalidCastException(nameof(dispatcher));
+
+            dispatcher.MessageReceived += messageReceived;
+        }
+
+        public void UnsubscribeFromMessage<T>(Action<T, Receiver> messageReceived)
+            where T : IMessage
+        {
+            if (!_messageDispatchers.ContainsKey(typeof(T)))
+                return;
+
+            var dispatcher = _messageDispatchers[typeof(T)] as ServerSideMessageDispatcher<T>;
+            if (dispatcher == null)
+                throw new InvalidCastException(nameof(dispatcher));
+
+            dispatcher.MessageReceived -= messageReceived;
         }
 
         public void Broadcast(Messages.IMessage message)

@@ -5,14 +5,16 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using VsadilNestihl.Networking.Messages;
 using VsadilNestihl.Networking.Messages.Game;
 
 namespace VsadilNestihl.Networking
 {
     public class Client
     {
-        private Thread receivingThread;
-        private Thread sendingThread;
+        private Thread _receivingThread;
+        private Thread _sendingThread;
+        private readonly Dictionary<Type, IClientSideMessageDispatcher> _messageDispatchers;
 
         public TcpClient TcpClient { get; private set; }
         public String Address { get; private set; }
@@ -26,9 +28,7 @@ namespace VsadilNestihl.Networking
         public int MaxMessageSize { get; set; }
 
         public SerializationEngines.ISerializationEngine SerializationEngine { get; private set; }
-
-        public delegate void IncomingMessage(Messages.IMessage message);
-        public Dictionary<Type, IncomingMessage> MessageDispatcher { get; private set; }
+        
 
         #region Events
 
@@ -40,6 +40,8 @@ namespace VsadilNestihl.Networking
 
         public Client(SerializationEngines.ISerializationEngine serializationEngine)
         {
+            _messageDispatchers = new Dictionary<Type, IClientSideMessageDispatcher>();
+
             MessageQueue = new List<Messages.IMessage>();
             Connected = false;
             SendingInterval = 30;
@@ -47,8 +49,7 @@ namespace VsadilNestihl.Networking
             HeartbeatInterval = 3000;
             MaxMessageSize = 10000;
 
-            this.SerializationEngine = serializationEngine;
-            MessageDispatcher = new Dictionary<Type, IncomingMessage>();
+            SerializationEngine = serializationEngine;
         }
 
         #endregion
@@ -69,13 +70,13 @@ namespace VsadilNestihl.Networking
 
             Connected = true;
 
-            receivingThread = new Thread(ReceivingMethod);
-            receivingThread.IsBackground = true;
-            receivingThread.Start();
+            _receivingThread = new Thread(ReceivingMethod);
+            _receivingThread.IsBackground = true;
+            _receivingThread.Start();
 
-            sendingThread = new Thread(SendingMethod);
-            sendingThread.IsBackground = true;
-            sendingThread.Start();
+            _sendingThread = new Thread(SendingMethod);
+            _sendingThread.IsBackground = true;
+            _sendingThread.Start();
         }
 
         public void Disconnect()
@@ -95,6 +96,32 @@ namespace VsadilNestihl.Networking
 
             Connected = false;
             OnDisonnected?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void SubscribeForMessage<T>(Action<T> messageReceived)
+            where T : IMessage
+        {
+            if (!_messageDispatchers.ContainsKey(typeof(T)))
+                _messageDispatchers.Add(typeof(T), new ClientSideMessageDispatcher<T>());
+
+            var dispatcher = _messageDispatchers[typeof(T)] as ClientSideMessageDispatcher<T>;
+            if (dispatcher == null)
+                throw new InvalidCastException(nameof(dispatcher));
+
+            dispatcher.MessageReceived += messageReceived;
+        }
+
+        public void UnsubscribeFromMessage<T>(Action<T> messageReceived)
+            where T : IMessage
+        {
+            if (!_messageDispatchers.ContainsKey(typeof(T)))
+                return;
+
+            var dispatcher = _messageDispatchers[typeof(T)] as ClientSideMessageDispatcher<T>;
+            if (dispatcher == null)
+                throw new InvalidCastException(nameof(dispatcher));
+
+            dispatcher.MessageReceived -= messageReceived;
         }
 
         public void SendMessage(Messages.IMessage message)
@@ -221,8 +248,8 @@ namespace VsadilNestihl.Networking
                                         }
 
                                         // local message dispatcher
-                                        if (MessageDispatcher.ContainsKey(message.GetType()))
-                                            MessageDispatcher[message.GetType()]?.Invoke((message));
+                                        if (_messageDispatchers.ContainsKey(message.GetType()))
+                                            _messageDispatchers[message.GetType()].Dispatch(message);
 
                                         // reset frame and data
                                         frame = new byte[4];

@@ -13,7 +13,7 @@ namespace VsadilNestihl.GUI.Extensions
         {
             var nfi = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
             nfi.NumberGroupSeparator = " ";
-            return integer.ToString("#,0.00", nfi);
+            return integer.ToString("#,0", nfi);
         }
     }
 }
