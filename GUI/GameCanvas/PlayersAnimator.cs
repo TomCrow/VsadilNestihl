@@ -21,13 +21,12 @@ namespace VsadilNestihl.GUI.GameCanvas
         
         private PlayerDrawable _currentAnimatingPlayer = null;
         private readonly object _lock = new object();
-        //private readonly SafeInvoker<Float2D> _frameCallbackInvoker;
-        //private readonly SafeInvoker _endCallback;
+        private readonly SafeInvoker<Float2D> _frameCallback;
+        private Point _currentEndPosition;
 
         public PlayersAnimator()
         {
-            //_frameCallbackInvoker = new SafeInvoker<Float2D>(FrameCallback);
-            //_endCallback = new SafeInvoker(EndCallback);
+            _frameCallback = new SafeInvoker<Float2D>(FrameCallback);
         }
 
         public void AddPlayer(PlayerDrawable player, ConcretePlace place)
@@ -45,15 +44,17 @@ namespace VsadilNestihl.GUI.GameCanvas
                 if (!_playersPlaces.ContainsKey(player))
                     return; // TODO:  throw exception
 
-                if (!_playersWaitingMoves.ContainsKey(player))
-                    _playersWaitingMoves.Add(player, new Queue<ConcretePlace>());
-
-                _playersWaitingMoves[player].Enqueue(place);
-
                 if (_currentAnimatingPlayer == null)
                 {
                     _currentAnimatingPlayer = player;
                     MoveTo(player, GetFreePointForPlace(place));
+                }
+                else
+                {
+                    if (!_playersWaitingMoves.ContainsKey(player))
+                        _playersWaitingMoves.Add(player, new Queue<ConcretePlace>());
+
+                    _playersWaitingMoves[player].Enqueue(place);
                 }
             }
         }
@@ -66,25 +67,11 @@ namespace VsadilNestihl.GUI.GameCanvas
 
         private void MoveTo(PlayerDrawable player, Point point)
         {
+            _currentEndPosition = point;
             var animator = new Animator2D(FPSLimiterKnownValues.LimitSixty);
             var currentPosition = player.GetPosition();
             animator.Paths = CreatePath(currentPosition.X, currentPosition.Y, point.X, point.Y);
-            animator.Play(new SafeInvoker<Float2D>(float2D =>
-            {
-                lock (_lock)
-                {
-                    if (_currentAnimatingPlayer == player)
-                        FrameCallback(float2D);
-                }
-            }), 
-                new SafeInvoker(() =>
-            {
-                lock (_lock)
-                {
-                    if (_currentAnimatingPlayer == player)
-                        EndCallback();
-                }
-            }));
+            animator.Play(_frameCallback);
         }
 
         private Path2D[] CreatePath(int startX, int startY, int endX, int endY)
@@ -105,19 +92,22 @@ namespace VsadilNestihl.GUI.GameCanvas
         {
             lock (_lock)
             {
-                _currentAnimatingPlayer?.SetPosition(float2D);
                 if (_currentAnimatingPlayer == null)
-                    Console.WriteLine("Frame callback null");
+                    return;
+
+                _currentAnimatingPlayer.SetPosition(float2D);
+
+                if (float2D == _currentEndPosition)
+                    End();
             }
         }
 
-        private void EndCallback()
+        private void End()
         {
-            Console.WriteLine("End callback");
             lock (_lock)
             {
                 if (_currentAnimatingPlayer == null)
-                    return; // TODO log error
+                    return;
 
                 var nextPlace = GetNextPlaceForPlayer(_currentAnimatingPlayer);
                 if (nextPlace != null)
@@ -128,6 +118,7 @@ namespace VsadilNestihl.GUI.GameCanvas
                 {
                     foreach (var playerWaitingMove in _playersWaitingMoves)
                     {
+                        _currentAnimatingPlayer = playerWaitingMove.Key;
                         nextPlace = GetNextPlaceForPlayer(_currentAnimatingPlayer);
                         if (nextPlace != null)
                         {
