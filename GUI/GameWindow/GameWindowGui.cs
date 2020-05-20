@@ -9,6 +9,7 @@ using VsadilNestihl.Game;
 using VsadilNestihl.Game.Board.DostihyASazky;
 using VsadilNestihl.Game.Player;
 using VsadilNestihl.Game.PlayerControllers;
+using VsadilNestihl.GUI.GameCanvas;
 using VsadilNestihl.GUI.GameCanvas.Animators;
 using VsadilNestihl.GUI.GameCanvas.Drawables;
 using VsadilNestihl.GUI.GameCanvas.Helpers;
@@ -21,6 +22,7 @@ namespace VsadilNestihl.GUI.GameWindow
         private readonly Dictionary<int, PlayerDrawable> _playerDrawables = new Dictionary<int, PlayerDrawable>();
         private readonly Dictionary<int, ConcretePlace> _playerConcretePlaces = new Dictionary<int, ConcretePlace>();
         private readonly Dictionary<PlayerDrawable, PlayerAnimator> _playerAnimators = new Dictionary<PlayerDrawable, PlayerAnimator>();
+        private readonly PlayersAnimator _playersAnimator = new PlayersAnimator();
 
         private readonly BoardDrawable _boardDrawable;
         private DebugInfoDrawable _debugInfoDrawable = new DebugInfoDrawable(new Point(), null);
@@ -93,6 +95,11 @@ namespace VsadilNestihl.GUI.GameWindow
 
                 var concretePlace = (ConcretePlace)playerData.Place.GetPlaceId();
                 _playerConcretePlaces[playerId] = concretePlace;
+
+                // NEW
+                _playersAnimator.AddPlayer(playerDrawable, concretePlace);
+                _playersAnimator.MoveTo(playerDrawable, concretePlace);
+                // NEW
             }
 
             var distinctConcretePlaces = _playerConcretePlaces.Values.Distinct().ToList();
@@ -150,29 +157,17 @@ namespace VsadilNestihl.GUI.GameWindow
             _playerConcretePlaces[playerId] = concretePlace;
 
 
-            /*var playerDrawable = _playerDrawables[playerId];
-            var playerAnimator = _playerAnimators[playerDrawable];
-            var placePosition = PlacesPositions.GetPlayerPosition(concretePlace);
-
-            playerAnimator.MoveTo(placePosition.X + 25, placePosition.Y + 25);*/
-
             // TODO: animace skakani figurky
-            
-            
 
-            var playerIds = _playerConcretePlaces.Where(x => x.Value == concretePlace).Select(x => x.Key).ToList();
+            var playerDrawable = _playerDrawables[playerId];
+            _playersAnimator.MoveTo(playerDrawable, concretePlace);
+
+            /*var playerIds = _playerConcretePlaces.Where(x => x.Value == concretePlace).Select(x => x.Key).ToList();
             var playerDrawables = _playerDrawables.Where(x => playerIds.Contains(x.Key)).Select(x => x.Value).ToList();
             var playerAnimators = _playerAnimators.Where(x => playerDrawables.Contains(x.Key)).Select(x => x.Value).ToList();
 
             var leftCornerPoint = PlacesPositions.GetPlayerPosition(concretePlace);
-            PlayerPositionSetterHelper.SetPlayersPositions(playerAnimators, leftCornerPoint);
-
-            //_playerConcretePlaces[playerId] = concretePlace;
-
-            /*var playerIds = _playerConcretePlaces.Where(x => x.Value == concretePlace).Select(x => x.Key).ToList();
-            var playerDrawables = _playerDrawables.Where(x => playerIds.Contains(x.Key)).Select(x => x.Value).ToList();
-            
-            PlayerPositionSetterHelper.SetPlayersPositions(playerDrawables, leftCornerPoint);*/
+            PlayerPositionSetterHelper.SetPlayersPositions(playerAnimators, leftCornerPoint);*/
         }
 
         public void PlayerSetPlace(int playerId, int placeId)

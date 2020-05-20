@@ -141,6 +141,7 @@
     <Compile Include="GUI\GameCanvas\IDrawable.cs" />
     <Compile Include="GUI\GameCanvas\Drawables\PlayerDrawable.cs" />
     <Compile Include="GUI\GameCanvas\IGameCanvas.cs" />
+    <Compile Include="GUI\GameCanvas\PlayersAnimator.cs" />
     <Compile Include="GUI\GameWindow\CustomBorderMouseState.cs" />
     <Compile Include="GUI\GameWindow\FormGameWindow.cs">
       <SubType>Form</SubType>
