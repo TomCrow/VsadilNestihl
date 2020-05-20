@@ -20,9 +20,12 @@ namespace VsadilNestihl.GUI.GameCanvas
         private readonly Dictionary<PlayerDrawable, Queue<ConcretePlace>> _playersWaitingMoves = new Dictionary<PlayerDrawable, Queue<ConcretePlace>>();
         
         private PlayerDrawable _currentAnimatingPlayer = null;
+        private ConcretePlace _currentEndPlace;
+        private Point _currentEndPosition;
         private readonly object _lock = new object();
         private readonly SafeInvoker<Float2D> _frameCallback;
-        private Point _currentEndPosition;
+
+        public event Action<PlayerDrawable, ConcretePlace> PlayerAtPlace;
 
         public PlayersAnimator()
         {
@@ -47,6 +50,7 @@ namespace VsadilNestihl.GUI.GameCanvas
                 if (_currentAnimatingPlayer == null)
                 {
                     _currentAnimatingPlayer = player;
+                    _currentEndPlace = place;
                     MoveTo(player, GetFreePointForPlace(place));
                 }
                 else
@@ -98,30 +102,34 @@ namespace VsadilNestihl.GUI.GameCanvas
                 _currentAnimatingPlayer.SetPosition(float2D);
 
                 if (float2D == _currentEndPosition)
-                    End();
+                    AnimationEnd();
             }
         }
 
-        private void End()
+        private void AnimationEnd()
         {
             lock (_lock)
             {
                 if (_currentAnimatingPlayer == null)
                     return;
 
+                PlayerAtPlace?.Invoke(_currentAnimatingPlayer, _currentEndPlace);
+
                 var nextPlace = GetNextPlaceForPlayer(_currentAnimatingPlayer);
                 if (nextPlace != null)
                 {
+                    _currentEndPlace = nextPlace.Value;
                     MoveTo(_currentAnimatingPlayer, GetFreePointForPlace(nextPlace.Value));
                 }
                 else
                 {
                     foreach (var playerWaitingMove in _playersWaitingMoves)
                     {
-                        _currentAnimatingPlayer = playerWaitingMove.Key;
                         nextPlace = GetNextPlaceForPlayer(_currentAnimatingPlayer);
                         if (nextPlace != null)
                         {
+                            _currentAnimatingPlayer = playerWaitingMove.Key;
+                            _currentEndPlace = nextPlace.Value;
                             MoveTo(playerWaitingMove.Key, GetFreePointForPlace(nextPlace.Value));
                             return;
                         }
