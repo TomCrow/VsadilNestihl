@@ -110,7 +110,7 @@ namespace VsadilNestihl.GUI.GameWindow
                 var playerAnimators = _playerAnimators.Where(x => playerDrawables.Contains(x.Key)).Select(x => x.Value).ToList();
 
                 var leftCornerPoint = PlacesPositions.GetPlayerPosition(concretePlace);
-                PlayerPositionSetterHelper.SetPlayersPositions(playerAnimators, leftCornerPoint);
+                PlayerPlaceHelper.SetPlayersPositions(playerAnimators, leftCornerPoint);
             }
 
             _debugInfoDrawable.UpdateCurrentPlayerId(GameData.GetCurrentPlayerId());
@@ -167,7 +167,7 @@ namespace VsadilNestihl.GUI.GameWindow
             var playerAnimators = _playerAnimators.Where(x => playerDrawables.Contains(x.Key)).Select(x => x.Value).ToList();
 
             var leftCornerPoint = PlacesPositions.GetPlayerPosition(concretePlace);
-            PlayerPositionSetterHelper.SetPlayersPositions(playerAnimators, leftCornerPoint);*/
+            PlayerPlaceHelper.SetPlayersPositions(playerAnimators, leftCornerPoint);*/
         }
 
         public void PlayerSetPlace(int playerId, int placeId)
@@ -179,7 +179,7 @@ namespace VsadilNestihl.GUI.GameWindow
             var playerIds = _playerConcretePlaces.Where(x => x.Value == concretePlace).Select(x => x.Key).ToList();
             var playerDrawables = _playerDrawables.Where(x => playerIds.Contains(x.Key)).Select(x => x.Value).ToList();
             var leftCornerPoint = PlacesPositions.GetPlayerPosition(concretePlace);
-            PlayerPositionSetterHelper.SetPlayersPositions(playerDrawables, leftCornerPoint);*/
+            PlayerPlaceHelper.SetPlayersPositions(playerDrawables, leftCornerPoint);*/
         }
 
         public void PlayerRolledDice(int playerId, int rolledCount)

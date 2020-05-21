@@ -51,6 +51,7 @@ namespace VsadilNestihl.GUI.GameCanvas
                 {
                     _currentAnimatingPlayer = player;
                     _currentEndPlace = place;
+                    _playersPlaces[player] = place;
                     MoveTo(player, GetFreePointForPlace(place));
                 }
                 else
@@ -66,7 +67,18 @@ namespace VsadilNestihl.GUI.GameCanvas
         private Point GetFreePointForPlace(ConcretePlace place)
         {
             var leftCornerPoint = PlacesPositions.GetPlayerPosition(place);
-            return new Point(leftCornerPoint.X + 25, leftCornerPoint.Y + 25);
+            var occupiedPositions = GetOccupiedPositions(place, leftCornerPoint.Location);
+            var freePositionPoint = PlayerPlaceHelper.GetFreePosition(occupiedPositions);
+            return new Point(leftCornerPoint.X + freePositionPoint.X, leftCornerPoint.Y + freePositionPoint.Y);
+        }
+
+        private List<Point> GetOccupiedPositions(ConcretePlace place, Point leftCornerPoint)
+        {
+            var occupiedPoints = new List<Point>();
+            foreach (var playerPoint in _playersPlaces.Where(x => x.Value == place).Select(o => o.Key.GetPosition()))
+                occupiedPoints.Add(new Point(playerPoint.X - leftCornerPoint.X, playerPoint.Y - leftCornerPoint.Y));
+
+            return occupiedPoints;
         }
 
         private void MoveTo(PlayerDrawable player, Point point)

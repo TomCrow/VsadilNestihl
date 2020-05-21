@@ -137,7 +137,7 @@
     </Compile>
     <Compile Include="GUI\GameCanvas\Helpers\PlacesPositions.cs" />
     <Compile Include="GUI\Extensions\InvokingExtensions.cs" />
-    <Compile Include="GUI\GameCanvas\Helpers\PlayerPositionSetterHelper.cs" />
+    <Compile Include="GUI\GameCanvas\Helpers\PlayerPlaceHelper.cs" />
     <Compile Include="GUI\GameCanvas\IDrawable.cs" />
     <Compile Include="GUI\GameCanvas\Drawables\PlayerDrawable.cs" />
     <Compile Include="GUI\GameCanvas\IGameCanvas.cs" />

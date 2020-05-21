@@ -9,8 +9,32 @@ using VsadilNestihl.GUI.GameCanvas.Drawables;
 
 namespace VsadilNestihl.GUI.GameCanvas.Helpers
 {
-    public static class PlayerPositionSetterHelper
+    public static class PlayerPlaceHelper
     {
+        private static IReadOnlyList<Point> _placePoints = new List<Point>
+        {
+            new Point(14, 15),
+            new Point(31, 14),
+            new Point(42, 24),
+            new Point(12, 28),
+            new Point(20, 38),
+            new Point(37, 38)
+        };
+
+        public static Point GetFreePosition(List<Point> occupiedPoints)
+        {
+            foreach (var placePoint in _placePoints)
+            {
+                if (occupiedPoints.Any(x => x == placePoint))
+                    continue;
+
+                return placePoint;
+            }
+
+            throw new Exception("BIG ERROR"); // TODO: refactor to concrete exception
+        }
+
+        [Obsolete]
         public static void SetPlayersPositions(List<Animators.PlayerAnimator> playersDrawables, Rectangle position)
         {
             if (playersDrawables.Count == 1)
