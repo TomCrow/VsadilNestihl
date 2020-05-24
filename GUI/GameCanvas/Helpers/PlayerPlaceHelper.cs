@@ -11,24 +11,29 @@ namespace VsadilNestihl.GUI.GameCanvas.Helpers
 {
     public static class PlayerPlaceHelper
     {
-        private static IReadOnlyList<Point> _placePoints = new List<Point>
+        private static Dictionary<int, Point> _placePoints = new Dictionary<int, Point>
         {
-            new Point(14, 15),
-            new Point(31, 14),
-            new Point(42, 24),
-            new Point(12, 28),
-            new Point(20, 38),
-            new Point(37, 38)
+            {1, new Point(14, 15)},
+            {2, new Point(31, 14)},
+            {3, new Point(42, 24)},
+            {4, new Point(12, 28)},
+            {5, new Point(20, 38)},
+            {6, new Point(37, 38)}
         };
 
-        public static Point GetFreePosition(List<Point> occupiedPoints)
+        public static Point GetPointById(int id)
+        {
+            return _placePoints[id];
+        }
+
+        public static int GetFreePointId(List<int> occupiedPoints)
         {
             foreach (var placePoint in _placePoints)
             {
-                if (occupiedPoints.Any(x => x == placePoint))
+                if (occupiedPoints.Any(x => x == placePoint.Key))
                     continue;
 
-                return placePoint;
+                return placePoint.Key;
             }
 
             throw new Exception("BIG ERROR"); // TODO: refactor to concrete exception

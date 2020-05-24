@@ -7,6 +7,7 @@ using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using VsadilNestihl.Game.Board.DostihyASazky;
+using VsadilNestihl.Game.Player;
 using VsadilNestihl.GUI.GameCanvas.Animators;
 using VsadilNestihl.GUI.GameCanvas.Drawables;
 using VsadilNestihl.GUI.GameCanvas.Helpers;
@@ -17,6 +18,7 @@ namespace VsadilNestihl.GUI.GameCanvas
     public class PlayersAnimator
     {
         private readonly Dictionary<PlayerDrawable, ConcretePlace> _playersPlaces = new Dictionary<PlayerDrawable, ConcretePlace>();
+        private readonly Dictionary<PlayerDrawable, int> _playersPositions = new Dictionary<PlayerDrawable, int>();
         private readonly Dictionary<PlayerDrawable, Queue<ConcretePlace>> _playersWaitingMoves = new Dictionary<PlayerDrawable, Queue<ConcretePlace>>();
         
         private PlayerDrawable _currentAnimatingPlayer = null;
@@ -37,6 +39,7 @@ namespace VsadilNestihl.GUI.GameCanvas
             if (_playersPlaces.ContainsKey(player))
                 return; // TODO: throw exception
 
+            _playersPositions.Add(player, GetFreePointIdForPlace(place));
             _playersPlaces.Add(player, place);
         }
 
@@ -51,8 +54,9 @@ namespace VsadilNestihl.GUI.GameCanvas
                 {
                     _currentAnimatingPlayer = player;
                     _currentEndPlace = place;
+                    _playersPositions[player] = GetFreePointIdForPlace(place);
                     _playersPlaces[player] = place;
-                    MoveTo(player, GetFreePointForPlace(place));
+                    MoveTo(player, GetPositionForPlaceAndPoint(place, _playersPositions[player]));
                 }
                 else
                 {
@@ -64,19 +68,29 @@ namespace VsadilNestihl.GUI.GameCanvas
             }
         }
 
-        private Point GetFreePointForPlace(ConcretePlace place)
+        public void WhenOnPlace(PlayerDrawable player, ConcretePlace place, Action action)
         {
-            var leftCornerPoint = PlacesPositions.GetPlayerPosition(place);
-            var occupiedPositions = GetOccupiedPositions(place, leftCornerPoint.Location);
-            var freePositionPoint = PlayerPlaceHelper.GetFreePosition(occupiedPositions);
-            return new Point(leftCornerPoint.X + freePositionPoint.X, leftCornerPoint.Y + freePositionPoint.Y);
+
         }
 
-        private List<Point> GetOccupiedPositions(ConcretePlace place, Point leftCornerPoint)
+        private int GetFreePointIdForPlace(ConcretePlace place)
         {
-            var occupiedPoints = new List<Point>();
-            foreach (var playerPoint in _playersPlaces.Where(x => x.Value == place).Select(o => o.Key.GetPosition()))
-                occupiedPoints.Add(new Point(playerPoint.X - leftCornerPoint.X, playerPoint.Y - leftCornerPoint.Y));
+            var occupiedPositions = GetOccupiedPositions(place);
+            return PlayerPlaceHelper.GetFreePointId(occupiedPositions);
+        }
+
+        private Point GetPositionForPlaceAndPoint(ConcretePlace place, int pointId)
+        {
+            var leftCornerPoint = PlacesPositions.GetPlayerPosition(place);
+            var pointPoint = Helpers.PlayerPlaceHelper.GetPointById(pointId);
+            return new Point(leftCornerPoint.X + pointPoint.X, leftCornerPoint.Y + pointPoint.Y);
+        }
+
+        private List<int> GetOccupiedPositions(ConcretePlace place)
+        {
+            var occupiedPoints = new List<int>();
+            foreach (var playerPoint in _playersPlaces.Where(x => x.Value == place))
+                occupiedPoints.Add(_playersPositions[playerPoint.Key]);
 
             return occupiedPoints;
         }
@@ -125,13 +139,15 @@ namespace VsadilNestihl.GUI.GameCanvas
                 if (_currentAnimatingPlayer == null)
                     return;
 
-                PlayerAtPlace?.Invoke(_currentAnimatingPlayer, _currentEndPlace);
+                PlayerSteppedOnPlace(_currentAnimatingPlayer, _currentEndPlace);
 
                 var nextPlace = GetNextPlaceForPlayer(_currentAnimatingPlayer);
                 if (nextPlace != null)
                 {
                     _currentEndPlace = nextPlace.Value;
-                    MoveTo(_currentAnimatingPlayer, GetFreePointForPlace(nextPlace.Value));
+                    _playersPositions[_currentAnimatingPlayer] = GetFreePointIdForPlace(nextPlace.Value);
+                    _playersPlaces[_currentAnimatingPlayer] = nextPlace.Value;
+                    MoveTo(_currentAnimatingPlayer, GetPositionForPlaceAndPoint(nextPlace.Value, _playersPositions[_currentAnimatingPlayer]));
                 }
                 else
                 {
@@ -142,7 +158,9 @@ namespace VsadilNestihl.GUI.GameCanvas
                         {
                             _currentAnimatingPlayer = playerWaitingMove.Key;
                             _currentEndPlace = nextPlace.Value;
-                            MoveTo(playerWaitingMove.Key, GetFreePointForPlace(nextPlace.Value));
+                            _playersPositions[_currentAnimatingPlayer] = GetFreePointIdForPlace(nextPlace.Value);
+                            _playersPlaces[_currentAnimatingPlayer] = nextPlace.Value;
+                            MoveTo(playerWaitingMove.Key, GetPositionForPlaceAndPoint(nextPlace.Value, _playersPositions[_currentAnimatingPlayer]));
                             return;
                         }
                     }
@@ -151,6 +169,11 @@ namespace VsadilNestihl.GUI.GameCanvas
                     _currentAnimatingPlayer = null;
                 }
             }
+        }
+
+        private void PlayerSteppedOnPlace(PlayerDrawable player, ConcretePlace place)
+        {
+            PlayerAtPlace?.Invoke(_currentAnimatingPlayer, _currentEndPlace);
         }
 
         private ConcretePlace? GetNextPlaceForPlayer(PlayerDrawable player)
